@@ -7,6 +7,18 @@
 # Ignore active_state files
 *active_state*
 
+# MLflow files (auto-generated metadata)
+mlruns/
+**/mlruns/
+
+# Database files
+*.db
+*.sqlite
+
+# Additional sensitive patterns
+*credentials*
+*secrets*
+
 # Python
 __pycache__/
 *.py[cod]
