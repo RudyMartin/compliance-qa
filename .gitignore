@@ -153,4 +153,7 @@ logs/
 
 # Temporary files
 *.tmp
-*.temp
+*.temp# Functional test outputs and results
+functionals/*/TEST_RESULTS.md
+functionals/*/FUNCTIONAL_PROOF_*.md
+functionals/**/test_output.log
