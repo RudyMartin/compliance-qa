@@ -8,11 +8,11 @@ $env:DB_HOST = "vectorqa-cluster.cluster-cu562e4m02nq.us-east-1.rds.amazonaws.co
 $env:DB_PORT = "5432"
 $env:DB_NAME = "vectorqa"
 $env:DB_USERNAME = "vectorqa_user"
-$env:DB_PASSWORD = "***REMOVED***"
+$env:DB_PASSWORD = "YOUR_DB_PASSWORD"
 
 # AWS credentials
-$env:AWS_ACCESS_KEY_ID = "***REMOVED***"
-$env:AWS_SECRET_ACCESS_KEY = "***REMOVED***"
+$env:AWS_ACCESS_KEY_ID = "YOUR_AWS_ACCESS_KEY_ID"
+$env:AWS_SECRET_ACCESS_KEY = "YOUR_AWS_SECRET_ACCESS_KEY"
 $env:AWS_DEFAULT_REGION = "us-east-1"
 
 # MLflow settings

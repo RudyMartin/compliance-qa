@@ -10,11 +10,11 @@ set DB_HOST=vectorqa-cluster.cluster-cu562e4m02nq.us-east-1.rds.amazonaws.com
 set DB_PORT=5432
 set DB_NAME=vectorqa
 set DB_USERNAME=vectorqa_user
-set DB_PASSWORD=***REMOVED***
+set DB_PASSWORD=YOUR_DB_PASSWORD
 
 REM AWS credentials
-set AWS_ACCESS_KEY_ID=***REMOVED***
-set AWS_SECRET_ACCESS_KEY=***REMOVED***
+set AWS_ACCESS_KEY_ID=YOUR_AWS_ACCESS_KEY_ID
+set AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY
 set AWS_DEFAULT_REGION=us-east-1
 
 REM MLflow settings

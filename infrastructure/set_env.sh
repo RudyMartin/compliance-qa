@@ -10,11 +10,11 @@ export DB_HOST=vectorqa-cluster.cluster-cu562e4m02nq.us-east-1.rds.amazonaws.com
 export DB_PORT=5432
 export DB_NAME=vectorqa
 export DB_USERNAME=vectorqa_user
-export DB_PASSWORD=***REMOVED***
+export DB_PASSWORD=YOUR_DB_PASSWORD
 
 # AWS credentials
-export AWS_ACCESS_KEY_ID=***REMOVED***
-export AWS_SECRET_ACCESS_KEY=***REMOVED***
+export AWS_ACCESS_KEY_ID=YOUR_AWS_ACCESS_KEY_ID
+export AWS_SECRET_ACCESS_KEY=YOUR_AWS_SECRET_ACCESS_KEY
 export AWS_DEFAULT_REGION=us-east-1
 
 # MLflow settings
