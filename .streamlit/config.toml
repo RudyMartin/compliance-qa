@@ -1,0 +1,22 @@
+[server]
+runOnSave = true
+fileWatcherType = "auto"
+
+[browser]
+gatherUsageStats = false
+serverAddress = "0.0.0.0"
+
+[runner]
+magicEnabled = true
+installTracer = false
+fixMatplotlib = true
+
+[logger]
+level = "info"
+
+[client]
+caching = true
+displayEnabled = true
+
+[theme]
+base = "light"
