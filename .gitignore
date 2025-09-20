@@ -1,8 +1,18 @@
-# Ignore settings files (contain sensitive data)
+# ===========================================================================
+# SECURITY & CREDENTIALS - CRITICAL EXCLUSIONS
+# ===========================================================================
+
+# Settings and configuration files (often contain credentials)
 *settings*.yaml
 *settings*.yml
+*settings*.json
 infrastructure/settings*
 *settings_backup*
+*config*.yaml
+*config*.yml
+*config*.json
+aws_settings.*
+simple_config.*
 
 # Exception: Allow settings-related scripts and documentation
 !*settings_structure*
@@ -22,9 +32,64 @@ mlruns/
 *.db
 *.sqlite
 
-# Additional sensitive patterns
+# Environment files (contain credentials and secrets)
+.env
+.env.*
+*.env
+infrastructure/.env*
+infrastructure/set_env.*
+set_env.*
+*set_env*
+
+# Credential and authentication files
+*credential*
 *credentials*
+*secret*
 *secrets*
+*password*
+*token*
+*auth*
+*key*.json
+*key*.yaml
+
+# AWS specific
+.aws/
+aws-credentials.*
+aws-config.*
+*aws_access*
+*aws_secret*
+
+# Database credentials
+*db_config*
+*database.ini
+*db_password*
+*db_credentials*
+
+# Backup files (may contain old credentials)
+*.backup
+*.bak
+*.old
+*.orig
+*.save
+*backup*.yaml
+*backup*.yml
+*backup*.json
+infrastructure/*backup*
+
+# Certificate and key files
+*.pem
+*.key
+*.crt
+*.cert
+*.p12
+*.pfx
+*.jks
+*.keystore
+*.truststore
+
+# State files that may contain runtime secrets
+*state*.json
+*state*.yaml
 
 # Note: packages/ contains separate git repositories
 # Each package in packages/ is tracked independently
