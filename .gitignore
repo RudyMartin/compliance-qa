@@ -1,6 +1,12 @@
 # Ignore all files with 'settings' in the name
 *settings*
 
+# Ignore parquet files (contain sensitive data)
+*.parquet
+
+# Ignore active_state files
+*active_state*
+
 # Python
 __pycache__/
 *.py[cod]
