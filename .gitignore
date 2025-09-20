@@ -19,8 +19,8 @@ mlruns/
 *credentials*
 *secrets*
 
-# Packages directory (separate repositories)
-packages/
+# Note: packages/ contains separate git repositories
+# Each package in packages/ is tracked independently
 
 # Python
 __pycache__/
