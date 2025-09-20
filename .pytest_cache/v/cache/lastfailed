@@ -1,0 +1,11 @@
+{
+  "test_12th_grader_usability.py": true,
+  "test_mlflow_viewer.py": true,
+  "test_resilient_pools.py": true,
+  "test_self_describing_credentials.py": true,
+  "test_session_architecture.py::test_session_port_interface": true,
+  "test_session_architecture.py::test_session_functionality": true,
+  "test_session_architecture.py::test_dependency_injection_with_session": true,
+  "test_session_architecture.py::test_session_isolation": true,
+  "test_complete_setup.py::test_health_check": true
+}
