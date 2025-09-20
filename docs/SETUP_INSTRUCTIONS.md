@@ -5,7 +5,7 @@
 ### Option 1: Automatic Setup (Recommended)
 ```bash
 # Load credentials from settings.yaml automatically
-python -c "from infrastructure.settings_loader import setup_environment_from_settings; setup_environment_from_settings()"
+python -c "from infrastructure.yaml_loader import setup_environment_from_settings; setup_environment_from_settings()"
 python -m streamlit run portals/setup/setup_portal.py --server.port 8512
 ```
 
@@ -60,7 +60,7 @@ qa-shipping/
     ├── environment_manager.py
     ├── credential_validator.py
     ├── portal_config.py
-    ├── settings_loader.py
+    ├── yaml_loader.py
     └── settings.yaml    # Configuration file
 ```
 
@@ -166,7 +166,7 @@ python -c "from infrastructure.settings_loader import setup_environment_from_set
 ```bash
 # Verify settings.yaml exists and has correct structure
 ls infrastructure/settings.yaml
-python -c "from infrastructure.settings_loader import get_settings_loader; print(get_settings_loader().get_settings_summary())"
+python -c "from infrastructure.yaml_loader import get_settings_loader; print(get_settings_loader().get_settings_summary())"
 ```
 
 **Portal Not Starting:**

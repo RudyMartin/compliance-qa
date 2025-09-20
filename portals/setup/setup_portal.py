@@ -33,7 +33,7 @@ try:
     from infrastructure.environment_manager import get_environment_manager, get_db_config, get_aws_config, get_mlflow_config
     from infrastructure.credential_validator import validate_all_credentials, quick_health_check
     from infrastructure.portal_config import get_portal_config_manager, get_portal_summary
-    from infrastructure.settings_loader import get_settings_loader
+    from infrastructure.yaml_loader import get_settings_loader
 except ImportError as e:
     st.error(f"Configuration system not available: {e}")
     st.stop()
@@ -184,7 +184,7 @@ qa-shipping/
     ├── environment_manager.py
     ├── credential_validator.py
     ├── portal_config.py
-    ├── settings_loader.py
+    ├── yaml_loader.py
     └── settings.yaml    # Configuration file
         """)
 
@@ -656,7 +656,7 @@ def render_comprehensive_setup():
 def check_connection_pool_status():
     """Check if connection pooling is properly enabled."""
     try:
-        from infrastructure.settings_loader import get_settings_loader
+        from infrastructure.yaml_loader import get_settings_loader
         settings_loader = get_settings_loader()
         config = settings_loader.load_config()
 
@@ -897,7 +897,7 @@ def render_script_generation_management():
 def perform_environment_setup():
     """Perform comprehensive environment setup."""
     try:
-        from infrastructure.settings_loader import setup_environment_from_settings
+        from infrastructure.yaml_loader import setup_environment_from_settings
         setup_environment_from_settings()
         return True
     except Exception:

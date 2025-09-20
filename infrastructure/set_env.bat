@@ -37,7 +37,7 @@ REM Test environment loading
 python -c "from infrastructure.environment_manager import get_environment_manager; env_mgr = get_environment_manager(); summary = env_mgr.get_environment_summary(); print('System Status:', 'OK' if all(summary['validation_results'].values()) else 'ISSUES')" 2>nul && echo System validation: OK || echo System validation: FAIL
 
 REM Test settings loader
-python -c "from infrastructure.settings_loader import get_settings_loader; loader = get_settings_loader(); summary = loader.get_settings_summary(); print('Settings loaded from:', summary['source_file'])" 2>nul && echo Settings loader: OK || echo Settings loader: FAIL
+python -c "from infrastructure.yaml_loader import get_settings_loader; loader = get_settings_loader(); summary = loader.get_settings_summary(); print('Settings loaded from:', summary['source_file'])" 2>nul && echo Settings loader: OK || echo Settings loader: FAIL
 
 REM Test database connection
 python -c "from infrastructure.credential_validator import quick_health_check; import asyncio; loop = asyncio.new_event_loop(); asyncio.set_event_loop(loop); healthy = loop.run_until_complete(quick_health_check()); print('Database connection:', 'OK' if healthy else 'FAIL')" 2>nul || echo Database test: Could not run
@@ -52,4 +52,4 @@ echo   2. Start Setup Portal: python -m streamlit run portals\setup\setup_portal
 echo   3. Access Portal: http://localhost:8512
 echo.
 echo For automatic setup (recommended):
-echo   python -c "from infrastructure.settings_loader import setup_environment_from_settings; setup_environment_from_settings()"
+echo   python -c "from infrastructure.yaml_loader import setup_environment_from_settings; setup_environment_from_settings()"

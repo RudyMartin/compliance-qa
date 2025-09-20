@@ -16,7 +16,7 @@ import yaml
 
 # Import settings loader for YAML configuration
 try:
-    from .settings_loader import get_settings_loader, setup_environment_from_settings
+    from .yaml_loader import get_settings_loader, setup_environment_from_settings
 except ImportError:
     # Fallback if settings_loader not available
     get_settings_loader = None

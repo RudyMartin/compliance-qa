@@ -45,4 +45,4 @@ Write-Host "  2. Start Setup Portal: python -m streamlit run portals\setup\setup
 Write-Host "  3. Access Portal: http://localhost:8512"
 Write-Host ""
 Write-Host "For automatic setup (recommended):" -ForegroundColor Yellow
-Write-Host '  python -c "from infrastructure.settings_loader import setup_environment_from_settings; setup_environment_from_settings()"'
+Write-Host '  python -c "from infrastructure.yaml_loader import setup_environment_from_settings; setup_environment_from_settings()"'

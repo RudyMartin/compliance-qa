@@ -11,7 +11,7 @@ from pathlib import Path
 from typing import Dict, Any, List
 from datetime import datetime
 
-from .settings_loader import get_settings_loader
+from .yaml_loader import get_settings_loader
 
 logger = logging.getLogger(__name__)
 
@@ -68,7 +68,7 @@ REM Test environment loading
 python -c "from infrastructure.environment_manager import get_environment_manager; env_mgr = get_environment_manager(); summary = env_mgr.get_environment_summary(); print('System Status:', 'OK' if all(summary['validation_results'].values()) else 'ISSUES')" 2>nul && echo System validation: OK || echo System validation: FAIL
 
 REM Test settings loader
-python -c "from infrastructure.settings_loader import get_settings_loader; loader = get_settings_loader(); summary = loader.get_settings_summary(); print('Settings loaded from:', summary['source_file'])" 2>nul && echo Settings loader: OK || echo Settings loader: FAIL
+python -c "from infrastructure.yaml_loader import get_settings_loader; loader = get_settings_loader(); summary = loader.get_settings_summary(); print('Settings loaded from:', summary['source_file'])" 2>nul && echo Settings loader: OK || echo Settings loader: FAIL
 
 REM Test database connection
 python -c "from infrastructure.credential_validator import quick_health_check; import asyncio; loop = asyncio.new_event_loop(); asyncio.set_event_loop(loop); healthy = loop.run_until_complete(quick_health_check()); print('Database connection:', 'OK' if healthy else 'FAIL')" 2>nul || echo Database test: Could not run
@@ -83,7 +83,7 @@ echo   2. Start Setup Portal: python -m streamlit run portals\\setup\\setup_port
 echo   3. Access Portal: http://localhost:8512
 echo.
 echo For automatic setup (recommended):
-echo   python -c "from infrastructure.settings_loader import setup_environment_from_settings; setup_environment_from_settings()"
+echo   python -c "from infrastructure.yaml_loader import setup_environment_from_settings; setup_environment_from_settings()"
 """
 
         with open(output_path, 'w') as f:
@@ -138,7 +138,7 @@ echo "Testing infrastructure connectivity..."
 python3 -c "from infrastructure.environment_manager import get_environment_manager; env_mgr = get_environment_manager(); summary = env_mgr.get_environment_summary(); print('System Status:', 'OK' if all(summary['validation_results'].values()) else 'ISSUES')" 2>/dev/null && echo "System validation: OK" || echo "System validation: FAIL"
 
 # Test settings loader
-python3 -c "from infrastructure.settings_loader import get_settings_loader; loader = get_settings_loader(); summary = loader.get_settings_summary(); print('Settings loaded from:', summary['source_file'])" 2>/dev/null && echo "Settings loader: OK" || echo "Settings loader: FAIL"
+python3 -c "from infrastructure.yaml_loader import get_settings_loader; loader = get_settings_loader(); summary = loader.get_settings_summary(); print('Settings loaded from:', summary['source_file'])" 2>/dev/null && echo "Settings loader: OK" || echo "Settings loader: FAIL"
 
 # Test database connection
 python3 -c "from infrastructure.credential_validator import quick_health_check; import asyncio; loop = asyncio.new_event_loop(); asyncio.set_event_loop(loop); healthy = loop.run_until_complete(quick_health_check()); print('Database connection:', 'OK' if healthy else 'FAIL')" 2>/dev/null || echo "Database test: Could not run"
@@ -153,7 +153,7 @@ echo "  2. Start Setup Portal: python -m streamlit run portals/setup/setup_porta
 echo "  3. Access Portal: http://localhost:8512"
 echo ""
 echo "For automatic setup (recommended):"
-echo "  python -c \\"from infrastructure.settings_loader import setup_environment_from_settings; setup_environment_from_settings()\\""
+echo "  python -c \\"from infrastructure.yaml_loader import setup_environment_from_settings; setup_environment_from_settings()\\""
 """
 
         with open(output_path, 'w') as f:
@@ -259,7 +259,7 @@ Write-Host "  2. Start Setup Portal: python -m streamlit run portals\\setup\\set
 Write-Host "  3. Access Portal: http://localhost:8512"
 Write-Host ""
 Write-Host "For automatic setup (recommended):" -ForegroundColor Yellow
-Write-Host '  python -c "from infrastructure.settings_loader import setup_environment_from_settings; setup_environment_from_settings()"'
+Write-Host '  python -c "from infrastructure.yaml_loader import setup_environment_from_settings; setup_environment_from_settings()"'
 """
 
         with open(output_path, 'w') as f:
