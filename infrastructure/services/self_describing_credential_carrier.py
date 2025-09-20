@@ -35,7 +35,7 @@ class SelfDescribingCredentialDiscovery:
         """Discover ALL credential sources purely from configuration 'type' fields"""
 
         if not self._settings_loader:
-            from infrastructure.settings_loader import get_settings_loader
+            from infrastructure.yaml_loader import get_settings_loader
             self._settings_loader = get_settings_loader()
 
         # Get raw settings dict

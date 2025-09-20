@@ -14,7 +14,7 @@ qa_root = Path(__file__).parent
 sys.path.insert(0, str(qa_root))
 
 # Import all modules at module level
-from infrastructure.settings_loader import get_settings_loader, setup_environment_from_settings
+from infrastructure.yaml_loader import get_settings_loader, setup_environment_from_settings
 from infrastructure.environment_manager import get_environment_manager
 from infrastructure.credential_validator import quick_health_check
 from common.utilities.path_manager import get_path_manager

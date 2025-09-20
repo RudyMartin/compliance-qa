@@ -106,7 +106,7 @@ class DIContainer:
 
         try:
             # Create infrastructure components first
-            from infrastructure.settings_loader import SettingsLoader
+            from infrastructure.yaml_loader import SettingsLoader
             from infrastructure.services.credential_carrier import get_credential_carrier
             from adapters.secondary.session.unified_session_adapter import UnifiedSessionAdapter
 

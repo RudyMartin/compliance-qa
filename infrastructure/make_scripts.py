@@ -101,7 +101,7 @@ def main():
         print("  Unix/Mac: source infrastructure/set_env.sh")
         print("  PowerShell: .\\infrastructure\\set_env.ps1")
         print("  Docker: docker run --env-file infrastructure/.env")
-        print("  Auto Setup: python -c \"from infrastructure.settings_loader import setup_environment_from_settings; setup_environment_from_settings()\"")
+        print("  Auto Setup: python -c \"from infrastructure.yaml_loader import setup_environment_from_settings; setup_environment_from_settings()\"")
 
     except Exception as e:
         print(f"Error: {e}", file=sys.stderr)

@@ -35,7 +35,7 @@ class DynamicCredentialDiscovery:
         """Dynamically discover ALL credential sources in settings.yaml"""
 
         if not self._settings_loader:
-            from infrastructure.settings_loader import get_settings_loader
+            from infrastructure.yaml_loader import get_settings_loader
             self._settings_loader = get_settings_loader()
 
         # Get raw settings dict (not the flattened dataclass)

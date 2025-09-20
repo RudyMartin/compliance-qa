@@ -12,7 +12,7 @@ except ImportError:
 
 # Load test configuration
 try:
-    from infrastructure.settings_loader import get_settings_loader
+    from infrastructure.yaml_loader import get_settings_loader
     settings_loader = get_settings_loader()
     test_config = settings_loader._load_settings().get('testing', {}).get('standardized_config', {})
     MAX_RETRIES = test_config.get('max_retries', 3)

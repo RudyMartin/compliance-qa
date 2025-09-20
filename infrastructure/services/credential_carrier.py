@@ -69,7 +69,7 @@ class CredentialCarrier:
         """Load credentials from settings.yaml"""
         try:
             if not self._settings_loader:
-                from infrastructure.settings_loader import get_settings_loader
+                from infrastructure.yaml_loader import get_settings_loader
                 self._settings_loader = get_settings_loader()
 
             # Use the settings loader's methods to get properly parsed configs
