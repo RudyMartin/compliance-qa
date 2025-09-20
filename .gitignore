@@ -19,6 +19,9 @@ mlruns/
 *credentials*
 *secrets*
 
+# Packages directory (separate repositories)
+packages/
+
 # Python
 __pycache__/
 *.py[cod]
