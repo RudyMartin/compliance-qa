@@ -134,6 +134,28 @@ class SettingsLoader:
             'region': s3_config.get('region', 'us-east-1')
         }
 
+    def get_bedrock_config(self) -> Dict[str, Any]:
+        """Get Bedrock configuration from settings - no hardcoding."""
+        settings = self._load_settings()
+        bedrock_config = settings.get('credentials', {}).get('bedrock_llm', {})
+
+        # Return exactly what's in settings without hardcoded fallbacks
+        result = {}
+
+        # Only include keys that exist in settings
+        for key in ['service_provider', 'region', 'default_model', 'model_mapping', 'adapter_config']:
+            if key in bedrock_config:
+                result[key] = bedrock_config[key]
+
+        # Extract nested adapter_config values if they exist
+        adapter_config = bedrock_config.get('adapter_config', {})
+        if 'retry_attempts' in adapter_config:
+            result['retry_attempts'] = adapter_config['retry_attempts']
+        if 'timeout' in adapter_config:
+            result['timeout'] = adapter_config['timeout']
+
+        return result
+
     def get_environment_type(self) -> str:
         """Get environment type from settings."""
         settings = self._load_settings()
