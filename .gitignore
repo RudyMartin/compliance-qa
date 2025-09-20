@@ -27,10 +27,17 @@ simple_config.*
 # MLflow files (auto-generated metadata)
 mlruns/
 **/mlruns/
+mlflow.db
+*mlflow*.db
+mlartifacts/
+*.mlflow
 
 # Database files
 *.db
 *.sqlite
+*.sqlite3
+test_*.db
+mlflow.db
 
 # Environment files (contain credentials and secrets)
 .env
