@@ -1,5 +1,12 @@
-# Ignore all files with 'settings' in the name
-*settings*
+# Ignore settings files (contain sensitive data)
+*settings*.yaml
+*settings*.yml
+infrastructure/settings*
+*settings_backup*
+
+# Exception: Allow settings-related scripts and documentation
+!*settings_structure*
+!analyze_settings_structure.py
 
 # Ignore parquet files (contain sensitive data)
 *.parquet

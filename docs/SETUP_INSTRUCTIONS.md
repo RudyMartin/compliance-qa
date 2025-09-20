@@ -159,7 +159,7 @@ echo $DB_HOST                                            # Should show AWS RDS h
 ```bash
 # Ensure you're in the qa-shipping directory
 cd qa-shipping
-python -c "from infrastructure.settings_loader import setup_environment_from_settings"
+python -c "from infrastructure.yaml_loader import setup_environment_from_settings"
 ```
 
 **Credential Issues:**
