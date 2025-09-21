@@ -153,7 +153,25 @@ logs/
 
 # Temporary files
 *.tmp
-*.temp# Functional test outputs and results
+*.temp
+
+# Claude Code artifacts and session files
+**/.claude/
+.claude/
+*.claude
+claude-*
+*claude*.md
+claude_*.json
+claude_*.yaml
+.claude-*
+
+# Claude Code generated files (parent and packages)
+**/*claude*
+**/claude_*
+packages/**/claude*
+packages/**/.claude/
+
+# Functional test outputs and results
 functionals/*/TEST_RESULTS.md
 functionals/*/FUNCTIONAL_PROOF_*.md
 functionals/**/test_output.log

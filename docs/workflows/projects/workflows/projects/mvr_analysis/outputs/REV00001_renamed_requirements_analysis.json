@@ -1,0 +1,259 @@
+{
+  "current_model": {
+    "model_type": "Traditional",
+    "risk_tier": "High",
+    "review_activity": "Full Scope Validation",
+    "is_third_party": false,
+    "total_required": 9,
+    "vst_required": 9,
+    "section_numbers": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "I",
+      "J",
+      "L"
+    ],
+    "vst_section_numbers": [
+      "A",
+      "B",
+      "C",
+      "D",
+      "E",
+      "F",
+      "I",
+      "J",
+      "L"
+    ]
+  },
+  "by_model_type": {
+    "AI/ML": {
+      "total_required": 10,
+      "vst_required": 10,
+      "section_numbers": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "H",
+        "I",
+        "J",
+        "L"
+      ],
+      "vst_section_numbers": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "H",
+        "I",
+        "J",
+        "L"
+      ],
+      "is_current_model": false
+    },
+    "Traditional": {
+      "total_required": 9,
+      "vst_required": 9,
+      "section_numbers": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "I",
+        "J",
+        "L"
+      ],
+      "vst_section_numbers": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "I",
+        "J",
+        "L"
+      ],
+      "is_current_model": true
+    },
+    "Integrator": {
+      "total_required": 7,
+      "vst_required": 7,
+      "section_numbers": [
+        "A",
+        "B",
+        "C",
+        "E",
+        "F",
+        "I",
+        "J"
+      ],
+      "vst_section_numbers": [
+        "A",
+        "B",
+        "C",
+        "E",
+        "F",
+        "I",
+        "J"
+      ],
+      "is_current_model": false
+    },
+    "Qualitative": {
+      "total_required": 4,
+      "vst_required": 4,
+      "section_numbers": [
+        "A",
+        "B",
+        "F",
+        "J"
+      ],
+      "vst_section_numbers": [
+        "A",
+        "B",
+        "F",
+        "J"
+      ],
+      "is_current_model": false
+    },
+    "GenAI": {
+      "total_required": 10,
+      "vst_required": 10,
+      "section_numbers": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "H",
+        "I",
+        "J",
+        "L"
+      ],
+      "vst_section_numbers": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "H",
+        "I",
+        "J",
+        "L"
+      ],
+      "is_current_model": false
+    },
+    "SDC": {
+      "total_required": 7,
+      "vst_required": 7,
+      "section_numbers": [
+        "A",
+        "B",
+        "C",
+        "E",
+        "F",
+        "I",
+        "J"
+      ],
+      "vst_section_numbers": [
+        "A",
+        "B",
+        "C",
+        "E",
+        "F",
+        "I",
+        "J"
+      ],
+      "is_current_model": false
+    }
+  },
+  "by_risk_tier": {
+    "High": {
+      "total_required": 9,
+      "vst_required": 9,
+      "section_numbers": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "I",
+        "J",
+        "L"
+      ],
+      "vst_section_numbers": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "I",
+        "J",
+        "L"
+      ],
+      "is_current_tier": true
+    },
+    "Medium": {
+      "total_required": 8,
+      "vst_required": 8,
+      "section_numbers": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "I",
+        "J"
+      ],
+      "vst_section_numbers": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "I",
+        "J"
+      ],
+      "is_current_tier": false
+    },
+    "Low": {
+      "total_required": 5,
+      "vst_required": 5,
+      "section_numbers": [
+        "A",
+        "B",
+        "C",
+        "F",
+        "J"
+      ],
+      "vst_section_numbers": [
+        "A",
+        "B",
+        "C",
+        "F",
+        "J"
+      ],
+      "is_current_tier": false
+    }
+  },
+  "key_insights": [
+    "Risk tier scaling: High (9) vs Low (5) = 4 fewer sections for lower risk",
+    "All required sections are VST-scoped (high regulatory scrutiny)"
+  ]
+}

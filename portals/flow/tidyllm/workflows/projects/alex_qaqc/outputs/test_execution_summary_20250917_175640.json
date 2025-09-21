@@ -1,0 +1,88 @@
+{
+  "execution_metadata": {
+    "start_time": "2025-09-17T17:56:40.589069",
+    "end_time": "2025-09-17T17:57:15.593507",
+    "execution_mode": "parallel",
+    "selected_tests": [
+      "A",
+      "B",
+      "C",
+      "D"
+    ],
+    "project": "alex_qaqc",
+    "timeout_seconds": 300
+  },
+  "test_results": {
+    "A": {
+      "test_id": "A",
+      "test_name": "Speed Focus (Haiku->Sonnet)",
+      "status": "completed",
+      "elapsed_time": 35.001584,
+      "stage1_time": null,
+      "stage2_time": null,
+      "total_time": 30.63983,
+      "error_message": null,
+      "has_result": true
+    },
+    "B": {
+      "test_id": "B",
+      "test_name": "Quality Focus (Sonnet->3.5-Sonnet)",
+      "status": "completed",
+      "elapsed_time": 35.001567,
+      "stage1_time": null,
+      "stage2_time": null,
+      "total_time": 30.639829,
+      "error_message": null,
+      "has_result": true
+    },
+    "C": {
+      "test_id": "C",
+      "test_name": "Premium Focus (Haiku->3.5-Sonnet)",
+      "status": "completed",
+      "elapsed_time": 35.001558,
+      "stage1_time": null,
+      "stage2_time": null,
+      "total_time": 30.639825,
+      "error_message": null,
+      "has_result": true
+    },
+    "D": {
+      "test_id": "D",
+      "test_name": "DSPy Optimized (Haiku->Sonnet+DSPy)",
+      "status": "failed",
+      "elapsed_time": 35.001555,
+      "stage1_time": null,
+      "stage2_time": null,
+      "total_time": null,
+      "error_message": "Test execution failed",
+      "has_result": false
+    }
+  },
+  "execution_summary": {
+    "total_tests": 4,
+    "completed_tests": 3,
+    "failed_tests": 1,
+    "pending_tests": 0,
+    "success_rate": 75.0,
+    "execution_mode": "parallel",
+    "elapsed_time": 35.004475,
+    "estimated_completion": null
+  },
+  "error_summary": {
+    "total_errors": 1,
+    "error_log": [
+      {
+        "timestamp": "2025-09-17T17:57:11.231810",
+        "test_id": "D",
+        "test_name": "DSPy Optimized (Haiku->Sonnet+DSPy)",
+        "error_message": "Test execution failed",
+        "execution_mode": "parallel",
+        "project": "alex_qaqc"
+      }
+    ]
+  },
+  "recommendations": [
+    "Tests D failed - review individual error logs",
+    "Consider running failed tests individually for debugging"
+  ]
+}

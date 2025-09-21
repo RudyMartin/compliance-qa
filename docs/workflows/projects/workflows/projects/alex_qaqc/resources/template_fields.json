@@ -1,0 +1,54 @@
+{
+  "project": "",
+  "extraction_summary": {
+    "total_fields": 5,
+    "sources_found": {
+      "criteria": false,
+      "templates": false,
+      "resources": true
+    },
+    "errors": []
+  },
+  "project_template_fields": {
+    "document_title": {
+      "description": "Document title or identifier",
+      "type": "text",
+      "source": "resources",
+      "required": false,
+      "default": "",
+      "validation": []
+    },
+    "document_type": {
+      "description": "Type of document being analyzed",
+      "type": "select",
+      "source": "resources",
+      "required": false,
+      "default": "unknown",
+      "validation": []
+    },
+    "author": {
+      "description": "Document author or organization",
+      "type": "text",
+      "source": "resources",
+      "required": false,
+      "default": "",
+      "validation": []
+    },
+    "version": {
+      "description": "Document version number",
+      "type": "text",
+      "source": "resources",
+      "required": false,
+      "default": "1.0",
+      "validation": []
+    },
+    "creation_date": {
+      "description": "Document creation date",
+      "type": "date",
+      "source": "resources",
+      "required": false,
+      "default": "",
+      "validation": []
+    }
+  }
+}

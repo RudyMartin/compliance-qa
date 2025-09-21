@@ -1,0 +1,10 @@
+{
+  "workflow_id": "alex_qaqc",
+  "execution_time": "2025-09-17T10:00:04.474786",
+  "input_files": [
+    ".gitkeep",
+    "sample_compliance_doc.pdf"
+  ],
+  "status": "completed",
+  "message": "Workflow executed successfully via File Manager"
+}

@@ -1,0 +1,44 @@
+{
+  "workflow_name": "mvr_analysis",
+  "description": "Model Validation Report analysis using QA gap analyzer and workflow router",
+  "type": "MVR Analysis",
+  "created": "2025-09-14T19:21:59.952905",
+  "scoring_criteria": {
+    "compliance": {
+      "weight": 0.35,
+      "description": "Model validation shows missing required sections and incomplete sections",
+      "template_field": true,
+      "field_type": "number",
+      "field_desc": "Compliance score from 0-5 based on section completeness",
+      "field_validation": "0-5",
+      "field_category": "scoring"
+    },
+    "coverage": {
+      "weight": 0.25,
+      "description": "Validation covers percentage of required sections based on model characteristics",
+      "template_field": true,
+      "field_type": "number",
+      "field_desc": "Coverage score from 0-5 based on section coverage",
+      "field_validation": "0-5",
+      "field_category": "scoring"
+    },
+    "clarity": {
+      "weight": 0.2,
+      "description": "Review structure follows standard format with sufficient detail",
+      "template_field": true,
+      "field_type": "number",
+      "field_desc": "Clarity score from 0-5 based on documentation quality",
+      "field_validation": "0-5",
+      "field_category": "scoring"
+    },
+    "challenge": {
+      "weight": 0.2,
+      "description": "Evidence of independent challenge and validation",
+      "template_field": true,
+      "field_type": "number",
+      "field_desc": "Challenge score from 0-5 based on independent validation",
+      "field_validation": "0-5",
+      "field_category": "scoring"
+    }
+  }
+}

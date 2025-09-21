@@ -143,21 +143,29 @@ def render_step_2_software_check():
         results = dep_results['results']
         status = dep_results['overall_status']
 
-        st.markdown("### 💻 Software Check Results:")
+        st.markdown("### 💻 Software & Configuration Check Results:")
 
         if status == 'ready':
-            st.success("🎉 **PERFECT!** All required software is installed!")
+            st.success("🎉 **PERFECT!** All required software is installed and configured!")
         else:
-            st.warning("⚠️ **Some software is missing.** We'll help you install it!")
+            st.warning("⚠️ **Some software or configuration is missing.** We'll help you fix it!")
 
         # Show detailed results
         for check, passed in results.items():
             if isinstance(passed, bool):
                 check_name = check.replace('_', ' ').title()
                 if passed:
-                    st.success(f"✅ **{check_name}**: Installed and ready!")
+                    if check == 'aws_credentials_configured':
+                        st.success(f"✅ **{check_name}**: Configured and ready!")
+                    else:
+                        st.success(f"✅ **{check_name}**: Installed and ready!")
                 else:
-                    st.error(f"❌ **{check_name}**: Not installed")
+                    if check == 'aws_credentials_configured':
+                        st.error(f"❌ **{check_name}**: Not configured")
+                    elif check == 'file_permissions':
+                        st.error(f"❌ **{check_name}**: Insufficient permissions")
+                    else:
+                        st.error(f"❌ **{check_name}**: Not installed")
 
                     # Provide specific installation help
                     if check == 'postgresql_available':
@@ -178,7 +186,7 @@ def render_step_2_software_check():
             st.warning("🎯 **NEXT STEP:** Install the missing software above, then try again.")
 
         # Add a button to re-check
-        if st.button("🔄 Check Again", use_container_width=True):
+        if st.button("🔄 Check Again", use_container_width=True, key="step2_check_again"):
             del st.session_state['step2_results']
             st.rerun()
 
@@ -245,7 +253,7 @@ def render_step_3_chat_setup():
             st.warning("🎯 **NEXT STEP:** Fix the AI configuration issues above.")
 
         # Add a button to re-check
-        if st.button("🔄 Check Again", use_container_width=True):
+        if st.button("🔄 Check Again", use_container_width=True, key="step3_check_again"):
             del st.session_state['step3_results']
             st.rerun()
 
@@ -303,7 +311,7 @@ def render_step_4_health_check():
             st.warning("🎯 **NEXT STEP:** Fix the issues above, then test again.")
 
         # Add a button to re-check
-        if st.button("🔄 Check Again", use_container_width=True):
+        if st.button("🔄 Check Again", use_container_width=True, key="step4_check_again"):
             del st.session_state['step4_results']
             st.rerun()
 
