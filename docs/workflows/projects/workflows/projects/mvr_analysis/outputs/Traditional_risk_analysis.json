@@ -1,0 +1,303 @@
+{
+  "metadata": {
+    "generated_at": "2025-09-12T11:03:40.825791",
+    "generator_version": "MVR-QA-v1.0",
+    "base_model_type": "Traditional",
+    "review_activity": "Full Scope Validation",
+    "analysis_type": "Risk Tier Sensitivity Analysis"
+  },
+  "executive_summary": {
+    "model_type": "Traditional",
+    "risk_tiers_analyzed": [
+      "Low",
+      "Medium",
+      "High"
+    ],
+    "total_sections_range": {
+      "minimum": 5,
+      "maximum": 9
+    },
+    "score_range": {
+      "lowest": 56.0,
+      "highest": 76.0
+    },
+    "key_insight": "Risk tier scaling shows 4 additional sections from Low to High risk"
+  },
+  "risk_tier_analysis": {
+    "Low": {
+      "overall_score": 76.0,
+      "verdict": "warning",
+      "sections": {
+        "required": 5,
+        "complete": 4,
+        "incomplete": 1,
+        "missing": 0,
+        "completion_rate": 0.8
+      },
+      "criterion_scores": {
+        "compliance": 4,
+        "coverage": 4,
+        "clarity": 4,
+        "challenge": 3
+      },
+      "section_list": [
+        "A",
+        "B",
+        "C",
+        "F",
+        "J"
+      ]
+    },
+    "Medium": {
+      "overall_score": 56.0,
+      "verdict": "fail",
+      "sections": {
+        "required": 8,
+        "complete": 5,
+        "incomplete": 3,
+        "missing": 0,
+        "completion_rate": 0.625
+      },
+      "criterion_scores": {
+        "compliance": 3,
+        "coverage": 3,
+        "clarity": 3,
+        "challenge": 2
+      },
+      "section_list": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "I",
+        "J"
+      ]
+    },
+    "High": {
+      "overall_score": 67.0,
+      "verdict": "warning",
+      "sections": {
+        "required": 9,
+        "complete": 7,
+        "incomplete": 2,
+        "missing": 0,
+        "completion_rate": 0.7777777777777778
+      },
+      "criterion_scores": {
+        "compliance": 4,
+        "coverage": 3,
+        "clarity": 3,
+        "challenge": 3
+      },
+      "section_list": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "I",
+        "J",
+        "L"
+      ]
+    }
+  },
+  "sensitivity_analysis": {
+    "section_impact": {
+      "low_to_medium": {
+        "additional_sections": 3,
+        "score_impact": -20.0,
+        "impact_per_section": -6.666666666666667,
+        "new_sections": [
+          "E",
+          "I",
+          "D"
+        ]
+      },
+      "medium_to_high": {
+        "additional_sections": 1,
+        "score_impact": 11.0,
+        "impact_per_section": 11.0,
+        "new_sections": [
+          "L"
+        ]
+      },
+      "low_to_high": {
+        "additional_sections": 4,
+        "score_impact": -9.0,
+        "impact_per_section": -2.25
+      }
+    },
+    "complexity_drivers": {
+      "Low": {
+        "key_sections": [
+          "A",
+          "B",
+          "C",
+          "F",
+          "J"
+        ],
+        "focus": "Essential validation only - Planning, Governance, Data, Implementation, Documentation",
+        "regulatory_burden": "Minimal - core compliance requirements"
+      },
+      "Medium": {
+        "key_sections": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "I",
+          "J"
+        ],
+        "focus": "Adds methodology validation - Development (D), Performance (E), Monitoring (I)",
+        "regulatory_burden": "Moderate - expanded scope for model development validation"
+      },
+      "High": {
+        "key_sections": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "I",
+          "J",
+          "L"
+        ],
+        "focus": "Adds stress testing - Stress Testing & Scenario Analysis (L)",
+        "regulatory_burden": "Maximum - full validation including stress scenarios"
+      }
+    },
+    "performance_factors": {
+      "completion_rate_impact": {
+        "Low": "80.0% completion = 76 score",
+        "Medium": "62.5% completion = 56 score",
+        "High": "77.8% completion = 67 score"
+      },
+      "score_efficiency": {
+        "Low": 15.2,
+        "Medium": 7.0,
+        "High": 7.444444444444445
+      }
+    }
+  },
+  "requirements_framework": {
+    "model_type_patterns": {
+      "AI_ML_GenAI": {
+        "complexity_level": "Highest",
+        "high_risk_sections": 10,
+        "key_requirement": "Section H (AI-specific validation)",
+        "regulatory_focus": "Algorithmic transparency and fairness"
+      },
+      "Traditional": {
+        "complexity_level": "High",
+        "high_risk_sections": 9,
+        "key_requirement": "Section L (Stress testing)",
+        "regulatory_focus": "Full methodology validation"
+      },
+      "Integrator_SDC": {
+        "complexity_level": "Medium",
+        "high_risk_sections": 7,
+        "key_requirement": "Section G (Third-party assessment)",
+        "regulatory_focus": "Third-party model validation"
+      },
+      "Qualitative": {
+        "complexity_level": "Low",
+        "high_risk_sections": 4,
+        "key_requirement": "Section K (Qualitative assessment)",
+        "regulatory_focus": "Streamlined qualitative validation"
+      }
+    },
+    "risk_tier_scaling": {
+      "High": {
+        "description": "Maximum sections including stress testing and specialized validations",
+        "regulatory_burden": "Maximum - full validation with stress scenarios"
+      },
+      "Medium": {
+        "description": "Core validation sections without stress testing",
+        "regulatory_burden": "Moderate - expanded scope for methodology validation"
+      },
+      "Low": {
+        "description": "Essential sections only (A, B, C, F, J)",
+        "regulatory_burden": "Minimal - core compliance requirements"
+      }
+    },
+    "vst_scoping": {
+      "vst_required_sections": "Most sections require VST documentation standards",
+      "non_vst_exceptions": [
+        "Section K (Qualitative)",
+        "Section G (Third Party)"
+      ],
+      "impact": "VST scoping drives enhanced documentation and evidence requirements"
+    }
+  },
+  "mathematical_insights": {
+    "efficiency_analysis": {
+      "Low": {
+        "points_per_section": 15.2,
+        "completion_impact": "80.0% completion = 76 score"
+      },
+      "Medium": {
+        "points_per_section": 7.0,
+        "completion_impact": "62.5% completion = 56 score"
+      },
+      "High": {
+        "points_per_section": 7.444444444444445,
+        "completion_impact": "77.8% completion = 67 score"
+      }
+    },
+    "transition_impacts": {
+      "low_to_medium": {
+        "section_penalty": -6.666666666666667,
+        "sections_added": [
+          "E",
+          "I",
+          "D"
+        ],
+        "interpretation": "Adding methodology validation creates efficiency penalty"
+      },
+      "medium_to_high": {
+        "section_benefit": 11.0,
+        "sections_added": [
+          "L"
+        ],
+        "interpretation": "Stress testing requirement improves focused attention"
+      }
+    },
+    "key_findings": [
+      "Low risk achieves 15.2 points/section (most efficient)",
+      "Medium risk suffers -6.7 points/section penalty",
+      "High risk recovers with 11.0 points/section improvement"
+    ]
+  },
+  "actionable_insights": {
+    "regulatory_strategy": [
+      "Low risk models benefit from streamlined validation approach",
+      "Medium risk models need careful scope management to avoid efficiency loss",
+      "High risk models achieve better outcomes through focused regulatory scrutiny"
+    ],
+    "validation_priorities": {
+      "Low": [
+        "Focus on essential compliance (A,B,C,F,J)",
+        "Maximize completion quality"
+      ],
+      "Medium": [
+        "Manage methodology validation scope",
+        "Prevent scope creep inefficiencies"
+      ],
+      "High": [
+        "Leverage regulatory attention",
+        "Emphasize stress testing quality (Section L)"
+      ]
+    },
+    "scoring_optimization": [
+      "Completion rate has 17.5% impact range",
+      "Section efficiency varies 2x between risk tiers",
+      "Strategic focus on high-impact sections yields better scores"
+    ]
+  }
+}

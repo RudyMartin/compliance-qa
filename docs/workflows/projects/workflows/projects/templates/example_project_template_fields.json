@@ -1,0 +1,59 @@
+{
+  "project_template_fields": {
+    "input_files": {
+      "description": "List of input documents to process",
+      "type": "array",
+      "required": true,
+      "validation": ["non_empty", "valid_file_paths"]
+    },
+    "quality_threshold": {
+      "description": "Minimum quality score (0.0-1.0)",
+      "type": "number",
+      "required": true,
+      "default": 0.85,
+      "validation": ["range:0.0-1.0"]
+    },
+    "domain_context": {
+      "description": "Domain-specific context for processing",
+      "type": "string",
+      "required": false,
+      "default": "general"
+    },
+    "processing_mode": {
+      "description": "Processing mode selection",
+      "type": "string",
+      "required": true,
+      "default": "standard",
+      "validation": ["enum:standard,fast,detailed"]
+    },
+    "output_format": {
+      "description": "Desired output format configuration",
+      "type": "object",
+      "required": false,
+      "default": {
+        "format": "json",
+        "include_metadata": true,
+        "compression": false
+      }
+    },
+    "enable_rag_enhancement": {
+      "description": "Enable RAG system enhancement",
+      "type": "boolean",
+      "required": false,
+      "default": true
+    },
+    "max_processing_time": {
+      "description": "Maximum processing time in minutes",
+      "type": "number",
+      "required": false,
+      "default": 30,
+      "validation": ["min:1", "max:120"]
+    }
+  },
+  "field_extraction_metadata": {
+    "extracted_at": "2025-01-15T12:00:00Z",
+    "extractor_version": "1.0",
+    "total_fields": 7,
+    "sources": ["criteria", "templates", "resources"]
+  }
+}

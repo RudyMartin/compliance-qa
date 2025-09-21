@@ -1,0 +1,33 @@
+{
+  "test_config": {
+    "test_id": "B",
+    "name": "quality_focus",
+    "label": "Test B: Quality Focus",
+    "stage1_model": "claude-3-sonnet",
+    "stage2_model": "claude-3-5-sonnet",
+    "description": "Strong initial + premium enhancement for higher quality"
+  },
+  "initial_response": {
+    "content": "For the QA/QC workflow for data quality assessment, here's a quick initial analysis:\n\nMetadata Extraction:\n- Implement automated metadata extraction from data sources to capture key attributes like source, timestamp, data types, etc.\n- Consider using a centralized metadata repository for easy access and analysis.\n\nAnalysis Steps:\n- Define a standardized set of data quality checks (e.g., completeness, validity, consistency, integrity) based on business rules and requirements.\n- Prioritize checks based on criticality and potential impact on downstream processes.\n- Automate the execution of these checks as much as possible for efficiency and consistency.\n\nResults Aggregation:\n- Establish a centralized repository or dashboard to consolidate and visualize QA/QC results from various data sources and checks.\n- Implement alerting mechanisms for critical issues and exceptions.\n\nRecording Questions:\n- Maintain a knowledge base or FAQ section to document common data quality issues, root causes, and resolutions.\n- Encourage collaboration and knowledge sharing among team members.\n\nTemplate Ordering and Execution Strategy:\n- Implement a modular and extensible framework for the QA/QC workflow, allowing easy addition or modification of checks.\n- Consider a parallel execution strategy for independent checks to improve performance.\n- Prioritize checks based on data criticality and dependencies, executing higher-priority checks first.\n- Implement checkpoints for manual intervention and review, if necessary.\n\nKey Recommendations:\n- Automate as much as possible for consistency and efficiency.\n- Centralize metadata, results, and knowledge for easier access and analysis.\n- Prioritize and modularize checks for flexibility and performance optimization.",
+    "confidence": 0.6,
+    "processing_time_ms": 14699.0327835083,
+    "model_used": "claude-3-sonnet",
+    "tokens_used": 317.2
+  },
+  "enhanced_response": {
+    "content": "Enhanced analysis: The initial response was correct but incomplete. Additional considerations include workflow dependencies, performance optimization, error handling, and testing strategies for optimal results.",
+    "confidence": 0.9,
+    "processing_time_ms": 52.989959716796875,
+    "model_used": "claude-3-5-sonnet",
+    "tokens_used": 31.200000000000003
+  },
+  "summary": {
+    "improvement_summary": "Increased confidence by 0.3",
+    "total_processing_time_ms": 15344.724178314209,
+    "confidence_improvement": 0.30000000000000004,
+    "final_content": "Enhanced analysis: The initial response was correct but incomplete. Additional considerations include workflow dependencies, performance optimization, error handling, and testing strategies for optimal results."
+  },
+  "timestamp": "2025-09-17T17:59:38.799030",
+  "project_name": "alex_qaqc",
+  "output_location": "tidyllm/workflows/projects/alex_qaqc/outputs/ab_test_B_detailed_results.json"
+}

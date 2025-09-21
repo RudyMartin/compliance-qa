@@ -1,0 +1,100 @@
+{
+  "workflow_criteria": {
+    "workflow_id": "model_validation_001",
+    "workflow_name": "Model Validation Assessment Flow",
+    "version": "1.0",
+    "created_at": "2025-01-15T12:00:00Z"
+  },
+  "document_qualifiers": {
+    "file_types": {
+      "value": ["pdf", "docx", "xlsx", "pptx"],
+      "template_field": false,
+      "description": "Supported model documentation formats"
+    },
+    "max_file_size_mb": {
+      "value": 100,
+      "template_field": false,
+      "description": "Maximum file size for model documentation"
+    },
+    "required_documents": {
+      "value": ["model_development_document", "data_dictionary", "validation_testing"],
+      "template_field": false,
+      "description": "Mandatory documentation for validation"
+    }
+  },
+  "validation_standards": {
+    "sr_11_7_compliance": {
+      "conceptual_soundness": "Model theory and logic assessment",
+      "ongoing_monitoring": "Performance tracking requirements",
+      "outcomes_analysis": "Backtesting and benchmarking",
+      "corrective_action": "Issue remediation processes"
+    },
+    "model_risk_framework": {
+      "inherent_risk": "Model complexity and usage assessment",
+      "control_effectiveness": "Validation process robustness",
+      "residual_risk": "Post-validation risk level"
+    }
+  },
+  "assessment_criteria": {
+    "documentation_completeness": {
+      "minimum_score": 0.85,
+      "required_sections": ["executive_summary", "methodology", "data_sources", "limitations", "validation_results"],
+      "scoring_weights": {
+        "completeness": 0.3,
+        "clarity": 0.2,
+        "technical_depth": 0.25,
+        "regulatory_alignment": 0.25
+      }
+    },
+    "methodology_validation": {
+      "theoretical_soundness": 0.9,
+      "implementation_accuracy": 0.85,
+      "assumptions_validity": 0.8,
+      "sensitivity_analysis": 0.75
+    },
+    "performance_standards": {
+      "backtesting_pass_rate": 0.95,
+      "benchmark_deviation": 0.05,
+      "statistical_significance": 0.95,
+      "out_of_sample_performance": 0.8
+    }
+  },
+  "template_fields": {
+    "model_type": {
+      "description": "Type of model being validated",
+      "type": "string",
+      "required": true,
+      "enum": ["credit_risk", "market_risk", "operational_risk", "stress_testing", "pricing"],
+      "default": "credit_risk",
+      "validation_rules": ["must_match_documentation"]
+    },
+    "regulatory_framework": {
+      "description": "Applicable regulatory framework",
+      "type": "string",
+      "required": true,
+      "enum": ["SR_11-7", "CCAR", "IFRS_9", "Basel_III", "CECL"],
+      "default": "SR_11-7"
+    },
+    "validation_scope": {
+      "description": "Scope of validation assessment",
+      "type": "string",
+      "required": true,
+      "enum": ["initial", "annual", "material_change", "ad_hoc"],
+      "default": "annual"
+    },
+    "confidence_threshold": {
+      "description": "Minimum confidence threshold for validation findings",
+      "type": "number",
+      "required": true,
+      "range": [0.7, 1.0],
+      "default": 0.85
+    },
+    "review_id": {
+      "description": "Unique validation review identifier",
+      "type": "string",
+      "required": true,
+      "pattern": "MVR[0-9]{6}_[0-9]{4}",
+      "example": "MVR123456_2025"
+    }
+  }
+}

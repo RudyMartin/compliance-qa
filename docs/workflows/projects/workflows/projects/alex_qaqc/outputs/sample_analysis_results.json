@@ -1,0 +1,46 @@
+{
+  "workflow_execution": {
+    "workflow_id": "alex_qaqc",
+    "execution_timestamp": "2025-09-17T13:50:00Z",
+    "status": "completed",
+    "processing_time_ms": 45000,
+    "input_files": ["sample_compliance_doc.pdf"],
+    "steps_completed": 4
+  },
+  "metadata_extraction": {
+    "document_title": "Compliance Assessment Report",
+    "document_type": "regulatory_compliance",
+    "author": "Quality Assurance Team",
+    "version": "2.1",
+    "creation_date": "2025-09-15",
+    "page_count": 18,
+    "text_length": 12450,
+    "language": "en",
+    "confidence_score": 0.94
+  },
+  "analysis_results": {
+    "completeness_score": 0.92,
+    "accuracy_score": 0.88,
+    "consistency_score": 0.91,
+    "timeliness_score": 0.95,
+    "overall_quality_score": 0.915,
+    "quality_rating": "excellent",
+    "critical_issues": [],
+    "warnings": [
+      "Minor formatting inconsistency in section 3.2",
+      "Missing optional field: secondary_reviewer"
+    ]
+  },
+  "recommendations": [
+    "Document meets all quality standards",
+    "Consider standardizing section 3.2 formatting",
+    "Add secondary reviewer information for completeness"
+  ],
+  "processing_summary": {
+    "total_criteria_evaluated": 24,
+    "passed_criteria": 22,
+    "warnings": 2,
+    "errors": 0,
+    "execution_log": "All QAQC steps completed successfully"
+  }
+}

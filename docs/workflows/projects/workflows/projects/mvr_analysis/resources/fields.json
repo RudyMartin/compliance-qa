@@ -1,0 +1,637 @@
+{
+  "workflow_name": "mvr_analysis",
+  "template_file": "mvr_analysis_template.md",
+  "last_updated": "2025-09-14T19:21:59.954071",
+  "generic_fields_version": "1.0",
+  "total_fields": 65,
+  "fields_used_in_template": [
+    "actual_sections",
+    "analyzer_version",
+    "challenge_contribution",
+    "challenge_justification",
+    "challenge_score",
+    "challenge_weight",
+    "clarity_contribution",
+    "clarity_justification",
+    "clarity_score",
+    "clarity_weight",
+    "complexity_level",
+    "compliance_contribution",
+    "compliance_justification",
+    "compliance_score",
+    "compliance_weight",
+    "coverage_contribution",
+    "coverage_justification",
+    "coverage_score",
+    "coverage_weight",
+    "expected_sections",
+    "generated_date",
+    "immediate_actions",
+    "incomplete_sections",
+    "judge_version",
+    "key_findings",
+    "missing_sections",
+    "model_id",
+    "model_specific_requirements",
+    "model_type",
+    "overall_score",
+    "pending_items",
+    "processing_time",
+    "quality_improvement",
+    "regulatory_note",
+    "required_sections",
+    "requirements_analysis",
+    "review_activity",
+    "risk_tier",
+    "third_party",
+    "verdict",
+    "vst_scoped_sections"
+  ],
+  "fields": {
+    "workflow_name": {
+      "field_name": "workflow_name",
+      "field_desc": "Name of the workflow being executed",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "^[a-z_]+$",
+      "field_category": "metadata"
+    },
+    "report_id": {
+      "field_name": "report_id",
+      "field_desc": "Unique identifier for this report",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "^[A-Z0-9_]+$",
+      "field_category": "metadata"
+    },
+    "timestamp": {
+      "field_name": "timestamp",
+      "field_desc": "ISO timestamp when report was generated",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "ISO8601",
+      "field_category": "metadata"
+    },
+    "analysis_date": {
+      "field_name": "analysis_date",
+      "field_desc": "Date when analysis was performed",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "YYYY-MM-DD",
+      "field_category": "metadata"
+    },
+    "status": {
+      "field_name": "status",
+      "field_desc": "Current status of the analysis",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "pending",
+      "field_validation": "pending|in_progress|completed|failed|approved|rejected",
+      "field_category": "metadata"
+    },
+    "document_type": {
+      "field_name": "document_type",
+      "field_desc": "Type of document being analyzed",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "document_info"
+    },
+    "document_version": {
+      "field_name": "document_version",
+      "field_desc": "Version of the document",
+      "field_type": "string",
+      "field_required": false,
+      "field_default": "1.0",
+      "field_validation": "",
+      "field_category": "document_info"
+    },
+    "confidence_score": {
+      "field_name": "confidence_score",
+      "field_desc": "Confidence level in the analysis (0-100)",
+      "field_type": "number",
+      "field_required": true,
+      "field_default": "0",
+      "field_validation": "0-100",
+      "field_category": "document_info"
+    },
+    "compliance_score": {
+      "field_name": "compliance_score",
+      "field_desc": "Regulatory compliance score (0-100)",
+      "field_type": "number",
+      "field_required": true,
+      "field_default": "0",
+      "field_validation": "0-100",
+      "field_category": "quality_metrics"
+    },
+    "coverage_score": {
+      "field_name": "coverage_score",
+      "field_desc": "Analysis coverage completeness score (0-100)",
+      "field_type": "number",
+      "field_required": true,
+      "field_default": "0",
+      "field_validation": "0-100",
+      "field_category": "quality_metrics"
+    },
+    "clarity_score": {
+      "field_name": "clarity_score",
+      "field_desc": "Documentation clarity score (0-100)",
+      "field_type": "number",
+      "field_required": true,
+      "field_default": "0",
+      "field_validation": "0-100",
+      "field_category": "quality_metrics"
+    },
+    "challenge_score": {
+      "field_name": "challenge_score",
+      "field_desc": "Independent validation challenge score (0-100)",
+      "field_type": "number",
+      "field_required": true,
+      "field_default": "0",
+      "field_validation": "0-100",
+      "field_category": "quality_metrics"
+    },
+    "overall_score": {
+      "field_name": "overall_score",
+      "field_desc": "Overall weighted quality score (0-100)",
+      "field_type": "number",
+      "field_required": true,
+      "field_default": "0",
+      "field_validation": "0-100",
+      "field_category": "quality_metrics"
+    },
+    "analysis_results": {
+      "field_name": "analysis_results",
+      "field_desc": "Main analysis findings and results",
+      "field_type": "text",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "analysis_content"
+    },
+    "findings": {
+      "field_name": "findings",
+      "field_desc": "Key findings from the analysis",
+      "field_type": "text",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "analysis_content"
+    },
+    "recommendations": {
+      "field_name": "recommendations",
+      "field_desc": "Actionable recommendations based on analysis",
+      "field_type": "text",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "analysis_content"
+    },
+    "risk_assessment": {
+      "field_name": "risk_assessment",
+      "field_desc": "Risk level assessment and explanation",
+      "field_type": "text",
+      "field_required": false,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "analysis_content"
+    },
+    "reviewer": {
+      "field_name": "reviewer",
+      "field_desc": "Name of the primary reviewer",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "reviewer_info"
+    },
+    "reviewer_role": {
+      "field_name": "reviewer_role",
+      "field_desc": "Role/title of the reviewer",
+      "field_type": "string",
+      "field_required": false,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "reviewer_info"
+    },
+    "qa_status": {
+      "field_name": "qa_status",
+      "field_desc": "Quality assurance status",
+      "field_type": "enum",
+      "field_required": true,
+      "field_default": "pending",
+      "field_validation": "pending|in_review|approved|requires_revision",
+      "field_category": "reviewer_info"
+    },
+    "regulatory_framework": {
+      "field_name": "regulatory_framework",
+      "field_desc": "Applicable regulatory framework (e.g., SR-11-7, Basel-III)",
+      "field_type": "string",
+      "field_required": false,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "compliance"
+    },
+    "compliance_status": {
+      "field_name": "compliance_status",
+      "field_desc": "Overall compliance status",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "pending",
+      "field_validation": "compliant|non_compliant|pending|requires_review",
+      "field_category": "compliance"
+    },
+    "validation_required": {
+      "field_name": "validation_required",
+      "field_desc": "Whether additional validation is required",
+      "field_type": "boolean",
+      "field_required": true,
+      "field_default": true,
+      "field_validation": "true|false",
+      "field_category": "compliance"
+    },
+    "risk_level": {
+      "field_name": "risk_level",
+      "field_desc": "Assessed risk level",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "medium",
+      "field_validation": "low|medium|high|critical",
+      "field_category": "risk_management"
+    },
+    "risk_tier": {
+      "field_name": "risk_tier",
+      "field_desc": "Risk tier classification",
+      "field_type": "string",
+      "field_required": false,
+      "field_default": "tier_2",
+      "field_validation": "tier_1|tier_2|tier_3",
+      "field_category": "risk_management"
+    },
+    "mitigation_required": {
+      "field_name": "mitigation_required",
+      "field_desc": "Whether risk mitigation is required",
+      "field_type": "boolean",
+      "field_required": true,
+      "field_default": false,
+      "field_validation": "true|false",
+      "field_category": "risk_management"
+    },
+    "compliance": {
+      "field_name": "compliance",
+      "field_desc": "Compliance score from 0-5 based on section completeness",
+      "field_type": "number",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "0-5",
+      "field_category": "scoring"
+    },
+    "coverage": {
+      "field_name": "coverage",
+      "field_desc": "Coverage score from 0-5 based on section coverage",
+      "field_type": "number",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "0-5",
+      "field_category": "scoring"
+    },
+    "clarity": {
+      "field_name": "clarity",
+      "field_desc": "Clarity score from 0-5 based on documentation quality",
+      "field_type": "number",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "0-5",
+      "field_category": "scoring"
+    },
+    "challenge": {
+      "field_name": "challenge",
+      "field_desc": "Challenge score from 0-5 based on independent validation",
+      "field_type": "number",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "0-5",
+      "field_category": "scoring"
+    },
+    "actual_sections": {
+      "field_name": "actual_sections",
+      "field_desc": "MVR-specific field for actual sections",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "analyzer_version": {
+      "field_name": "analyzer_version",
+      "field_desc": "MVR-specific field for analyzer version",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "challenge_contribution": {
+      "field_name": "challenge_contribution",
+      "field_desc": "MVR-specific field for challenge contribution",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "challenge_justification": {
+      "field_name": "challenge_justification",
+      "field_desc": "MVR-specific field for challenge justification",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "challenge_weight": {
+      "field_name": "challenge_weight",
+      "field_desc": "MVR-specific field for challenge weight",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "clarity_contribution": {
+      "field_name": "clarity_contribution",
+      "field_desc": "MVR-specific field for clarity contribution",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "clarity_justification": {
+      "field_name": "clarity_justification",
+      "field_desc": "MVR-specific field for clarity justification",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "clarity_weight": {
+      "field_name": "clarity_weight",
+      "field_desc": "MVR-specific field for clarity weight",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "complexity_level": {
+      "field_name": "complexity_level",
+      "field_desc": "MVR-specific field for complexity level",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "compliance_contribution": {
+      "field_name": "compliance_contribution",
+      "field_desc": "MVR-specific field for compliance contribution",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "compliance_justification": {
+      "field_name": "compliance_justification",
+      "field_desc": "MVR-specific field for compliance justification",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "compliance_weight": {
+      "field_name": "compliance_weight",
+      "field_desc": "MVR-specific field for compliance weight",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "coverage_contribution": {
+      "field_name": "coverage_contribution",
+      "field_desc": "MVR-specific field for coverage contribution",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "coverage_justification": {
+      "field_name": "coverage_justification",
+      "field_desc": "MVR-specific field for coverage justification",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "coverage_weight": {
+      "field_name": "coverage_weight",
+      "field_desc": "MVR-specific field for coverage weight",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "expected_sections": {
+      "field_name": "expected_sections",
+      "field_desc": "MVR-specific field for expected sections",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "generated_date": {
+      "field_name": "generated_date",
+      "field_desc": "MVR-specific field for generated date",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "immediate_actions": {
+      "field_name": "immediate_actions",
+      "field_desc": "MVR-specific field for immediate actions",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "incomplete_sections": {
+      "field_name": "incomplete_sections",
+      "field_desc": "MVR-specific field for incomplete sections",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "judge_version": {
+      "field_name": "judge_version",
+      "field_desc": "MVR-specific field for judge version",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "key_findings": {
+      "field_name": "key_findings",
+      "field_desc": "MVR-specific field for key findings",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "missing_sections": {
+      "field_name": "missing_sections",
+      "field_desc": "MVR-specific field for missing sections",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "model_id": {
+      "field_name": "model_id",
+      "field_desc": "MVR-specific field for model id",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "model_specific_requirements": {
+      "field_name": "model_specific_requirements",
+      "field_desc": "MVR-specific field for model specific requirements",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "model_type": {
+      "field_name": "model_type",
+      "field_desc": "MVR-specific field for model type",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "pending_items": {
+      "field_name": "pending_items",
+      "field_desc": "MVR-specific field for pending items",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "processing_time": {
+      "field_name": "processing_time",
+      "field_desc": "MVR-specific field for processing time",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "quality_improvement": {
+      "field_name": "quality_improvement",
+      "field_desc": "MVR-specific field for quality improvement",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "regulatory_note": {
+      "field_name": "regulatory_note",
+      "field_desc": "MVR-specific field for regulatory note",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "required_sections": {
+      "field_name": "required_sections",
+      "field_desc": "MVR-specific field for required sections",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "requirements_analysis": {
+      "field_name": "requirements_analysis",
+      "field_desc": "MVR-specific field for requirements analysis",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "review_activity": {
+      "field_name": "review_activity",
+      "field_desc": "MVR-specific field for review activity",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "third_party": {
+      "field_name": "third_party",
+      "field_desc": "MVR-specific field for third party",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "verdict": {
+      "field_name": "verdict",
+      "field_desc": "MVR-specific field for verdict",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    },
+    "vst_scoped_sections": {
+      "field_name": "vst_scoped_sections",
+      "field_desc": "MVR-specific field for vst scoped sections",
+      "field_type": "string",
+      "field_required": true,
+      "field_default": "",
+      "field_validation": "",
+      "field_category": "mvr_specific"
+    }
+  }
+}

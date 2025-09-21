@@ -1,0 +1,114 @@
+{
+  "timestamp": "2025-09-20T21:07:54.201427",
+  "checks": [
+    {
+      "name": "Domain Layer Isolation",
+      "result": {
+        "status": "FAIL",
+        "message": "Found 2 domain isolation violations",
+        "details": [
+          "domain\\services\\setup_service.py: imports from adapters",
+          "domain\\ports\\outbound\\setup_dependencies_port.py: imports from infrastructure"
+        ]
+      }
+    },
+    {
+      "name": "Port Definitions",
+      "result": {
+        "status": "WARNING",
+        "message": "Missing 2 port definitions",
+        "details": [
+          "StoragePort",
+          "LLMPort"
+        ]
+      }
+    },
+    {
+      "name": "Adapter Implementation",
+      "result": {
+        "status": "WARNING",
+        "message": "Only 2 adapters found",
+        "details": [
+          "adapters\\secondary\\in_memory_portal_repository.py",
+          "adapters\\secondary\\yaml_config_repository.py",
+          "adapters\\session\\unified_session_manager.py",
+          "adapters\\secondary\\session\\unified_session_adapter.py",
+          "adapters\\secondary\\setup\\setup_dependencies_adapter.py",
+          "adapters\\primary\\cli\\portal_startup.py",
+          "adapters\\primary\\cli\\validate_environment.py",
+          "adapters\\primary\\web\\setup\\setup_portal.py"
+        ]
+      }
+    },
+    {
+      "name": "Infrastructure Independence",
+      "result": {
+        "status": "FAIL",
+        "message": "Infrastructure has 2 dependency violations",
+        "details": [
+          "infrastructure\\container.py: imports from adapters",
+          "infrastructure\\script_generator.py: imports from adapters"
+        ]
+      }
+    },
+    {
+      "name": "Circular Dependencies",
+      "result": {
+        "status": "WARNING",
+        "message": "Found 23 potential circular dependencies",
+        "details": [
+          "infrastructure\\services\\resilient_pool_manager.py: imports from packages",
+          "packages\\tidyllm\\cli.py: directly imports boto3",
+          "packages\\tidyllm\\admin\\credential_loader.py: directly imports boto3",
+          "packages\\tidyllm\\admin\\run_diagnostics_real.py: directly imports boto3",
+          "packages\\tidyllm\\gateways\\corporate_llm_gateway.py: directly imports boto3",
+          "packages\\tidyllm\\infrastructure\\diagnostics.py: directly imports boto3",
+          "packages\\tidyllm\\interfaces\\cli.py: directly imports boto3",
+          "packages\\tidyllm\\knowledge_systems\\startup_model_discovery.py: directly imports boto3",
+          "packages\\tidyllm\\scripts\\check_aws_config.py: directly imports boto3",
+          "packages\\tidyllm\\scripts\\s3_flow_parser.py: directly imports boto3",
+          "packages\\tidyllm\\scripts\\test_s3_file_upload.py: directly imports boto3",
+          "packages\\tidyllm\\validators\\aws.py: directly imports boto3",
+          "packages\\tidyllm\\workflows\\projects\\code_review\\sample_compliant_code.py: directly imports boto3",
+          "packages\\tidyllm\\utils\\corporate\\usm_wrapper.py: directly imports boto3",
+          "packages\\tidyllm\\utils\\corporate\\validator.py: directly imports boto3",
+          "packages\\tidyllm\\knowledge_systems\\migrated\\scattered_rag\\rag_pipeline_tester.py: directly imports boto3",
+          "packages\\tidyllm\\knowledge_systems\\migrated\\scattered_rag\\_sme_rag_system.py: directly imports boto3",
+          "packages\\tidyllm\\knowledge_systems\\adapters\\judge_rag\\judge_rag_adapter.py: directly imports boto3",
+          "packages\\tidyllm\\knowledge_systems\\adapters\\postgres_rag\\_sme_rag_system.py: directly imports boto3",
+          "packages\\tidyllm\\infrastructure\\session\\unified.py: directly imports boto3",
+          "packages\\tidyllm\\flow\\examples\\checklist_flow.py: directly imports boto3",
+          "packages\\tidyllm\\flow\\examples\\modeling_flow.py: directly imports boto3",
+          "packages\\tidyllm\\flow\\examples\\sop_flow.py: directly imports boto3"
+        ]
+      }
+    },
+    {
+      "name": "Delegate Pattern",
+      "result": {
+        "status": "PASS",
+        "message": "Found 3 delegate implementations",
+        "details": [
+          "aws_delegate.py",
+          "bedrock_delegate.py",
+          "s3_delegate.py"
+        ]
+      }
+    },
+    {
+      "name": "Test Structure",
+      "result": {
+        "status": "PASS",
+        "message": "Test structure properly organized",
+        "details": []
+      }
+    }
+  ],
+  "summary": {
+    "total_checks": 7,
+    "passed": 2,
+    "warnings": 3,
+    "violations": 2,
+    "compliance_score": 28.57142857142857
+  }
+}

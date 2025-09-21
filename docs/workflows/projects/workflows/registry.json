@@ -1,0 +1,1145 @@
+{
+  "alex_qaqc": {
+    "workflow_id": "alex_qaqc",
+    "workflow_name": "Alex QAQC - Quality Assurance & Quality Control",
+    "workflow_type": "analysis",
+    "status": "active",
+    "description": "4-step QAQC workflow for document analysis with metadata extraction, analysis, aggregation, and recording of 5 analysis questions",
+    "supports_pdf": true,
+    "estimated_duration_ms": 45000,
+    "criteria": {
+      "id": "alex_qaqc_criteria",
+      "name": "[Alex QAQC] Quality Assurance & Quality Control",
+      "description": "Comprehensive QAQC analysis for document quality, compliance, and technical accuracy",
+      "scoring_rubric": {
+        "document_quality": 1.0,
+        "compliance_score": 1.0,
+        "technical_accuracy": 1.0,
+        "content_validation": 1.0,
+        "metadata_completeness": 1.0
+      },
+      "weight_scheme": {
+        "document_quality": 0.25,
+        "compliance_score": 0.25,
+        "technical_accuracy": 0.25,
+        "content_validation": 0.15,
+        "metadata_completeness": 0.1
+      }
+    }
+  },
+  "process_mvr": {
+    "workflow_id": "process_mvr",
+    "workflow_name": "Process MVR",
+    "workflow_type": "mvr",
+    "criteria": {
+      "id": "process_mvr_criteria",
+      "name": "[Process MVR] Criteria",
+      "description": "Process Model Validation Report through complete compliance workflow",
+      "scoring_rubric": {
+        "document_completeness": 1.0,
+        "compliance_score": 1.0,
+        "risk_assessment": 1.0,
+        "data_quality": 1.0
+      },
+      "weight_scheme": {
+        "document_completeness": 0.25,
+        "compliance_score": 0.35,
+        "risk_assessment": 0.3,
+        "data_quality": 0.1
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "mvr_document_type",
+        "compliance_standards"
+      ],
+      "processing_strategy": "multi_perspective",
+      "priority_level": "high",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "process_mvr_template",
+      "name": "[Process MVR] Template",
+      "template_path": "templates/mvr_analysis.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748144",
+      "last_modified": "2025-09-13T22:11:47.748148",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "active",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748154",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@mvr#process!extract@compliance_data",
+    "template_names": [
+      "mvr_analysis",
+      "qa_control"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "financial_analysis": {
+    "workflow_id": "financial_analysis",
+    "workflow_name": "Financial Analysis",
+    "workflow_type": "financial",
+    "criteria": {
+      "id": "financial_analysis_criteria",
+      "name": "[Financial Analysis] Criteria",
+      "description": "Comprehensive financial document analysis and risk assessment",
+      "scoring_rubric": {
+        "accuracy": 1.0,
+        "completeness": 1.0,
+        "risk_metrics": 1.0,
+        "compliance": 1.0
+      },
+      "weight_scheme": {
+        "accuracy": 0.4,
+        "completeness": 0.2,
+        "risk_metrics": 0.25,
+        "compliance": 0.15
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "financial_document_type"
+      ],
+      "processing_strategy": "single_template",
+      "priority_level": "normal",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "financial_analysis_template",
+      "name": "[Financial Analysis] Template",
+      "template_path": "templates/financial_analysis.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748163",
+      "last_modified": "2025-09-13T22:11:47.748164",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "inactive",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748165",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@financial#analysis!assess@risk_metrics",
+    "template_names": [
+      "financial_analysis",
+      "qa_control"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "contract_review": {
+    "workflow_id": "contract_review",
+    "workflow_name": "Contract Review",
+    "workflow_type": "contract",
+    "criteria": {
+      "id": "contract_review_criteria",
+      "name": "[Contract Review] Criteria",
+      "description": "Legal contract review with compliance validation",
+      "scoring_rubric": {
+        "general_quality": 1.0,
+        "completeness": 1.0,
+        "accuracy": 1.0,
+        "compliance": 1.0
+      },
+      "weight_scheme": {
+        "general_quality": 0.25,
+        "completeness": 0.25,
+        "accuracy": 0.25,
+        "compliance": 0.25
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "legal_document_type",
+        "contract_complexity"
+      ],
+      "processing_strategy": "multi_perspective",
+      "priority_level": "high",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "contract_review_template",
+      "name": "[Contract Review] Template",
+      "template_path": "templates/contract_analysis.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748171",
+      "last_modified": "2025-09-13T22:11:47.748172",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "inactive",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748174",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@contract#review!validate@legal_terms",
+    "template_names": [
+      "contract_analysis",
+      "compliance_review"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "quality_check": {
+    "workflow_id": "quality_check",
+    "workflow_name": "Quality Check",
+    "workflow_type": "quality",
+    "criteria": {
+      "id": "quality_check_criteria",
+      "name": "[Quality Check] Criteria",
+      "description": "Quality assurance review and validation workflow",
+      "scoring_rubric": {
+        "accuracy": 1.0,
+        "consistency": 1.0,
+        "completeness": 1.0,
+        "standards_compliance": 1.0
+      },
+      "weight_scheme": {
+        "accuracy": 0.3,
+        "consistency": 0.25,
+        "completeness": 0.25,
+        "standards_compliance": 0.2
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "quality_standards"
+      ],
+      "processing_strategy": "single_template",
+      "priority_level": "normal",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "quality_check_template",
+      "name": "[Quality Check] Template",
+      "template_path": "templates/qa_control.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748179",
+      "last_modified": "2025-09-13T22:11:47.748180",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "active",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748182",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@quality#check!validate@standards",
+    "template_names": [
+      "qa_control"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "peer_review": {
+    "workflow_id": "peer_review",
+    "workflow_name": "Peer Review",
+    "workflow_type": "peer",
+    "criteria": {
+      "id": "peer_review_criteria",
+      "name": "[Peer Review] Criteria",
+      "description": "Expert peer review and professional validation",
+      "scoring_rubric": {
+        "general_quality": 1.0,
+        "completeness": 1.0,
+        "accuracy": 1.0,
+        "compliance": 1.0
+      },
+      "weight_scheme": {
+        "general_quality": 0.25,
+        "completeness": 0.25,
+        "accuracy": 0.25,
+        "compliance": 0.25
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "expert_review_required"
+      ],
+      "processing_strategy": "multi_perspective",
+      "priority_level": "critical",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "peer_review_template",
+      "name": "[Peer Review] Template",
+      "template_path": "templates/peer_review.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748187",
+      "last_modified": "2025-09-13T22:11:47.748188",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "inactive",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748190",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@peer#review!validate@expert_opinion",
+    "template_names": [
+      "peer_review",
+      "qa_control"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "compliance_check": {
+    "workflow_id": "compliance_check",
+    "workflow_name": "Compliance Check",
+    "workflow_type": "compliance",
+    "criteria": {
+      "id": "compliance_check_criteria",
+      "name": "[Compliance Check] Criteria",
+      "description": "Regulatory compliance analysis and risk assessment",
+      "scoring_rubric": {
+        "regulatory_adherence": 1.0,
+        "documentation": 1.0,
+        "risk_mitigation": 1.0,
+        "audit_trail": 1.0
+      },
+      "weight_scheme": {
+        "regulatory_adherence": 0.4,
+        "documentation": 0.2,
+        "risk_mitigation": 0.25,
+        "audit_trail": 0.15
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "regulatory_requirements"
+      ],
+      "processing_strategy": "multi_perspective",
+      "priority_level": "high",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "compliance_check_template",
+      "name": "[Compliance Check] Template",
+      "template_path": "templates/compliance_review.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748195",
+      "last_modified": "2025-09-13T22:11:47.748196",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "active",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748197",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@compliance#check!validate@regulations",
+    "template_names": [
+      "compliance_review",
+      "qa_control"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "data_extraction": {
+    "workflow_id": "data_extraction",
+    "workflow_name": "Data Extraction",
+    "workflow_type": "data",
+    "criteria": {
+      "id": "data_extraction_criteria",
+      "name": "[Data Extraction] Criteria",
+      "description": "Structured data extraction and processing workflow",
+      "scoring_rubric": {
+        "general_quality": 1.0,
+        "completeness": 1.0,
+        "accuracy": 1.0,
+        "compliance": 1.0
+      },
+      "weight_scheme": {
+        "general_quality": 0.25,
+        "completeness": 0.25,
+        "accuracy": 0.25,
+        "compliance": 0.25
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "data_structure_validation"
+      ],
+      "processing_strategy": "single_template",
+      "priority_level": "normal",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "data_extraction_template",
+      "name": "[Data Extraction] Template",
+      "template_path": "templates/data_extraction.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748202",
+      "last_modified": "2025-09-13T22:11:47.748203",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "active",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748204",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@data#extraction!extract@structured_data",
+    "template_names": [
+      "data_extraction"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "hybrid_analysis": {
+    "workflow_id": "hybrid_analysis",
+    "workflow_name": "Hybrid Analysis",
+    "workflow_type": "hybrid",
+    "criteria": {
+      "id": "hybrid_analysis_criteria",
+      "name": "[Hybrid Analysis] Criteria",
+      "description": "Multi-dimensional document analysis combining multiple analytical perspectives",
+      "scoring_rubric": {
+        "general_quality": 1.0,
+        "completeness": 1.0,
+        "accuracy": 1.0,
+        "compliance": 1.0
+      },
+      "weight_scheme": {
+        "general_quality": 0.25,
+        "completeness": 0.25,
+        "accuracy": 0.25,
+        "compliance": 0.25
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "multi_framework_applicable"
+      ],
+      "processing_strategy": "hybrid_analysis",
+      "priority_level": "high",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "hybrid_analysis_template",
+      "name": "[Hybrid Analysis] Template",
+      "template_path": "templates/hybrid_analysis.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748208",
+      "last_modified": "2025-09-13T22:11:47.748209",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "active",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748211",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@hybrid#analysis!synthesize@multi_framework",
+    "template_names": [
+      "hybrid_analysis",
+      "qa_control"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "check_mvs_compliance": {
+    "workflow_id": "check_mvs_compliance",
+    "workflow_name": "Check MVS Compliance",
+    "workflow_type": "compliance",
+    "criteria": {
+      "id": "check_mvs_compliance_criteria",
+      "name": "[Check MVS Compliance] Criteria",
+      "description": "Validate document against MVS 5.4.3 requirements",
+      "scoring_rubric": {
+        "regulatory_adherence": 1.0,
+        "documentation": 1.0,
+        "risk_mitigation": 1.0,
+        "audit_trail": 1.0
+      },
+      "weight_scheme": {
+        "regulatory_adherence": 0.4,
+        "documentation": 0.2,
+        "risk_mitigation": 0.25,
+        "audit_trail": 0.15
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "MVS_5.4.3",
+        "severity_threshold_medium"
+      ],
+      "processing_strategy": "single_template",
+      "priority_level": "high",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "check_mvs_compliance_template",
+      "name": "[Check MVS Compliance] Template",
+      "template_path": "templates/compliance_review.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748215",
+      "last_modified": "2025-09-13T22:11:47.748216",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "active",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748217",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@compliance#check!validate@mvs_requirements",
+    "template_names": [
+      "compliance_review",
+      "qa_control"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "performance_test": {
+    "workflow_id": "performance_test",
+    "workflow_name": "Performance Test",
+    "workflow_type": "performance",
+    "criteria": {
+      "id": "performance_test_criteria",
+      "name": "[Performance Test] Criteria",
+      "description": "Run comprehensive performance benchmark operations",
+      "scoring_rubric": {
+        "general_quality": 1.0,
+        "completeness": 1.0,
+        "accuracy": 1.0,
+        "compliance": 1.0
+      },
+      "weight_scheme": {
+        "general_quality": 0.25,
+        "completeness": 0.25,
+        "accuracy": 0.25,
+        "compliance": 0.25
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "performance_metrics"
+      ],
+      "processing_strategy": "single_template",
+      "priority_level": "normal",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "performance_test_template",
+      "name": "[Performance Test] Template",
+      "template_path": "templates/qa_control.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748222",
+      "last_modified": "2025-09-13T22:11:47.748223",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "inactive",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748224",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@performance#test!benchmark@operations",
+    "template_names": [
+      "qa_control",
+      "data_extraction"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "cost_analysis": {
+    "workflow_id": "cost_analysis",
+    "workflow_name": "Cost Analysis",
+    "workflow_type": "cost",
+    "criteria": {
+      "id": "cost_analysis_criteria",
+      "name": "[Cost Analysis] Criteria",
+      "description": "Analyze cost patterns and optimization opportunities",
+      "scoring_rubric": {
+        "general_quality": 1.0,
+        "completeness": 1.0,
+        "accuracy": 1.0,
+        "compliance": 1.0
+      },
+      "weight_scheme": {
+        "general_quality": 0.25,
+        "completeness": 0.25,
+        "accuracy": 0.25,
+        "compliance": 0.25
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "cost_tracking"
+      ],
+      "processing_strategy": "single_template",
+      "priority_level": "normal",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "cost_analysis_template",
+      "name": "[Cost Analysis] Template",
+      "template_path": "templates/financial_analysis.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748229",
+      "last_modified": "2025-09-13T22:11:47.748230",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "active",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748231",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@cost#analysis!track@operations",
+    "template_names": [
+      "financial_analysis"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "error_analysis": {
+    "workflow_id": "error_analysis",
+    "workflow_name": "Error Analysis",
+    "workflow_type": "error",
+    "criteria": {
+      "id": "error_analysis_criteria",
+      "name": "[Error Analysis] Criteria",
+      "description": "Analyze error patterns and failure modes",
+      "scoring_rubric": {
+        "general_quality": 1.0,
+        "completeness": 1.0,
+        "accuracy": 1.0,
+        "compliance": 1.0
+      },
+      "weight_scheme": {
+        "general_quality": 0.25,
+        "completeness": 0.25,
+        "accuracy": 0.25,
+        "compliance": 0.25
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "error_patterns"
+      ],
+      "processing_strategy": "single_template",
+      "priority_level": "high",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "error_analysis_template",
+      "name": "[Error Analysis] Template",
+      "template_path": "templates/qa_control.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748236",
+      "last_modified": "2025-09-13T22:11:47.748236",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "active",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748238",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@error#analysis!identify@failures",
+    "template_names": [
+      "qa_control"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "integration_test": {
+    "workflow_id": "integration_test",
+    "workflow_name": "Integration Test",
+    "workflow_type": "integration",
+    "criteria": {
+      "id": "integration_test_criteria",
+      "name": "[Integration Test] Criteria",
+      "description": "Test integration between components and external systems",
+      "scoring_rubric": {
+        "general_quality": 1.0,
+        "completeness": 1.0,
+        "accuracy": 1.0,
+        "compliance": 1.0
+      },
+      "weight_scheme": {
+        "general_quality": 0.25,
+        "completeness": 0.25,
+        "accuracy": 0.25,
+        "compliance": 0.25
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "integration_validation"
+      ],
+      "processing_strategy": "single_template",
+      "priority_level": "normal",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "integration_test_template",
+      "name": "[Integration Test] Template",
+      "template_path": "templates/qa_control.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748242",
+      "last_modified": "2025-09-13T22:11:47.748243",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "active",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748244",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@integration#test!validate@components",
+    "template_names": [
+      "qa_control"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "document_section_view": {
+    "workflow_id": "document_section_view",
+    "workflow_name": "Document Section View",
+    "workflow_type": "document",
+    "criteria": {
+      "id": "document_section_view_criteria",
+      "name": "[Document Section View] Criteria",
+      "description": "Structured document section analysis for interactive browsing",
+      "scoring_rubric": {
+        "general_quality": 1.0,
+        "completeness": 1.0,
+        "accuracy": 1.0,
+        "compliance": 1.0
+      },
+      "weight_scheme": {
+        "general_quality": 0.25,
+        "completeness": 0.25,
+        "accuracy": 0.25,
+        "compliance": 0.25
+      },
+      "threshold_values": {},
+      "required_fields": [],
+      "optional_fields": [],
+      "validation_rules": [
+        "document_structure"
+      ],
+      "processing_strategy": "single_template",
+      "priority_level": "normal",
+      "estimated_duration_hours": 1.0,
+      "regulatory_standards": [],
+      "compliance_checks": {},
+      "minimum_score": 0.7,
+      "confidence_threshold": 0.8,
+      "review_required": false
+    },
+    "template": {
+      "id": "document_section_view_template",
+      "name": "[Document Section View] Template",
+      "template_path": "templates/document_section_view.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-13T22:11:47.748249",
+      "last_modified": "2025-09-13T22:11:47.748250",
+      "placeholders": [
+        "{document_content}",
+        "{validation_rules}"
+      ],
+      "sections": [],
+      "output_format": "json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "active",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-13T22:11:47.748251",
+    "polars_processor": "mvr_polars_processor",
+    "flow_encoding": "@document#section!analyze@structure",
+    "template_names": [
+      "document_section_view"
+    ],
+    "favorite_fields": {},
+    "custom_validators": [],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  },
+  "code_review": {
+    "workflow_id": "code_review",
+    "workflow_name": "Code Review",
+    "workflow_type": "quality",
+    "criteria": {
+      "id": "code_review_criteria",
+      "name": "[Code Review] Criteria",
+      "description": "Comprehensive code review covering quality, architecture, security, and compliance validation",
+      "scoring_rubric": {
+        "code_quality": 1.0,
+        "architectural_compliance": 1.0,
+        "security_compliance": 1.0,
+        "performance_impact": 1.0,
+        "regulatory_compliance": 1.0
+      },
+      "weight_scheme": {
+        "code_quality": 0.2,
+        "architectural_compliance": 0.25,
+        "security_compliance": 0.25,
+        "performance_impact": 0.15,
+        "regulatory_compliance": 0.15
+      },
+      "threshold_values": {
+        "minimum_test_coverage": 0.9,
+        "maximum_complexity": 10,
+        "performance_degradation_threshold": 0.1,
+        "security_vulnerability_threshold": 0
+      },
+      "required_fields": [
+        "code_changes",
+        "impact_assessment",
+        "test_coverage_report",
+        "security_scan_results",
+        "architectural_compliance_check"
+      ],
+      "optional_fields": [
+        "performance_benchmark",
+        "architectural_notes",
+        "reviewer_comments",
+        "improvement_suggestions"
+      ],
+      "validation_rules": [
+        "no_forbidden_dependencies",
+        "s3_first_compliance",
+        "architectural_pattern_adherence",
+        "security_best_practices",
+        "hexagonal_architecture_compliance",
+        "clean_architecture_layer_separation",
+        "app_folder_cleanup_validation"
+      ],
+      "processing_strategy": "multi_perspective",
+      "priority_level": "critical",
+      "estimated_duration_hours": 2.0,
+      "regulatory_standards": [
+        "SR-11-7",
+        "Basel-III",
+        "SOX-404"
+      ],
+      "compliance_checks": {
+        "architectural_ground_truth": "Must align with specs.json architectural decisions and hexagonal architecture",
+        "security_requirements": "Must pass S3-first compliance and app folder cleanup validation",
+        "performance_standards": "Must meet or exceed defined performance benchmarks",
+        "dependency_validation": "Zero forbidden dependencies (numpy, pandas, sklearn, sentence-transformers)",
+        "interface_patterns": "Must use adapters not gateways, proper TidyLLM interfaces"
+      },
+      "minimum_score": 0.9,
+      "confidence_threshold": 0.95,
+      "review_required": true
+    },
+    "template": {
+      "id": "code_review_template",
+      "name": "[Code Review] Template",
+      "template_path": "templates/code_review.md",
+      "template_content": "",
+      "version": "1.0.0",
+      "author": "system",
+      "created_date": "2025-09-14T00:00:00.000000",
+      "last_modified": "2025-09-14T00:00:00.000000",
+      "placeholders": [
+        "{code_changes}",
+        "{impact_assessment}",
+        "{architectural_compliance}",
+        "{security_validation}",
+        "{performance_analysis}"
+      ],
+      "sections": [
+        "Code Quality Analysis",
+        "Architectural Compliance Review",
+        "Security Validation",
+        "Performance Impact Assessment",
+        "Regulatory Compliance Check",
+        "Recommendations and Actions"
+      ],
+      "output_format": "structured_json",
+      "usage_count": 0,
+      "last_used": null,
+      "success_rate": 1.0
+    },
+    "status": "active",
+    "version": "1.0.0",
+    "created_by": "system",
+    "created_date": "2025-09-14T00:00:00.000000",
+    "polars_processor": "code_review_polars_processor",
+    "flow_encoding": "@code#review!validate@quality_security_architecture",
+    "template_names": [
+      "code_review",
+      "architectural_compliance",
+      "security_validation"
+    ],
+    "favorite_fields": {
+      "architectural_compliance": "Critical for V2 alignment",
+      "security_compliance": "S3-first and app cleanup validation",
+      "performance_impact": "Benchmark maintenance"
+    },
+    "custom_validators": [
+      "forbidden_dependency_checker",
+      "s3_first_validator",
+      "architectural_pattern_validator"
+    ],
+    "total_executions": 0,
+    "average_duration": 0.0,
+    "success_rate": 1.0,
+    "last_execution": null
+  }
+}
