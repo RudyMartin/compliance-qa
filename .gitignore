@@ -1,6 +1,42 @@
-# ===========================================================================
+# Compliance-QA Parent Repository .gitignore
+# Comprehensive gitignore with security focus and package management
+
+# =============================================================================
+# IMPORTANT: PACKAGE MANAGEMENT
+# =============================================================================
+# The packages/ directory contains separate Git repositories
+# Each package (tidyllm, tlm, tidyllm-sentence) manages its own versioning
+# We exclude their git and build artifacts but track the directories themselves
+
+# Package-specific exclusions
+packages/*/.git/
+packages/*/.gitignore
+packages/*/dist/
+packages/*/build/
+packages/*/*.egg-info/
+packages/*/__pycache__/
+packages/*/.pytest_cache/
+packages/*/.ruff_cache/
+packages/*/.mypy_cache/
+packages/*/.tox/
+packages/*/.nox/
+packages/*/htmlcov/
+packages/*/coverage/
+packages/*/.coverage
+packages/*/*.pyc
+packages/*/*.pyo
+packages/*/*.pyd
+packages/*/.DS_Store
+packages/*/Thumbs.db
+
+# Claude artifacts in packages
+packages/*/.claude/
+packages/*/claude*.md
+packages/*/.claude-*
+
+# =============================================================================
 # SECURITY & CREDENTIALS - CRITICAL EXCLUSIONS
-# ===========================================================================
+# =============================================================================
 
 # Settings and configuration files (often contain credentials)
 *settings*.yaml
@@ -18,29 +54,10 @@ simple_config.*
 !*settings_structure*
 !analyze_settings_structure.py
 
-# Ignore parquet files (contain sensitive data)
-*.parquet
-
-# Ignore active_state files
-*active_state*
-
-# MLflow files (auto-generated metadata)
-mlruns/
-**/mlruns/
-mlflow.db
-*mlflow*.db
-mlartifacts/
-*.mlflow
-
-# Database files
-*.db
-*.sqlite
-*.sqlite3
-test_*.db
-mlflow.db
-
-# Environment files (contain credentials and secrets)
+# Environment files with secrets
 .env
+.env.local
+.env.production
 .env.*
 *.env
 infrastructure/.env*
@@ -65,23 +82,14 @@ aws-credentials.*
 aws-config.*
 *aws_access*
 *aws_secret*
+*aws_key*
 
 # Database credentials
 *db_config*
 *database.ini
 *db_password*
 *db_credentials*
-
-# Backup files (may contain old credentials)
-*.backup
-*.bak
-*.old
-*.orig
-*.save
-*backup*.yaml
-*backup*.yml
-*backup*.json
-infrastructure/*backup*
+*db_settings*
 
 # Certificate and key files
 *.pem
@@ -94,18 +102,64 @@ infrastructure/*backup*
 *.keystore
 *.truststore
 
-# State files that may contain runtime secrets
+# Runtime state files
 *state*.json
 *state*.yaml
+runtime_state*
+active_state*
+*active_state*
 
-# Note: packages/ contains separate git repositories
-# Each package in packages/ is tracked independently
+# =============================================================================
+# DATABASE & DATA FILES
+# =============================================================================
 
-# Python
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+*.mdb
+*.accdb
+test_*.db
+mlflow.db
+*mlflow*.db
+
+# Database WAL files
+*.sqlite3-wal
+*.sqlite3-shm
+*.db-wal
+*.db-shm
+
+# Data files (may contain sensitive data)
+*.parquet
+*.csv
+*.h5
+*.hdf5
+data/*.db
+data/*.sqlite
+data/*.sqlite3
+data/backups/*.db*
+data/backups/*.sql
+
+# MLflow files (auto-generated metadata)
+mlruns/
+**/mlruns/
+mlflow.db
+mlartifacts/
+*.mlflow
+
+# =============================================================================
+# PYTHON
+# =============================================================================
+
+# Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
 *$py.class
+
+# C extensions
 *.so
+
+# Distribution / packaging
 .Python
 build/
 develop-eggs/
@@ -119,28 +173,148 @@ parts/
 sdist/
 var/
 wheels/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
+
+# PyInstaller
+*.manifest
+*.spec
+
+# Installer logs
+pip-log.txt
+pip-delete-this-directory.txt
+
+# Unit test / coverage reports
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
+coverage/
 
 # Virtual environments
 venv/
 env/
 ENV/
+env.bak/
+venv.bak/
 
-# IDE
-.vscode/
+# Modern Python tools
+.ruff_cache/
+.benchmarks/
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# IPython
+profile_default/
+ipython_config.py
+
+# pyenv
+.python-version
+
+# pipenv
+Pipfile.lock
+
+# poetry
+poetry.lock
+
+# pdm
+.pdm.toml
+
+# PEP 582
+__pypackages__/
+
+# =============================================================================
+# IDEs AND EDITORS
+# =============================================================================
+
+# PyCharm
 .idea/
+
+# VS Code
+.vscode/
+
+# Sublime Text
+*.sublime-project
+*.sublime-workspace
+
+# Vim
 *.swp
 *.swo
+*.swn
+*.swa
+*~
 
-# OS
+# Emacs
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
+# Rope
+.ropeproject/
+
+# Spyder
+.spyderproject
+.spyproject
+
+# =============================================================================
+# OPERATING SYSTEMS
+# =============================================================================
+
+# macOS
 .DS_Store
-Thumbs.db
+.AppleDouble
+.LSOverride
+Icon
+._*
+.DocumentRevisions-V100
+.fseventsd
+.Spotlight-V100
+.TemporaryItems
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.donotpresent
+.AppleDB
+.AppleDesktop
+Network Trash Folder
+Temporary Items
+.apdisk
 
-# MLflow
-mlruns/
-mlflow.db
+# Windows
+Thumbs.db
+Thumbs.db:encryptable
+ehthumbs.db
+ehthumbs_vista.db
+*.tmp
+*.temp
+Desktop.ini
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msix
+*.msm
+*.msp
+*.lnk
 
 # Windows special device names (accidentally created)
 nul
@@ -150,20 +324,18 @@ aux
 com[1-9]
 lpt[1-9]
 
-# Logs
-*.log
-logs/
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
 
-# Environment files
-.env
-.env.local
-.env.*.local
+# =============================================================================
+# CLAUDE CODE ARTIFACTS
+# =============================================================================
 
-# Temporary files
-*.tmp
-*.temp
-
-# Claude Code artifacts and session files
+# Claude Code session files and artifacts
 **/.claude/
 .claude/
 *.claude
@@ -172,14 +344,45 @@ claude-*
 claude_*.json
 claude_*.yaml
 .claude-*
+*claude*
 
-# Claude Code generated files (parent and packages)
+# Claude Code generated files
 **/*claude*
 **/claude_*
-packages/**/claude*
-packages/**/.claude/
 
-# Test directories and outputs (keep source but ignore outputs)
+# =============================================================================
+# LOGS AND TEMPORARY FILES
+# =============================================================================
+
+# Log files
+*.log
+*.log.*
+logs/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Temporary files
+*.tmp
+*.temp
+*.tmp.*
+*.temp.*
+temp/
+tmp/
+
+# Backup files
+*.backup
+*.bak
+*.old
+*.orig
+*.save
+
+# =============================================================================
+# PROJECT-SPECIFIC EXCLUSIONS
+# =============================================================================
+
+# Test directories and outputs
 tests/**/test_output.log
 tests/**/test_results.json
 tests/**/*.log
@@ -187,59 +390,124 @@ tests/**/coverage/
 tests/**/.pytest_cache/
 tests/**/htmlcov/
 
-# Migrated, development and testing directories (ignore entirely)
+# Migrated, development and testing directories
 migrated/
 functionals/
 examples/
 demos/
 
-# Modern Python tools
-.ruff_cache/
-.benchmarks/
-.pytest_cache/
-.tox/
-.nox/
-.mypy_cache/
-.dmypy.json
-dmypy.json
+# Project-specific folders
+review/
+presentation/
+pending/
 
-# Docker/Kubernetes
+# =============================================================================
+# DOCKER & DEPLOYMENT
+# =============================================================================
+
+# Docker
 *.pvc
 docker-compose.override.yml
 .dockerignore
+Dockerfile.local
 
-# Additional package managers
-pnpm-lock.yaml
+# Kubernetes
+*.yaml.local
+*.yml.local
+
+# =============================================================================
+# PACKAGE MANAGERS
+# =============================================================================
+
+# JavaScript/Node (if mixed project)
+node_modules/
 package-lock.json
 yarn.lock
-poetry.lock
+pnpm-lock.yaml
+.npm
+.yarn-integrity
+
+# Python
 Pipfile.lock
+poetry.lock
 
-# Database WAL files
-*.sqlite3-wal
-*.sqlite3-shm
-*.db-wal
-*.db-shm
+# =============================================================================
+# ARCHIVES AND MEDIA
+# =============================================================================
 
-# Node modules (if mixed project)
-node_modules/
+# Archives (usually not needed in repo)
+*.zip
+*.tar
+*.gz
+*.bz2
+*.xz
+*.rar
+*.7z
 
-# Additional IDE/Editor files
-*.swn
-*.swa
-*~
-.ropeproject/
-.spyderproject
-.spyproject
+# Large binary files
+*.iso
+*.dmg
+*.exe
+*.deb
+*.rpm
 
-# Extended temporary files
-temp/
-tmp/
-*.tmp.*
-*.temp.*
+# Media files (usually large)
+*.mp4
+*.avi
+*.mov
+*.wmv
+*.flv
+*.webm
+*.mp3
+*.wav
+*.flac
+*.aac
 
-# Extended logs
-*.log.*
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
+# Images (can be large, uncomment if needed)
+# *.jpg
+# *.jpeg
+# *.png
+# *.gif
+# *.bmp
+# *.tiff
+# *.svg
+
+# Documents (may contain sensitive info)
+*.pdf
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.ppt
+*.pptx
+
+# =============================================================================
+# EXCEPTIONS (files to explicitly include)
+# =============================================================================
+
+# Allow README files
+!README.md
+!readme.md
+
+# Allow LICENSE files
+!LICENSE
+!LICENSE.txt
+!LICENSE.md
+
+# Allow specific configuration templates
+!.env.example
+!.env.template
+!config.example.yaml
+!settings.example.yaml
+
+# Allow GitHub workflows (if needed)
+!.github/workflows/*.yml
+!.github/workflows/*.yaml
+
+# Allow documentation
+!docs/**/*.md
+!*.md
+
+# But still exclude Claude docs
+claude*.md
+CLAUDE.md
