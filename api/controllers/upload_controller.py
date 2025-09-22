@@ -12,6 +12,20 @@ from pathlib import Path
 import tempfile
 import os
 
+# Import PathManager for cross-platform path handling
+try:
+    from core.utilities.path_manager import get_path_manager
+except ImportError:
+    try:
+        from common.utilities.path_manager import get_path_manager
+    except ImportError:
+        def get_path_manager():
+            class MockPathManager:
+                @property
+                def root_folder(self):
+                    return os.getcwd()
+            return MockPathManager()
+
 # Page configuration
 st.set_page_config(
     page_title="V2 Boss Upload & Template Factory",
@@ -22,7 +36,9 @@ st.set_page_config(
 def load_credentials():
     """Load real credentials for backend connections"""
     try:
-        settings_path = Path("C:/Users/marti/AI-Scoring/tidyllm/admin/settings.yaml")
+        # Use PathManager for cross-platform path resolution
+        base_path = Path(get_path_manager().root_folder)
+        settings_path = base_path / "packages" / "tidyllm" / "admin" / "settings.yaml"
         with open(settings_path, 'r') as f:
             config = yaml.safe_load(f)
         return config

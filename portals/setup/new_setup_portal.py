@@ -73,6 +73,10 @@ def render_step_1_system_check():
     st.header("Step 1️⃣: Check Your System")
     st.markdown("**First, let's see if your computer is ready for AI!**")
 
+    # Progressive flow indicator
+    progress_bar = st.progress(0.2)
+    st.caption("Progress: Step 1 of 5")
+
     if st.button("🔍 CHECK MY SYSTEM NOW", type="primary", use_container_width=True):
         with st.spinner("Checking your system... This will take a few seconds..."):
             wizard_results = setup_service.installation_wizard()
@@ -103,17 +107,24 @@ def render_step_1_system_check():
 
                     # Provide specific help for each issue
                     if check == 'python_version':
-                        st.info("💡 **Fix:** You need Python 3.8 or newer. Ask your teacher for help installing Python.")
+                        st.info("💡 **Fix:** You need Python 3.8 or newer. Ask your portal admin for help installing Python.")
                     elif check == 'required_directories':
                         st.info("💡 **Fix:** Some folders are missing. Make sure you downloaded the complete project.")
                     elif check == 'settings_yaml_exists':
-                        st.info("💡 **Fix:** The settings.yaml file is missing. Ask your teacher for the configuration file.")
+                        st.info("💡 **Fix:** The settings.yaml file is missing. Ask your portal admin for the configuration file.")
                     elif check == 'database_connection':
                         st.info("💡 **Fix:** Can't connect to the database. Check your internet connection.")
                     elif check == 'aws_credentials':
-                        st.info("💡 **Fix:** AWS credentials are missing. Ask your teacher for the access keys.")
+                        st.info("💡 **Fix:** AWS credentials are missing. Ask your portal admin for the access keys.")
 
         st.info(f"📋 **Summary:** {wizard_results['summary']}")
+
+        # Detailed breakdown for clarity
+        if status != 'ready':
+            st.markdown("### 🔍 **What needs fixing:**")
+            failed_items = [check.replace('_', ' ').title() for check, passed in results.items() if isinstance(passed, bool) and not passed]
+            for item in failed_items:
+                st.markdown(f"❌ **{item}**")
 
         # Next step guidance
         if status == 'ready':
@@ -125,6 +136,153 @@ def render_step_1_system_check():
         if st.button("🔄 Check Again", use_container_width=True):
             del st.session_state['step1_results']
             st.rerun()
+
+    # S3 Configuration Section - Outside the system check card
+    st.markdown("---")
+    st.markdown("### ☁️ AWS S3 Configuration")
+
+    with st.expander("☁️ Configure AWS S3 Settings", expanded=False):
+        # Load current S3 settings
+        try:
+            from infrastructure.yaml_loader import get_settings_loader
+            settings_loader = get_settings_loader()
+            raw_settings = settings_loader._load_settings()  # Get raw dict
+
+            # Get AWS credentials
+            aws_creds = raw_settings.get('credentials', {}).get('aws_basic', {})
+            current_access_key = aws_creds.get('access_key_id', '')
+            current_secret_key = aws_creds.get('secret_access_key', '')
+            current_region = aws_creds.get('default_region', 'us-east-1')
+
+            # Get S3 service settings
+            s3_service = raw_settings.get('services', {}).get('s3', {})
+            current_bucket = s3_service.get('bucket', '')
+            current_prefix = s3_service.get('prefix', '')
+
+            # Mask AWS keys for display
+            masked_access = current_access_key[:4] + '****' + current_access_key[-4:] if len(current_access_key) > 8 else '****'
+            masked_secret = '****' + current_secret_key[-4:] if len(current_secret_key) > 4 else '****'
+
+            st.info(f"💡 **Current AWS Settings**: Bucket: {current_bucket}/{current_prefix} | Region: {current_region} | Access Key: {masked_access}")
+
+        except Exception as e:
+            st.warning(f"⚠️ Could not load current S3 settings: {str(e)}")
+            # Fallback to defaults
+            current_access_key = ''
+            current_secret_key = ''
+            current_region = 'us-east-1'
+            current_bucket = ''
+            current_prefix = ''
+
+        with st.form("s3_config_form"):
+            st.markdown("**AWS S3 Configuration**")
+
+            st.subheader("AWS Credentials")
+            col1, col2 = st.columns(2)
+
+            with col1:
+                aws_access_key = st.text_input("AWS Access Key ID", value=current_access_key, type="password", placeholder="AKIA...")
+                aws_region = st.selectbox("AWS Region",
+                                         ["us-east-1", "us-west-1", "us-west-2", "eu-west-1", "eu-central-1", "ap-southeast-1"],
+                                         index=0 if current_region == "us-east-1" else None)
+
+            with col2:
+                aws_secret_key = st.text_input("AWS Secret Access Key", value=current_secret_key, type="password", placeholder="Enter secret key")
+                st.markdown(" ")  # Spacer
+
+            st.subheader("S3 Bucket Configuration")
+            col3, col4 = st.columns(2)
+
+            with col3:
+                s3_bucket = st.text_input("S3 Bucket Name", value=current_bucket, placeholder="my-bucket")
+
+            with col4:
+                s3_prefix = st.text_input("S3 Prefix/Path", value=current_prefix, placeholder="data/", help="Prefix for all S3 operations")
+
+            # Form buttons
+            col_test, col_save = st.columns(2)
+
+            with col_test:
+                test_clicked = st.form_submit_button("🧪 Test S3 Access", use_container_width=True)
+
+            with col_save:
+                save_clicked = st.form_submit_button("💾 Save to Settings", use_container_width=True, type="primary")
+
+            if test_clicked:
+                with st.spinner("Testing S3 access..."):
+                    try:
+                        # Test through domain service (which uses infrastructure layer)
+                        if hasattr(setup_service, 'test_s3_access'):
+                            test_result = setup_service.test_s3_access(s3_bucket, s3_prefix, {
+                                'access_key_id': aws_access_key,
+                                'secret_access_key': aws_secret_key,
+                                'region': aws_region
+                            })
+
+                            if test_result.get('credentials_valid'):
+                                st.success(f"✅ AWS credentials valid! Found {test_result.get('bucket_count', 0)} bucket(s)")
+                                if test_result.get('bucket_accessible'):
+                                    st.success(f"✅ Bucket '{s3_bucket}' accessible! Found {test_result.get('objects_found', 0)} object(s)")
+                                    if test_result.get('write_permission'):
+                                        st.success(f"✅ Write access confirmed!")
+                                    else:
+                                        st.warning(f"⚠️ No write permission to bucket '{s3_bucket}'")
+                                else:
+                                    st.error(f"❌ Cannot access bucket '{s3_bucket}'")
+                            else:
+                                st.error(f"❌ Invalid AWS credentials")
+
+                            if test_result.get('errors'):
+                                for error in test_result['errors']:
+                                    st.error(f"❌ {error}")
+                        else:
+                            st.error("S3 testing feature not available - please restart the portal")
+
+                    except Exception as e:
+                        st.error(f"❌ Unexpected error during S3 test: {str(e)}")
+
+            if save_clicked:
+                with st.spinner("Saving S3 configuration to settings.yaml..."):
+                    try:
+                        # Save through domain service (which uses infrastructure layer)
+                        save_config = {
+                            'access_key_id': aws_access_key,
+                            'secret_access_key': aws_secret_key,
+                            'region': aws_region,
+                            'bucket': s3_bucket,
+                            'prefix': s3_prefix
+                        }
+
+                        if hasattr(setup_service, 'update_s3_config'):
+                            save_result = setup_service.update_s3_config(save_config)
+
+                            if save_result.get('success'):
+                                st.success(f"✅ S3 configuration saved to settings.yaml!")
+                                st.info(f"💡 S3 path configured: s3://{s3_bucket}/{s3_prefix}")
+                                st.balloons()
+
+                                # Clear step1 results to force re-check
+                                if 'step1_results' in st.session_state:
+                                    del st.session_state['step1_results']
+                            else:
+                                st.error(f"❌ Failed to save S3 configuration: {save_result.get('message', 'Unknown error')}")
+                        else:
+                            st.error("S3 configuration feature not available - please restart the portal")
+
+                    except Exception as e:
+                        st.error(f"❌ Unexpected error during S3 configuration save: {str(e)}")
+
+    st.info("💡 **Architecture Note:** This uses the unified AWS service through the hexagonal architecture for all S3 operations.")
+
+    # End of Prerequisites Tab
+    st.markdown("---")
+    st.markdown("""
+    ### 🎯 **How to use this page:**
+    - **Green ✅** means everything is working
+    - **Red ❌** means something needs to be fixed
+    - **Yellow ⚠️** means there might be a small issue
+    - When you see problems, ask your portal admin for help!
+    """)
 
 def render_step_2_software_check():
     """Step 2: Check required software."""
@@ -169,13 +327,13 @@ def render_step_2_software_check():
 
                     # Provide specific installation help
                     if check == 'postgresql_available':
-                        st.info("💡 **Fix:** PostgreSQL database is missing. Ask your teacher to help install it.")
+                        st.info("💡 **Fix:** PostgreSQL database is missing. Ask your portal admin to help install it.")
                     elif check == 'aws_credentials_configured':
-                        st.info("💡 **Fix:** AWS credentials are missing. Check settings.yaml or ask your teacher for AWS access keys.")
+                        st.info("💡 **Fix:** AWS credentials are missing. Check settings.yaml or ask your portal admin for AWS access keys.")
                     elif check == 'python_packages_installed':
                         st.info("💡 **Fix:** Some Python packages are missing. Try running: pip install -r requirements.txt")
                     elif check == 'file_permissions':
-                        st.info("💡 **Fix:** File permissions issue. Ask your teacher to check folder permissions.")
+                        st.info("💡 **Fix:** File permissions issue. Ask your portal admin to check folder permissions.")
 
         st.info(f"📋 **Summary:** {dep_results['summary']}")
 
@@ -190,20 +348,1358 @@ def render_step_2_software_check():
             del st.session_state['step2_results']
             st.rerun()
 
-def render_step_3_chat_setup():
-    """Step 3: Set up chat features."""
-    st.header("Step 3️⃣: Set Up AI Chat")
-    st.markdown("**Time to set up your AI chat with multiple models!**")
+def render_integrations_tab():
+    """Step 3: Manage infrastructure integrations."""
+    st.header("Step 3️⃣: Infrastructure Integrations")
+    st.markdown("**Configure and manage your infrastructure integrations - databases, tracking systems, and more.**")
+
+    # Database Configuration Card (First)
+    with st.container():
+        st.subheader("🗄️ Database Configuration")
+
+        with st.expander("💾 Update Database Connection", expanded=False):
+            st.markdown("Configure your primary database connection")
+
+            # Get current database configuration
+            from infrastructure.yaml_loader import get_settings_loader
+            loader = get_settings_loader()
+            current_db = loader.get_database_config()
+
+            # Database configuration form
+            with st.form(key="database_config_form"):
+                st.info(f"💡 Current Settings Loaded: {current_db['host']}:{current_db['port']}/{current_db['database']} (user: {current_db['username']})")
+
+                col1, col2 = st.columns(2)
+
+                with col1:
+                    db_host = st.text_input("Database Host", value=current_db['host'])
+                    db_name = st.text_input("Database Name", value=current_db['database'])
+                    db_user = st.text_input("Username", value=current_db['username'])
+
+                with col2:
+                    db_port = st.number_input("Port", value=current_db['port'], min_value=1, max_value=65535)
+                    db_password = st.text_input("Password", value=current_db['password'], type="password")
+
+                col1, col2, col3 = st.columns(3)
+
+                with col1:
+                    test_btn = st.form_submit_button("🧪 Test Connection", type="secondary", use_container_width=True)
+
+                with col2:
+                    save_btn = st.form_submit_button("💾 Save to settings.yaml", type="primary", use_container_width=True)
+
+                with col3:
+                    reset_btn = st.form_submit_button("🔄 Reset to Current", use_container_width=True)
+
+                if test_btn:
+                    # Test the connection with new settings
+                    test_config = {
+                        'postgres_host': db_host,
+                        'postgres_port': db_port,
+                        'postgres_database': db_name,
+                        'postgres_username': db_user,
+                        'postgres_password': db_password,
+                        'postgres_ssl_mode': 'require'
+                    }
+
+                    with st.spinner("Testing database connection..."):
+                        result = setup_service.dependencies.get_database_service().test_connection(test_config)
+
+                        if result.get('success'):
+                            st.success("✅ Database connection successful!")
+                            st.json(result.get('details', {}))
+                        else:
+                            st.error(f"❌ Database connection failed: {result.get('message', 'Unknown error')}")
+
+                if save_btn:
+                    # Save to settings.yaml
+                    save_config = {
+                        'host': db_host,
+                        'port': db_port,
+                        'database': db_name,
+                        'username': db_user,
+                        'password': db_password
+                    }
+
+                    result = setup_service.dependencies.get_database_service().update_settings(save_config)
+
+                    if result.get('success'):
+                        st.success("✅ Database configuration saved to settings.yaml!")
+                        st.balloons()
+                        time.sleep(2)
+                        st.rerun()
+                    else:
+                        st.error(f"❌ Failed to save configuration: {result.get('message')}")
+
+                if reset_btn:
+                    st.rerun()
+
+    # MLflow Re-installation (Second)
+    with st.container():
+        st.markdown("---")
+        st.subheader("🔬 MLflow Tracking Integration")
+
+        # Check MLflow status first
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("📊 Check MLflow Status", use_container_width=True):
+                try:
+                    import requests
+                    response = requests.get("http://localhost:5000", timeout=2)
+                    if response.status_code == 200:
+                        st.success("✅ MLflow is running at http://localhost:5000")
+
+                        # Check recent activity
+                        import mlflow
+                        from datetime import datetime, timedelta
+                        mlflow.set_tracking_uri("http://localhost:5000")
+                        client = mlflow.tracking.MlflowClient()
+
+                        # Get experiments
+                        experiments = client.search_experiments()
+                        st.info(f"Found {len(experiments)} experiments")
+
+                        # Get recent runs (last 30 days)
+                        thirty_days_ago = datetime.now() - timedelta(days=30)
+                        all_runs = []
+                        for exp in experiments:
+                            runs = client.search_runs(
+                                experiment_ids=[exp.experiment_id],
+                                filter_string=f"attributes.start_time > {int(thirty_days_ago.timestamp() * 1000)}"
+                            )
+                            all_runs.extend(runs)
+
+                        if all_runs:
+                            st.success(f"📈 Found {len(all_runs)} runs in the last 30 days")
+                            # Show latest runs
+                            st.caption("Latest activity:")
+                            for run in all_runs[:3]:
+                                st.text(f"  • Run {run.info.run_id[:8]}... at {datetime.fromtimestamp(run.info.start_time/1000)}")
+                        else:
+                            st.info("No MLflow activity in the last 30 days")
+                except Exception as e:
+                    st.error(f"❌ MLflow is not running or not responding: {str(e)}")
+
+        # MLflow Database Configuration
+        with st.expander("🗄️ MLflow Database Configuration", expanded=False):
+            st.markdown("Configure MLflow's backend database connection")
+
+            # Get current MLflow database configuration
+            from infrastructure.yaml_loader import get_settings_loader
+            loader = get_settings_loader()
+            settings = loader._load_settings()
+
+            # Check if MLflow is using separate database or inheriting from primary
+            mlflow_config = settings.get('integrations', {}).get('mlflow', {})
+            backend_uri = mlflow_config.get('backend_store_uri', 'auto_select')
+
+            st.info(f"Current backend: {backend_uri}")
+
+            # Configuration options
+            config_option = st.radio(
+                "MLflow Database Configuration",
+                [
+                    "Inherit from Primary Database",
+                    "Use Separate Database",
+                    "Use File Store (Local Only)",
+                    "AWS S3 Artifacts + PostgreSQL Backend (Production)"
+                ],
+                index=0 if backend_uri == "auto_select" else (
+                    3 if artifact_store and "s3://" in artifact_store else
+                    1 if "postgresql" in str(backend_uri) else 2
+                )
+            )
+
+            if config_option == "Use Separate Database":
+                st.warning("Configure a dedicated database for MLflow tracking")
+
+                with st.form(key="mlflow_db_config"):
+                    col1, col2 = st.columns(2)
+
+                    with col1:
+                        mlflow_host = st.text_input("Host", value="localhost")
+                        mlflow_database = st.text_input("Database", value="mlflow_db")
+                        mlflow_user = st.text_input("Username", value="mlflow_user")
+
+                    with col2:
+                        mlflow_port = st.number_input("Port", value=5432, min_value=1, max_value=65535)
+                        mlflow_password = st.text_input("Password", type="password")
+
+                    if st.form_submit_button("💾 Save MLflow Database Config", type="primary"):
+                        # Update MLflow backend configuration
+                        new_backend_uri = f"postgresql://{mlflow_user}:{mlflow_password}@{mlflow_host}:{mlflow_port}/{mlflow_database}"
+
+                        # Update settings
+                        settings['integrations']['mlflow']['backend_store_uri'] = new_backend_uri
+
+                        # Save to settings.yaml
+                        import yaml
+                        with open(loader.settings_path, 'w') as f:
+                            yaml.safe_dump(settings, f, default_flow_style=False, indent=2)
+
+                        st.success("✅ MLflow database configuration saved!")
+                        st.info("Restart MLflow server for changes to take effect")
+
+            elif config_option == "Use File Store (Local Only)":
+                st.info("MLflow will use local file storage (not recommended for production)")
+
+                file_path = st.text_input("File Store Path", value="./mlflow_data")
+
+                if st.button("💾 Save File Store Config"):
+                    settings['integrations']['mlflow']['backend_store_uri'] = f"file://{file_path}"
+
+                    import yaml
+                    with open(loader.settings_path, 'w') as f:
+                        yaml.safe_dump(settings, f, default_flow_style=False, indent=2)
+
+                    st.success("✅ MLflow file store configuration saved!")
+                    st.info("Restart MLflow server for changes to take effect")
+
+            elif config_option == "AWS S3 Artifacts + PostgreSQL Backend (Production)":
+                st.success("✅ Standard production configuration")
+                st.info("• Metadata: PostgreSQL (inherits from primary)")
+                st.info(f"• Artifacts: {artifact_store if artifact_store else 'Not configured'}")
+
+                # Show current S3 configuration
+                with st.form(key="s3_artifacts_config"):
+                    st.subheader("S3 Artifact Store Configuration")
+
+                    # Parse current S3 path if exists
+                    current_bucket = ""
+                    current_prefix = ""
+                    if artifact_store and artifact_store.startswith("s3://"):
+                        s3_path = artifact_store.replace("s3://", "")
+                        parts = s3_path.split("/", 1)
+                        current_bucket = parts[0] if parts else ""
+                        current_prefix = parts[1] if len(parts) > 1 else ""
+
+                    s3_bucket = st.text_input("S3 Bucket", value=current_bucket or "nsc-mvp1")
+                    s3_prefix = st.text_input("S3 Prefix", value=current_prefix or "onboarding-test/mlflow/")
+
+                    st.info("💡 This uses AWS credentials from primary configuration")
+
+                    if st.form_submit_button("💾 Update S3 Configuration"):
+                        new_artifact_store = f"s3://{s3_bucket}/{s3_prefix}"
+
+                        # Update settings with S3 artifact store but keep backend as auto_select
+                        settings['integrations']['mlflow']['artifact_store'] = new_artifact_store
+                        settings['integrations']['mlflow']['backend_store_uri'] = 'auto_select'
+                        settings['integrations']['mlflow']['backend_options']['s3_artifacts_only'] = True
+
+                        import yaml
+                        with open(loader.settings_path, 'w') as f:
+                            yaml.safe_dump(settings, f, default_flow_style=False, indent=2)
+
+                        st.success(f"✅ Updated artifact store: {new_artifact_store}")
+                        st.info("PostgreSQL backend: Inherits from primary database")
+                        st.info("Restart MLflow server for changes to take effect")
+
+                if st.button("🔄 Reset to Default Production Config"):
+                    default_store = "s3://nsc-mvp1/onboarding-test/mlflow/"
+
+                    # Reset to default production configuration
+                    settings['integrations']['mlflow']['artifact_store'] = default_store
+                    settings['integrations']['mlflow']['backend_store_uri'] = 'auto_select'
+                    settings['integrations']['mlflow']['backend_options']['s3_artifacts_only'] = True
+
+                    import yaml
+                    with open(loader.settings_path, 'w') as f:
+                        yaml.safe_dump(settings, f, default_flow_style=False, indent=2)
+
+                    st.success(f"✅ Reset to default: {default_store}")
+                    st.info("PostgreSQL backend: Inherits from primary database")
+                    st.rerun()
+
+            else:  # Inherit from Primary
+                st.success("✅ MLflow is configured to use the primary database")
+                st.caption("MLflow will share the same PostgreSQL database as your main application")
+
+                if st.button("🔄 Reset to Inherit from Primary"):
+                    settings['integrations']['mlflow']['backend_store_uri'] = 'auto_select'
+
+                    import yaml
+                    with open(loader.settings_path, 'w') as f:
+                        yaml.safe_dump(settings, f, default_flow_style=False, indent=2)
+
+                    st.success("✅ MLflow reset to use primary database!")
+                    st.rerun()
+
+        # MLflow Re-installation - Danger Zone
+        with st.expander("⚠️ DANGER ZONE - Re-install MLflow", expanded=False):
+            st.error("""
+            **⚡ WARNING: This will completely reset MLflow!**
+
+            This action will:
+            - Stop the MLflow server
+            - Delete ALL experiments, runs, and metrics from the database
+            - Delete ALL artifacts from S3 storage
+            - Recreate a fresh MLflow installation
+
+            **All ML tracking history will be permanently lost!**
+            """)
+
+            confirm_reinstall = st.checkbox("I understand this will delete all MLflow data", key="confirm_mlflow_reinstall_integrations")
+
+            if confirm_reinstall:
+                st.warning("Type 'DELETE MLFLOW' to confirm:")
+                confirmation_text = st.text_input("Confirmation", key="mlflow_confirm_text")
+
+                if confirmation_text == "DELETE MLFLOW":
+                    if st.button("🔴 RE-INSTALL MLFLOW", type="primary", key="reinstall_mlflow_btn"):
+                        with st.spinner("Re-installing MLflow... This will take a few moments..."):
+                            progress_bar = st.progress(0)
+                            status_text = st.empty()
+
+                            try:
+                                import subprocess
+                                import time
+
+                                # Step 1: Stop MLflow server
+                                status_text.text("Stopping MLflow server...")
+                                progress_bar.progress(10)
+                                subprocess.run(["taskkill", "/F", "/IM", "mlflow.exe"],
+                                             capture_output=True, text=True, shell=True)
+                                time.sleep(2)
+
+                                # Step 2: Clear MLflow artifacts from S3
+                                status_text.text("Clearing MLflow artifacts from S3...")
+                                progress_bar.progress(25)
+
+                                # Use boto3 to clear S3 artifacts
+                                try:
+                                    import boto3
+                                    from infrastructure.yaml_loader import get_settings_loader
+                                    settings_loader = get_settings_loader()
+                                    aws_config = settings_loader.get_aws_config()
+                                    s3_config = settings_loader.get_s3_config()
+
+                                    # Create S3 client
+                                    s3_client = boto3.client(
+                                        's3',
+                                        aws_access_key_id=aws_config['access_key_id'],
+                                        aws_secret_access_key=aws_config['secret_access_key'],
+                                        region_name=aws_config['region']
+                                    )
+
+                                    # Delete all objects under mlflow prefix
+                                    bucket = s3_config['bucket']
+                                    prefix = 'qa-shipping/mlflow/'
+
+                                    # List and delete all objects
+                                    paginator = s3_client.get_paginator('list_objects_v2')
+                                    pages = paginator.paginate(Bucket=bucket, Prefix=prefix)
+
+                                    delete_keys = []
+                                    for page in pages:
+                                        if 'Contents' in page:
+                                            for obj in page['Contents']:
+                                                delete_keys.append({'Key': obj['Key']})
+
+                                                # Delete in batches of 1000 (S3 limit)
+                                                if len(delete_keys) >= 1000:
+                                                    s3_client.delete_objects(
+                                                        Bucket=bucket,
+                                                        Delete={'Objects': delete_keys}
+                                                    )
+                                                    delete_keys = []
+
+                                    # Delete remaining objects
+                                    if delete_keys:
+                                        s3_client.delete_objects(
+                                            Bucket=bucket,
+                                            Delete={'Objects': delete_keys}
+                                        )
+
+                                    st.info(f"Cleared MLflow artifacts from s3://{bucket}/{prefix}")
+                                except Exception as s3_error:
+                                    st.warning(f"Could not clear S3 artifacts: {s3_error}")
+                                    st.info("Continuing with local cleanup...")
+
+                                # Step 3: Drop and recreate MLflow database tables
+                                status_text.text("Resetting MLflow database...")
+                                progress_bar.progress(40)
+
+                                # Get database config and reset MLflow tables
+                                from infrastructure.yaml_loader import get_settings_loader
+                                loader = get_settings_loader()
+                                db_config = loader.get_database_config()
+
+                                # Run MLflow database upgrade command
+                                mlflow_db_uri = f"postgresql://{db_config['username']}:{db_config['password']}@{db_config['host']}:{db_config['port']}/{db_config['database']}"
+
+                                # Step 4: Re-initialize MLflow database
+                                status_text.text("Re-initializing MLflow database...")
+                                progress_bar.progress(60)
+                                result = subprocess.run(
+                                    ["mlflow", "db", "upgrade", mlflow_db_uri],
+                                    capture_output=True,
+                                    text=True,
+                                    shell=True
+                                )
+                                time.sleep(2)
+
+                                # Step 5: Restart MLflow server
+                                status_text.text("Starting fresh MLflow server...")
+                                progress_bar.progress(80)
+                                subprocess.Popen(
+                                    ["mlflow", "server",
+                                     "--backend-store-uri", mlflow_db_uri,
+                                     "--default-artifact-root", "s3://nsc-mvp1/qa-shipping/mlflow/",
+                                     "--host", "0.0.0.0",
+                                     "--port", "5000"],
+                                    shell=True
+                                )
+                                time.sleep(3)
+
+                                # Step 6: Verify MLflow is running
+                                status_text.text("Verifying MLflow installation...")
+                                progress_bar.progress(95)
+
+                                import requests
+                                try:
+                                    response = requests.get("http://localhost:5000", timeout=5)
+                                    if response.status_code == 200:
+                                        progress_bar.progress(100)
+                                        status_text.text("MLflow re-installation complete!")
+                                        time.sleep(1)
+
+                                        st.balloons()
+                                        st.success("""
+                                        ✅ **MLflow Successfully Re-installed!**
+
+                                        - MLflow server is running at: http://localhost:5000
+                                        - Database has been reset and initialized
+                                        - All previous experiments and runs have been deleted
+                                        - System is ready for fresh ML tracking
+                                        """)
+                                    else:
+                                        st.error("MLflow server started but not responding correctly")
+                                except Exception as verify_error:
+                                    st.error(f"Could not verify MLflow: {verify_error}")
+
+                            except Exception as e:
+                                st.error(f"❌ MLflow re-installation failed: {str(e)}")
+                                st.exception(e)
+                else:
+                    if confirmation_text:
+                        st.error("❌ Confirmation text does not match. Type exactly: DELETE MLFLOW")
+
+            if not confirm_reinstall:
+                st.info("👆 Check the box above to enable MLflow re-installation")
+
+    # Future Integration Placeholders
+    st.markdown("---")
+    st.subheader("🔮 Additional Integrations")
+    st.info("""
+    Future integrations will appear here:
+    - **LDAP**: Enterprise authentication (currently disabled)
+    - **SSO**: Single sign-on integration (currently disabled)
+    - **Observability**: Datadog/NewRelic monitoring (currently disabled)
+    - **Vector Database**: pgvector for embeddings
+    """)
+
+    st.success("✅ Infrastructure integrations are configured and ready!")
+    st.caption("Move to the Connections tab to set up AI services")
+
+def render_step_4_chat_setup():
+    """Step 4: Set up AI chat with Bedrock configuration."""
+    st.header("Step 4️⃣: AI Chat Configuration")
+    st.markdown("**Configure your AI models and test the chat setup.**")
+
+    # Bedrock Configuration Section (main content)
+    st.markdown("### 🤖 AWS Bedrock Configuration")
+    st.markdown("Configure your AI model settings for chat functionality.")
+
+    with st.expander("🤖 Configure AWS Bedrock Settings", expanded=False):
+        # Load current Bedrock settings
+        try:
+            from infrastructure.yaml_loader import get_settings_loader
+            settings_loader = get_settings_loader()
+            raw_settings = settings_loader._load_settings()  # Get raw dict
+
+            # Get Bedrock configuration
+            bedrock_config = raw_settings.get('llm_models', {}).get('bedrock', {})
+            current_model_id = bedrock_config.get('model_id', '')
+            current_region = bedrock_config.get('region', 'us-east-1')
+            current_max_tokens = bedrock_config.get('max_tokens', 4096)
+            current_temperature = bedrock_config.get('temperature', 0.7)
+
+            # Get AWS credentials for Bedrock
+            aws_creds = raw_settings.get('credentials', {}).get('aws_basic', {})
+            has_aws_creds = bool(aws_creds.get('access_key_id') and aws_creds.get('secret_access_key'))
+
+            if has_aws_creds:
+                st.success("✅ AWS credentials configured (using credentials from Prerequisites)")
+            else:
+                st.warning("⚠️ AWS credentials not configured - set them in Prerequisites tab first")
+
+            st.info(f"💡 **Current Model**: {current_model_id or 'Not configured'}")
+
+        except Exception as e:
+            st.warning(f"⚠️ Could not load current Bedrock settings: {str(e)}")
+            current_model_id = ''
+            current_region = 'us-east-1'
+            current_max_tokens = 4096
+            current_temperature = 0.7
+            has_aws_creds = False
+
+        with st.form("bedrock_config_form"):
+            st.markdown("**AWS Bedrock Configuration**")
+
+            st.subheader("Model Selection")
+            col1, col2 = st.columns(2)
+
+            with col1:
+                # Available Bedrock models
+                bedrock_models = [
+                    "anthropic.claude-3-haiku-20240307-v1:0",
+                    "anthropic.claude-3-sonnet-20240229-v1:0",
+                    "anthropic.claude-3-5-sonnet-20240620-v1:0",
+                    "anthropic.claude-3-opus-20240229-v1:0",
+                    "anthropic.claude-instant-v1",
+                    "amazon.titan-text-express-v1",
+                    "amazon.titan-text-lite-v1",
+                    "meta.llama2-13b-chat-v1",
+                    "meta.llama2-70b-chat-v1"
+                ]
+
+                # Find current model index
+                try:
+                    model_index = bedrock_models.index(current_model_id)
+                except ValueError:
+                    model_index = 0
+
+                model_id = st.selectbox(
+                    "Bedrock Model",
+                    bedrock_models,
+                    index=model_index,
+                    help="Select the AI model to use"
+                )
+
+                temperature = st.slider(
+                    "Temperature",
+                    min_value=0.0,
+                    max_value=1.0,
+                    value=float(current_temperature),
+                    step=0.1,
+                    help="Controls randomness in responses (0=deterministic, 1=creative)"
+                )
+
+            with col2:
+                region = st.selectbox(
+                    "AWS Region",
+                    ["us-east-1", "us-west-2", "eu-west-1", "eu-central-1", "ap-southeast-1"],
+                    index=0 if current_region == "us-east-1" else None,
+                    help="AWS region where Bedrock is available"
+                )
+
+                max_tokens = st.number_input(
+                    "Max Tokens",
+                    min_value=100,
+                    max_value=100000,
+                    value=int(current_max_tokens),
+                    step=100,
+                    help="Maximum response length"
+                )
+
+            st.subheader("Additional Settings")
+            enable_streaming = st.checkbox("Enable Response Streaming", value=True, help="Stream responses in real-time")
+            enable_fallback = st.checkbox("Enable Model Fallback", value=True, help="Fallback to alternative model if primary fails")
+
+            # Form buttons
+            col_test, col_save = st.columns(2)
+
+            with col_test:
+                test_clicked = st.form_submit_button("🧪 Test Bedrock Access", use_container_width=True)
+
+            with col_save:
+                save_clicked = st.form_submit_button("💾 Save Configuration", use_container_width=True, type="primary")
+
+            if test_clicked:
+                if not has_aws_creds:
+                    st.error("❌ Please configure AWS credentials in Prerequisites tab first")
+                else:
+                    with st.spinner("Testing Bedrock access..."):
+                        try:
+                            # Test Bedrock connection using the domain service
+                            test_result = setup_service.test_bedrock_access()
+
+                            if test_result.get('success'):
+                                st.success(f"✅ Successfully connected to AWS Bedrock!")
+                                if test_result.get('models_available'):
+                                    st.info(f"📋 Available models: {', '.join(test_result['models_available'][:3])}...")
+                            else:
+                                st.error(f"❌ Bedrock test failed: {test_result.get('error', 'Unknown error')}")
+
+                        except Exception as e:
+                            st.error(f"❌ Unexpected error: {str(e)}")
+
+            if save_clicked:
+                with st.spinner("Saving Bedrock configuration..."):
+                    try:
+                        # Update Bedrock configuration in settings
+                        if 'llm_models' not in raw_settings:
+                            raw_settings['llm_models'] = {}
+                        if 'bedrock' not in raw_settings['llm_models']:
+                            raw_settings['llm_models']['bedrock'] = {}
+
+                        raw_settings['llm_models']['bedrock'].update({
+                            'model_id': model_id,
+                            'region': region,
+                            'max_tokens': max_tokens,
+                            'temperature': temperature,
+                            'streaming': enable_streaming,
+                            'fallback_enabled': enable_fallback,
+                            'type': 'bedrock_model'
+                        })
+
+                        # Save to settings.yaml
+                        import yaml
+                        with open(settings_loader.settings_path, 'w') as f:
+                            yaml.safe_dump(raw_settings, f, default_flow_style=False, indent=2)
+
+                        st.success("✅ Bedrock configuration saved successfully!")
+                        st.info(f"💡 Model configured: {model_id}")
+                        st.balloons()
+
+                        # Clear step3 results to force re-check
+                        if 'step3_results' in st.session_state:
+                            del st.session_state['step3_results']
+
+                    except Exception as e:
+                        st.error(f"❌ Failed to save configuration: {str(e)}")
+
+        st.info("💡 **Note:** Bedrock uses AWS credentials from Prerequisites tab for authentication.")
+
+        # Model Management Button
+        if st.button("⚙️ Advanced Model Configuration", type="secondary", use_container_width=True):
+            st.session_state.show_model_config = not st.session_state.get('show_model_config', False)
+
+        # Model Configuration Section
+        if st.session_state.get('show_model_config', False):
+            st.markdown("---")
+            st.subheader("🎯 Advanced Model Configuration")
+
+            # Load current Bedrock config
+            from infrastructure.yaml_loader import get_settings_loader
+            loader = get_settings_loader()
+            bedrock_config = loader.get_bedrock_config()
+
+            if bedrock_config:
+                # Get current settings
+                model_mapping = bedrock_config.get('model_mapping', {})
+                current_default = bedrock_config.get('default_model', '')
+                adapter_config = bedrock_config.get('adapter_config', {})
+
+                # Create tabs for different configuration sections
+                config_tab1, config_tab2, config_tab3, config_tab4, config_tab5 = st.tabs(["🎯 Models", "🔧 Mappings", "⚙️ Adapter Settings", "🔤 Embeddings", "🧪 Model Testing"])
+
+                with config_tab1:
+                    st.markdown("#### Model Selection")
+
+                    # Default model selection
+                    default_model_key = None
+                    for key, value in model_mapping.items():
+                        if value == current_default:
+                            default_model_key = key
+                            break
+
+                    selected_default = st.selectbox(
+                        "🎯 Default Model",
+                        options=list(model_mapping.keys()),
+                        index=list(model_mapping.keys()).index(default_model_key) if default_model_key and default_model_key in model_mapping else 0,
+                        help="Select the default model for AI operations"
+                    )
+
+                    # Available models selection
+                    st.markdown("#### Enable/Disable Models")
+                    available_models = st.multiselect(
+                        "✅ Available Models",
+                        options=list(model_mapping.keys()),
+                        default=list(model_mapping.keys()),
+                        help="Select which models should be available (unselected models will be disabled)"
+                    )
+
+                    # Show status
+                    disabled_models = [m for m in model_mapping.keys() if m not in available_models]
+                    if disabled_models:
+                        st.warning(f"⚠️ Disabled models: {', '.join(disabled_models)}")
+
+                with config_tab2:
+                    st.markdown("#### Model Mappings")
+                    st.info("💡 Model mappings link friendly names to AWS Bedrock model IDs")
+
+                    # Display current mappings
+                    st.markdown("**Current Mappings:**")
+                    for alias, model_id in model_mapping.items():
+                        col1, col2, col3 = st.columns([1, 3, 1])
+                        with col1:
+                            st.text(alias)
+                        with col2:
+                            st.code(model_id, language=None)
+                        with col3:
+                            if alias in available_models:
+                                st.success("✅ Enabled")
+                            else:
+                                st.error("❌ Disabled")
+
+                    # Model Library - friendly categorized view
+                    with st.expander("📚 Model Library - Add from Available Models"):
+
+                        # Chat/Conversation Models
+                        st.markdown("**💬 Chat & Conversation Models**")
+                        st.caption("For interactive chat, Q&A, and conversational AI")
+                        chat_models = {
+                            "Claude 3.5 Sonnet (Best Overall)": "anthropic.claude-3-5-sonnet-20240620-v1:0",
+                            "Claude 3 Opus (Most Capable)": "anthropic.claude-3-opus-20240229-v1:0",
+                            "Claude 3 Sonnet (Balanced)": "anthropic.claude-3-sonnet-20240229-v1:0",
+                            "Claude 3 Haiku (Fast & Efficient)": "anthropic.claude-3-haiku-20240307-v1:0"
+                        }
+
+                        for display_name, model_id in chat_models.items():
+                            col1, col2, col3 = st.columns([3, 4, 2])
+                            with col1:
+                                st.text(display_name)
+                            with col2:
+                                st.code(model_id, language=None)
+                            with col3:
+                                already_mapped = model_id in model_mapping.values()
+                                if already_mapped:
+                                    st.success("✅ Mapped")
+                                else:
+                                    if st.button(f"Add", key=f"add_chat_{model_id}"):
+                                        alias = f"chat-{display_name.lower().replace(' ', '-').replace('(', '').replace(')', '').replace('.', '').replace('&', 'and')}"
+                                        model_mapping[alias] = model_id
+                                        st.success(f"✅ Added: {alias}")
+                                        st.rerun()
+
+                        st.divider()
+
+                        # Text Generation/Processing Models
+                        st.markdown("**📝 Text Generation & Processing Models**")
+                        st.caption("For content generation, analysis, summarization, workflows, and ensemble operations")
+                        text_models = {
+                            "Claude 3.5 Sonnet (Premium)": "anthropic.claude-3-5-sonnet-20240620-v1:0",
+                            "Claude 3 Opus (Complex Tasks)": "anthropic.claude-3-opus-20240229-v1:0",
+                            "Claude 3 Sonnet (Balanced)": "anthropic.claude-3-sonnet-20240229-v1:0",
+                            "Claude 3 Haiku (High Throughput)": "anthropic.claude-3-haiku-20240307-v1:0",
+                            "Llama 3.1 70B (Alternative)": "meta.llama3-1-70b-instruct-v1:0",
+                            "Llama 3.1 8B (Lightweight)": "meta.llama3-1-8b-instruct-v1:0",
+                            "Mistral Large (European)": "mistral.mistral-large-2402-v1:0",
+                            "Mistral 7B (Efficient)": "mistral.mistral-7b-instruct-v0:2"
+                        }
+
+                        st.info("💡 Perfect for ensemble workflows - use multiple models for different steps or validation")
+
+                        for display_name, model_id in text_models.items():
+                            col1, col2, col3 = st.columns([3, 4, 2])
+                            with col1:
+                                st.text(display_name)
+                            with col2:
+                                st.code(model_id, language=None)
+                            with col3:
+                                already_mapped = model_id in model_mapping.values()
+                                if already_mapped:
+                                    st.success("✅ Mapped")
+                                else:
+                                    if st.button(f"Add", key=f"add_text_{model_id}"):
+                                        alias = f"text-{display_name.lower().replace(' ', '-').replace('(', '').replace(')', '').replace('.', '')}"
+                                        model_mapping[alias] = model_id
+                                        st.success(f"✅ Added: {alias}")
+                                        st.rerun()
+
+                        st.divider()
+
+                        # Embedding Models
+                        st.markdown("**🔗 Embedding Models**")
+                        st.caption("For vector search, RAG, and semantic similarity")
+                        embedding_models = {
+                            "Titan v2 (Recommended 1024D)": "amazon.titan-embed-text-v2:0",
+                            "Titan v1 (1536D → 1024D)": "amazon.titan-embed-text-v1",
+                            "Cohere English (1024D)": "cohere.embed-english-v3",
+                            "Cohere Multilingual (1024D)": "cohere.embed-multilingual-v3"
+                        }
+
+                        for display_name, model_id in embedding_models.items():
+                            col1, col2, col3 = st.columns([3, 4, 2])
+                            with col1:
+                                st.text(display_name)
+                            with col2:
+                                st.code(model_id, language=None)
+                            with col3:
+                                already_mapped = model_id in model_mapping.values()
+                                if already_mapped:
+                                    st.success("✅ Mapped")
+                                else:
+                                    if st.button(f"Add", key=f"add_embed_{model_id}"):
+                                        alias = display_name.lower().replace(" ", "-").replace("(", "").replace(")", "").replace("→", "to")
+                                        model_mapping[alias] = model_id
+                                        st.success(f"✅ Added: {alias}")
+                                        st.rerun()
+
+                        st.divider()
+
+                        # Multimodal Models
+                        st.markdown("**🎭 Multimodal Models**")
+                        st.caption("For vision, image analysis, and multimodal understanding")
+                        multimodal_models = {
+                            "Claude 3.5 Sonnet (Vision)": "anthropic.claude-3-5-sonnet-20240620-v1:0",
+                            "Claude 3 Opus (Vision)": "anthropic.claude-3-opus-20240229-v1:0",
+                            "Claude 3 Sonnet (Vision)": "anthropic.claude-3-sonnet-20240229-v1:0",
+                            "Claude 3 Haiku (Vision)": "anthropic.claude-3-haiku-20240307-v1:0"
+                        }
+
+                        st.info("💡 All Claude 3+ models support image analysis. Same model IDs, different use case.")
+
+                        for display_name, model_id in multimodal_models.items():
+                            col1, col2, col3 = st.columns([3, 4, 2])
+                            with col1:
+                                st.text(display_name)
+                            with col2:
+                                st.code(model_id, language=None)
+                            with col3:
+                                already_mapped = model_id in model_mapping.values()
+                                if already_mapped:
+                                    st.success("✅ Mapped")
+                                else:
+                                    if st.button(f"Add", key=f"add_vision_{model_id}"):
+                                        alias = f"vision-{display_name.lower().replace(' ', '-').replace('(', '').replace(')', '').replace('.', '')}"
+                                        model_mapping[alias] = model_id
+                                        st.success(f"✅ Added: {alias}")
+                                        st.rerun()
+
+                        st.divider()
+
+                        # Other Bedrock Models
+                        st.markdown("**🔧 Other Bedrock Models**")
+                        st.caption("Additional models available on AWS Bedrock")
+                        other_models = {
+                            "Llama 3.1 70B (Meta)": "meta.llama3-1-70b-instruct-v1:0",
+                            "Llama 3.1 8B (Meta)": "meta.llama3-1-8b-instruct-v1:0",
+                            "Mistral 7B (Mistral AI)": "mistral.mistral-7b-instruct-v0:2",
+                            "Mistral Large (Mistral AI)": "mistral.mistral-large-2402-v1:0",
+                            "Titan Text G1 (Amazon)": "amazon.titan-text-lite-v1",
+                            "AI21 Jurassic-2 Ultra": "ai21.j2-ultra-v1",
+                            "AI21 Jurassic-2 Mid": "ai21.j2-mid-v1"
+                        }
+
+                        for display_name, model_id in other_models.items():
+                            col1, col2, col3 = st.columns([3, 4, 2])
+                            with col1:
+                                st.text(display_name)
+                            with col2:
+                                st.code(model_id, language=None)
+                            with col3:
+                                already_mapped = model_id in model_mapping.values()
+                                if already_mapped:
+                                    st.success("✅ Mapped")
+                                else:
+                                    if st.button(f"Add", key=f"add_other_{model_id}"):
+                                        alias = display_name.lower().replace(" ", "-").replace("(", "").replace(")", "").replace(".", "")
+                                        model_mapping[alias] = model_id
+                                        st.success(f"✅ Added: {alias}")
+                                        st.rerun()
+
+                    # Manual add for advanced users
+                    with st.expander("⚙️ Advanced: Add Custom Model"):
+                        new_alias = st.text_input("Friendly Name", placeholder="e.g., my-custom-model")
+                        new_model_id = st.text_input("Bedrock Model ID", placeholder="e.g., anthropic.claude-3-opus-20240229-v1:0")
+
+                        if st.button("Add Custom Mapping"):
+                            if new_alias and new_model_id:
+                                model_mapping[new_alias] = new_model_id
+                                st.success(f"✅ Added mapping: {new_alias} → {new_model_id}")
+                                st.rerun()
+                            else:
+                                st.error("Please provide both alias and model ID")
+
+                with config_tab3:
+                    st.markdown("#### Adapter Configuration")
+                    st.info("💡 Control timeout, retry, and circuit breaker settings")
+
+                    col1, col2 = st.columns(2)
+
+                    with col1:
+                        timeout = st.number_input(
+                            "⏱️ Timeout (seconds)",
+                            min_value=10,
+                            max_value=300,
+                            value=adapter_config.get('timeout', 60),
+                            step=10,
+                            help="Maximum time to wait for model response"
+                        )
+
+                        retry_attempts = st.number_input(
+                            "🔄 Retry Attempts",
+                            min_value=0,
+                            max_value=10,
+                            value=adapter_config.get('retry_attempts', 3),
+                            help="Number of retry attempts on failure"
+                        )
+
+                    with col2:
+                        circuit_breaker = st.checkbox(
+                            "🔌 Circuit Breaker",
+                            value=adapter_config.get('circuit_breaker', True),
+                            help="Enable circuit breaker pattern for fault tolerance"
+                        )
+
+                        if circuit_breaker:
+                            st.info("Circuit breaker will temporarily disable failing services")
+
+                with config_tab4:
+                    st.markdown("#### Embeddings Configuration")
+                    st.info("💡 Configure embedding models for vector search and RAG operations")
+
+                    # Check current embeddings config from settings
+                    embeddings_config = bedrock_config.get('embeddings', {})
+
+                    col1, col2 = st.columns(2)
+
+                    with col1:
+                        # Embedding model selection with dimensions
+                        embedding_models = {
+                            "amazon.titan-embed-text-v1": {"dimensions": 1536, "max_tokens": 8192},
+                            "amazon.titan-embed-text-v2:0": {"dimensions": 1024, "max_tokens": 8192},
+                            "cohere.embed-english-v3": {"dimensions": 1024, "max_tokens": 512},
+                            "cohere.embed-multilingual-v3": {"dimensions": 1024, "max_tokens": 512}
+                        }
+
+                        selected_embedding_model = st.selectbox(
+                            "🔤 Embedding Model",
+                            options=list(embedding_models.keys()),
+                            index=list(embedding_models.keys()).index(embeddings_config.get('model_id', list(embedding_models.keys())[0])) if embeddings_config.get('model_id') in embedding_models else 0,
+                            help="Select embedding model for vector operations"
+                        )
+
+                        # Auto-set dimensions based on model
+                        model_info = embedding_models[selected_embedding_model]
+                        auto_dimensions = model_info["dimensions"]
+                        max_tokens = model_info["max_tokens"]
+
+                        st.info(f"📐 **Auto-detected dimensions:** {auto_dimensions} for {selected_embedding_model.split('.')[-1]}")
+                        st.info(f"📄 **Max input tokens:** {max_tokens:,}")
+
+                        # Check pgvector database max dimensions
+                        if st.button("🔍 Check Database Vector Limits", help="Query pgvector database for maximum supported dimensions"):
+                            with st.spinner("Querying pgvector database..."):
+                                try:
+                                    # Get database service from setup_service
+                                    from domain.services.setup_service import SetupService
+                                    from adapters.secondary.setup.setup_dependencies_adapter import get_setup_dependencies_adapter
+
+                                    adapter = get_setup_dependencies_adapter()
+                                    setup_service_instance = SetupService(adapter)
+
+                                    # Get database connection
+                                    db_service = adapter.get_database_service()
+
+                                    # Query pgvector extension info
+                                    query = """
+                                    SELECT
+                                        name,
+                                        default_version,
+                                        installed_version,
+                                        comment
+                                    FROM pg_available_extensions
+                                    WHERE name = 'vector'
+                                    UNION ALL
+                                    SELECT
+                                        'vector_max_dims' as name,
+                                        NULL as default_version,
+                                        NULL as installed_version,
+                                        'Check current_setting for vector.max_dimensions' as comment
+                                    """
+
+                                    # Also try to get max dimensions setting
+                                    max_dims_query = """
+                                    SELECT
+                                        current_setting('vector.max_dimensions', true) as max_dimensions,
+                                        version() as pg_version
+                                    """
+
+                                    # Execute queries through database adapter
+                                    health_result = db_service.health_check()
+                                    if health_result.get('overall_status') == 'healthy':
+                                        st.success("✅ Database connection successful!")
+
+                                        # Show database info
+                                        databases = health_result.get('databases', {})
+                                        for db_name, db_info in databases.items():
+                                            if db_info.get('status') == 'healthy':
+                                                st.info(f"📊 **{db_name}**: {db_info.get('version', 'Unknown version')}")
+
+                                        # Based on your existing vector_manager.py configuration
+                                        st.info("🔧 **Your pgvector Configuration**:")
+                                        st.text("• Database: vectorqa on AWS RDS")
+                                        st.text("• Standard dimension: 1024 (from vector_manager.py)")
+                                        st.text("• Host: vectorqa-cluster.cluster-cu562e4m02nq.us-east-1.rds.amazonaws.com")
+                                        st.text("• pgvector supports up to 16,000 dimensions")
+                                        st.text("• Your Bedrock models: 1024-1536D (perfectly compatible)")
+
+                                        # Show recommendation based on your actual setup
+                                        current_vector_dim = 1024  # From your vector_manager.py
+                                        if auto_dimensions <= current_vector_dim:
+                                            st.success(f"✅ **Perfect Match**: {selected_embedding_model.split('.')[-1]} ({auto_dimensions}D) ≤ current vector DB ({current_vector_dim}D)")
+                                        elif auto_dimensions <= 1536:
+                                            st.warning(f"⚠️ **Size Increase**: {selected_embedding_model.split('.')[-1]} ({auto_dimensions}D) > current setup ({current_vector_dim}D)")
+                                            st.info("💡 You may need to update vector_dimension in VectorConfig")
+                                        else:
+                                            st.error(f"❌ **Incompatible**: {auto_dimensions}D exceeds recommended limits")
+                                    else:
+                                        st.warning("⚠️ Database not available - using default pgvector limits")
+                                        st.info("📏 **Default pgvector limits**: Up to 16,000 dimensions")
+
+                                except Exception as e:
+                                    st.error(f"❌ Could not query database: {str(e)}")
+                                    st.info("📏 **Standard pgvector limits**: Up to 16,000 dimensions")
+
+                        # Allow manual override (for advanced users)
+                        use_custom_dimensions = st.checkbox("🔧 Override dimensions (advanced)", value=False)
+
+                        if use_custom_dimensions:
+                            dimensions = st.number_input(
+                                "📐 Custom Vector Dimensions",
+                                min_value=128,
+                                max_value=1536,
+                                value=embeddings_config.get('dimensions', auto_dimensions),
+                                step=64,
+                                help="⚠️ Only change if you know what you're doing"
+                            )
+                            st.warning("⚠️ Using incorrect dimensions may cause compatibility issues")
+                        else:
+                            dimensions = auto_dimensions
+
+                    with col2:
+                        # Batch processing settings
+                        batch_size = st.number_input(
+                            "📦 Batch Size",
+                            min_value=1,
+                            max_value=100,
+                            value=embeddings_config.get('batch_size', 25),
+                            help="Number of texts to process in a single batch"
+                        )
+
+                        # Chunk settings for large texts
+                        max_chunk_size = st.number_input(
+                            "✂️ Max Chunk Size",
+                            min_value=100,
+                            max_value=8000,
+                            value=embeddings_config.get('max_chunk_size', 2000),
+                            step=100,
+                            help="Maximum characters per text chunk"
+                        )
+
+                    # Advanced embedding settings
+                    with st.expander("🔧 Advanced Embedding Settings"):
+                        col1, col2 = st.columns(2)
+
+                        with col1:
+                            normalize_embeddings = st.checkbox(
+                                "📏 Normalize Embeddings",
+                                value=embeddings_config.get('normalize', True),
+                                help="Normalize embedding vectors to unit length"
+                            )
+
+                            cache_embeddings = st.checkbox(
+                                "💾 Cache Embeddings",
+                                value=embeddings_config.get('cache_enabled', True),
+                                help="Cache embeddings to improve performance"
+                            )
+
+                        with col2:
+                            embedding_timeout = st.number_input(
+                                "⏱️ Embedding Timeout (seconds)",
+                                min_value=10,
+                                max_value=120,
+                                value=embeddings_config.get('timeout', 30),
+                                help="Timeout for embedding operations"
+                            )
+
+                    # Show current configuration
+                    st.markdown("**Current Configuration:**")
+                    config_col1, config_col2, config_col3 = st.columns(3)
+                    with config_col1:
+                        st.metric("Model", selected_embedding_model.split('.')[-1])
+                    with config_col2:
+                        st.metric("Dimensions", dimensions)
+                    with config_col3:
+                        st.metric("Batch Size", batch_size)
+
+                # Save ALL configuration
+                st.markdown("---")
+                if st.button("💾 Save All Configuration", type="primary", use_container_width=True, key="save_all_model_config"):
+                    try:
+                        # Save to settings
+                        import yaml
+                        settings_path = Path("infrastructure/settings.yaml")
+                        with open(settings_path, 'r') as f:
+                            settings = yaml.safe_load(f)
+
+                        # Update default model
+                        settings['credentials']['bedrock_llm']['default_model'] = model_mapping.get(selected_default, current_default)
+
+                        # Update model mappings (keeping all, but only enabled ones will be used)
+                        settings['credentials']['bedrock_llm']['model_mapping'] = model_mapping
+
+                        # Store disabled models list separately (for reference)
+                        disabled_models = [m for m in model_mapping.keys() if m not in available_models]
+                        if 'disabled_models' not in settings['credentials']['bedrock_llm']:
+                            settings['credentials']['bedrock_llm']['disabled_models'] = disabled_models
+                        else:
+                            settings['credentials']['bedrock_llm']['disabled_models'] = disabled_models
+
+                        # Update adapter config
+                        settings['credentials']['bedrock_llm']['adapter_config'] = {
+                            'timeout': timeout,
+                            'retry_attempts': retry_attempts,
+                            'circuit_breaker': circuit_breaker
+                        }
+
+                        # Update embeddings config
+                        settings['credentials']['bedrock_llm']['embeddings'] = {
+                            'model_id': selected_embedding_model,
+                            'dimensions': dimensions,
+                            'batch_size': batch_size,
+                            'max_chunk_size': max_chunk_size,
+                            'normalize': normalize_embeddings,
+                            'cache_enabled': cache_embeddings,
+                            'timeout': embedding_timeout,
+                            'type': 'bedrock_embeddings'
+                        }
+
+                        with open(settings_path, 'w') as f:
+                            yaml.safe_dump(settings, f, default_flow_style=False, indent=2)
+
+                        st.success("✅ All configurations saved successfully!")
+
+                        # Show summary
+                        col1, col2, col3, col4 = st.columns(4)
+                        with col1:
+                            st.info(f"📌 Default: {selected_default}")
+                        with col2:
+                            st.info(f"✅ Enabled: {len(available_models)} models")
+                        with col3:
+                            st.info(f"⏱️ Timeout: {timeout}s")
+                        with col4:
+                            st.info(f"🔤 Embeddings: {selected_embedding_model.split('.')[-1]}")
+
+                    except Exception as e:
+                        st.error(f"❌ Failed to save configuration: {str(e)}")
+
+                with config_tab5:
+                    st.markdown("#### Model Testing & Validation")
+                    st.info("🧪 Test individual models and validate your entire configuration")
+
+                    # Test Options
+                    col1, col2 = st.columns(2)
+
+                    with col1:
+                        st.markdown("##### 🔧 Quick Tests")
+
+                        # Single model test
+                        test_model = st.selectbox(
+                            "Test Single Model",
+                            options=list(model_mapping.keys()),
+                            help="Test access to a specific configured model"
+                        )
+
+                        model_type = st.radio(
+                            "Model Type",
+                            ["text", "embedding"],
+                            help="Select the type of model to test"
+                        )
+
+                        if st.button("🧪 Test Selected Model", use_container_width=True):
+                            if test_model and test_model in model_mapping:
+                                with st.spinner(f"Testing {test_model}..."):
+                                    try:
+                                        model_id = model_mapping[test_model]
+                                        result = setup_service.test_model_access(model_id, model_type)
+
+                                        if result.get('accessible'):
+                                            st.success(f"✅ {test_model} is accessible!")
+                                            col_resp1, col_resp2 = st.columns(2)
+                                            with col_resp1:
+                                                st.metric("Response Time", f"{result.get('response_time_ms', 0)}ms")
+                                            with col_resp2:
+                                                if model_type == "embedding" and result.get('embedding_dimension'):
+                                                    st.metric("Dimensions", f"{result.get('embedding_dimension')}D")
+                                                else:
+                                                    st.metric("Test Status", "✅ Success")
+                                        else:
+                                            st.error(f"❌ {test_model} failed: {result.get('error', 'Unknown error')}")
+                                    except Exception as e:
+                                        st.error(f"❌ Test failed: {str(e)}")
+                            else:
+                                st.error("❌ Please select a valid model")
+
+                        # Validate all mappings
+                        if st.button("🔍 Validate All Model Mappings", use_container_width=True):
+                            with st.spinner("Validating all configured models..."):
+                                try:
+                                    result = setup_service.validate_model_mapping(model_mapping)
+
+                                    if result.get('mapping_valid'):
+                                        st.success(f"✅ All {result.get('total_mappings', 0)} models are accessible!")
+                                    else:
+                                        st.warning(f"⚠️ {len(result.get('failed_mappings', []))} models failed validation")
+
+                                        if result.get('failed_mappings'):
+                                            st.markdown("**Failed Models:**")
+                                            for failed in result['failed_mappings']:
+                                                st.error(f"❌ {failed['friendly_name']} ({failed['model_id']}): {failed['error']}")
+
+                                    # Summary metrics
+                                    col_sum1, col_sum2, col_sum3 = st.columns(3)
+                                    with col_sum1:
+                                        st.metric("Total Models", result.get('total_mappings', 0))
+                                    with col_sum2:
+                                        st.metric("Accessible", result.get('accessible_mappings', 0))
+                                    with col_sum3:
+                                        st.metric("Failed", len(result.get('failed_mappings', [])))
+
+                                except Exception as e:
+                                    st.error(f"❌ Validation failed: {str(e)}")
+
+                    with col2:
+                        st.markdown("##### 🎯 Advanced Testing")
+
+                        # Model discovery
+                        if st.button("🔍 Discover Available Models", use_container_width=True):
+                            with st.spinner("Discovering available Bedrock models..."):
+                                try:
+                                    result = setup_service.get_available_models()
+
+                                    if result.get('error'):
+                                        st.error(f"❌ Discovery failed: {result['error']}")
+                                    else:
+                                        st.success(f"✅ Found {result.get('total_count', 0)} available models")
+
+                                        # Show breakdown by type
+                                        by_type = result.get('by_type', {})
+                                        if by_type:
+                                            st.markdown("**Available by Type:**")
+                                            for model_type, count in by_type.items():
+                                                st.metric(f"{model_type.title()} Models", count)
+
+                                except Exception as e:
+                                    st.error(f"❌ Discovery failed: {str(e)}")
+
+                        # Batch test configured models
+                        if st.button("🧪 Test All Configured Models", use_container_width=True):
+                            with st.spinner("Testing all configured models..."):
+                                try:
+                                    # Prepare models for batch testing
+                                    test_models = []
+                                    for friendly_name, model_id in model_mapping.items():
+                                        # Determine model type based on name or ID
+                                        if 'embed' in friendly_name.lower() or 'titan-embed' in model_id or 'cohere.embed' in model_id:
+                                            model_type = "embedding"
+                                        else:
+                                            model_type = "text"
+
+                                        test_models.append({
+                                            "model_id": model_id,
+                                            "type": model_type,
+                                            "name": friendly_name
+                                        })
+
+                                    result = setup_service.test_multiple_models(test_models)
+
+                                    # Display results
+                                    if result.get('summary', {}).get('all_accessible'):
+                                        st.success(f"✅ All {result.get('total_models', 0)} models are working!")
+                                    else:
+                                        st.warning(f"⚠️ {result.get('failed_models', 0)} models failed")
+
+                                    # Summary metrics
+                                    col_batch1, col_batch2, col_batch3 = st.columns(3)
+                                    with col_batch1:
+                                        st.metric("Total Tested", result.get('total_models', 0))
+                                    with col_batch2:
+                                        st.metric("Success Rate", f"{result.get('summary', {}).get('success_rate', 0):.1f}%")
+                                    with col_batch3:
+                                        st.metric("Failed", result.get('failed_models', 0))
+
+                                    # Show individual results in expander
+                                    with st.expander("📋 Detailed Results"):
+                                        model_results = result.get('model_results', {})
+                                        for name, test_result in model_results.items():
+                                            if test_result.get('accessible'):
+                                                st.success(f"✅ {name}: {test_result.get('response_time_ms', 0)}ms")
+                                            else:
+                                                st.error(f"❌ {name}: {test_result.get('error', 'Failed')}")
+
+                                except Exception as e:
+                                    st.error(f"❌ Batch testing failed: {str(e)}")
+
+                        # Embedding-specific testing
+                        st.markdown("##### 🔤 Embedding Testing")
+
+                        embedding_models = {k: v for k, v in model_mapping.items()
+                                          if 'embed' in k.lower() or 'titan-embed' in v or 'cohere.embed' in v}
+
+                        if embedding_models:
+                            embed_model = st.selectbox(
+                                "Test Embedding Model",
+                                options=list(embedding_models.keys()),
+                                help="Test embedding generation and dimension compatibility"
+                            )
+
+                            test_text = st.text_input(
+                                "Test Text",
+                                value="This is a sample text for embedding generation.",
+                                help="Text to generate embeddings for"
+                            )
+
+                            if st.button("🔤 Test Embedding Generation", use_container_width=True):
+                                if embed_model and embed_model in embedding_models:
+                                    with st.spinner(f"Testing embedding generation..."):
+                                        try:
+                                            model_id = embedding_models[embed_model]
+                                            result = setup_service.test_embedding_model(model_id, test_text)
+
+                                            if result.get('accessible'):
+                                                st.success(f"✅ Embedding generated successfully!")
+                                                col_embed1, col_embed2 = st.columns(2)
+                                                with col_embed1:
+                                                    st.metric("Dimensions", f"{result.get('embedding_dimension', 0)}D")
+                                                with col_embed2:
+                                                    st.metric("Response Time", f"{result.get('response_time_ms', 0)}ms")
+
+                                                # Check dimension compatibility
+                                                dims = result.get('embedding_dimension', 0)
+                                                if dims == 1024:
+                                                    st.success("🎯 Perfect! 1024D matches your database configuration")
+                                                elif dims > 1024:
+                                                    st.warning(f"⚠️ {dims}D will be truncated to 1024D for storage")
+                                                elif dims < 1024:
+                                                    st.info(f"📏 {dims}D will be padded to 1024D for storage")
+
+                                            else:
+                                                st.error(f"❌ Embedding test failed: {result.get('error', 'Unknown error')}")
+                                        except Exception as e:
+                                            st.error(f"❌ Embedding test failed: {str(e)}")
+                        else:
+                            st.info("💡 No embedding models configured. Add some in the Mappings tab!")
+
+            else:
+                st.warning("⚠️ Bedrock configuration not found in settings. Please save main configuration first.")
+
+    # Check AI Chat Status Section (at the end)
+    st.markdown("---")
+    st.markdown("### 🔍 Check AI Chat Status")
 
     if st.button("🤖 CHECK AI CHAT SETUP", type="primary", use_container_width=True):
         with st.spinner("Checking AI chat setup..."):
             chat_results = setup_service.tidyllm_basic_setup()
             # Store results in session state so they persist
-            st.session_state['step3_results'] = chat_results
+            st.session_state['step4_chat_results'] = chat_results
 
     # Display results if they exist in session state
-    if 'step3_results' in st.session_state:
-        chat_results = st.session_state['step3_results']
+    if 'step4_chat_results' in st.session_state:
+        chat_results = st.session_state['step4_chat_results']
         results = chat_results['results']
         model_count = chat_results.get('model_count', 0)
         status = chat_results['overall_status']
@@ -213,7 +1709,7 @@ def render_step_3_chat_setup():
         if status == 'configured':
             st.success(f"🎉 **AMAZING!** Your AI chat is ready with {model_count} different models!")
         else:
-            st.warning("⚠️ **AI chat needs configuration.** Let's fix this!")
+            st.warning("⚠️ **AI chat needs configuration.** Configure Bedrock settings above.")
 
         # Show AI models available
         if model_count > 0:
@@ -236,30 +1732,30 @@ def render_step_3_chat_setup():
 
                     # Provide specific help
                     if check == 'bedrock_models_configured':
-                        st.info("💡 **Fix:** AI models are not set up. Ask your teacher to configure AWS Bedrock.")
+                        st.info("💡 **Fix:** Configure AWS Bedrock settings above.")
                     elif check == 'basic_chat_settings':
                         st.info("💡 **Fix:** Chat settings are missing. Check the settings.yaml file.")
                     elif check == 'default_timeouts_set':
-                        st.info("💡 **Fix:** Timeout settings are missing. Ask your teacher to configure timeouts.")
+                        st.info("💡 **Fix:** Timeout settings are missing. Configure in settings.yaml.")
                     elif check == 'basic_mlflow_tracking':
-                        st.info("💡 **Fix:** MLflow tracking is not set up. Check MLflow configuration.")
+                        st.info("💡 **Fix:** MLflow tracking is not set up. Check Step 3 Integrations.")
 
         st.info(f"📋 **Summary:** {chat_results['summary']}")
 
         # Next step guidance
         if status == 'configured':
-            st.success("🎯 **NEXT STEP:** Go to Step 4 for final health check!")
+            st.success("🎯 **NEXT STEP:** Go to Step 5 for final health check!")
         else:
-            st.warning("🎯 **NEXT STEP:** Fix the AI configuration issues above.")
+            st.warning("🎯 **NEXT STEP:** Configure Bedrock settings above first.")
 
         # Add a button to re-check
-        if st.button("🔄 Check Again", use_container_width=True, key="step3_check_again"):
-            del st.session_state['step3_results']
+        if st.button("🔄 Check Again", use_container_width=True, key="step4_check_again"):
+            del st.session_state['step4_chat_results']
             st.rerun()
 
-def render_step_4_health_check():
-    """Step 4: Final health check."""
-    st.header("Step 4️⃣: Final Health Check")
+def render_step_5_health_check():
+    """Step 5: Final health check."""
+    st.header("Step 5️⃣: Final Health Check")
     st.markdown("**Let's make sure everything is working perfectly!**")
 
     if st.button("💚 TEST EVERYTHING NOW", type="primary", use_container_width=True):
@@ -292,11 +1788,11 @@ def render_step_4_health_check():
 
                     # Provide specific help
                     if check == 'database_connection_status':
-                        st.info("💡 **Fix:** Database connection failed. Check your internet or ask your teacher.")
+                        st.info("💡 **Fix:** Database connection failed. Check your internet or ask your portal admin.")
                     elif check == 'aws_service_connectivity':
-                        st.info("💡 **Fix:** AWS connection failed. Check AWS credentials with your teacher.")
+                        st.info("💡 **Fix:** AWS connection failed. Check AWS credentials with your portal admin.")
                     elif check == 'mlflow_tracking_status':
-                        st.info("💡 **Fix:** MLflow is not working. Ask your teacher to check MLflow setup.")
+                        st.info("💡 **Fix:** MLflow is not working. Ask your portal admin to check MLflow setup.")
                     elif check == 'bedrock_model_accessibility':
                         st.info("💡 **Fix:** AI models are not accessible. Check AWS Bedrock configuration.")
                     elif check == 'basic_chat_functionality':
@@ -315,9 +1811,9 @@ def render_step_4_health_check():
             del st.session_state['step4_results']
             st.rerun()
 
-def render_step_5_portal_guide():
-    """Step 5: Portal guide."""
-    st.header("Step 5️⃣: Explore Available Portals")
+def render_step_6_portal_guide():
+    """Step 6: Portal guide."""
+    st.header("Step 6️⃣: Explore Available Portals")
     st.markdown("**Great! Now you can explore all the different AI tools available!**")
 
     portal_data = setup_service.portal_guide()
@@ -351,7 +1847,7 @@ def render_step_5_portal_guide():
                 with col2:
                     st.write(f"📝 {description}")
                     if not active:
-                        st.caption("💡 Ask your teacher to start this portal if you need it")
+                        st.caption("💡 Ask your portal admin to start this portal if you need it")
 
                 with col3:
                     if active:
@@ -402,55 +1898,137 @@ def render_quick_actions():
             env_summary = setup_service.get_environment_summary()
             st.json(env_summary)
 
+def render_overview_tab():
+    """Overview tab - Welcome and introduction to the installer."""
+    st.markdown("# 🎉 Welcome to TidyLLM Setup!")
+
+    st.markdown("""
+    ## What is TidyLLM?
+
+    **TidyLLM** is your comprehensive AI platform that provides:
+
+    - 🤖 **Multi-Model Chat**: Access to Claude, GPT, and AWS Bedrock models
+    - 🔍 **RAG (Retrieval-Augmented Generation)**: Chat with your documents
+    - 🧪 **DSPy Integration**: Advanced prompt engineering and optimization
+    - 📊 **MLflow Tracking**: Monitor and track your AI experiments
+    - 🔧 **Workflow Builder**: Create custom AI workflows
+
+    ## 🚀 Quick Setup Journey
+
+    This installer will guide you through **4 simple steps**:
+
+    **🔧 Prerequisites** → **🔌 Connections** → **🧪 Test Features** → **🚀 Get Started**
+
+    ⏱️ **Estimated time:** 2-3 minutes
+    """)
+
+    st.markdown("## 📊 Current System Status")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.metric(
+            label="🖥️ System Check",
+            value="Checking...",
+            help="System requirements validation"
+        )
+
+    with col2:
+        st.metric(
+            label="🔌 Services",
+            value="Checking...",
+            help="Database and cloud connections"
+        )
+
+    with col3:
+        st.metric(
+            label="🤖 AI Models",
+            value="Checking...",
+            help="Available AI models and configurations"
+        )
+
+    st.info("💡 **Ready to start?** Click the **🔧 Prerequisites** tab above to begin!")
+
+def render_prerequisites_tab():
+    """Prerequisites tab - System and software requirements."""
+    st.markdown("# 🔧 Prerequisites")
+    st.markdown("**Let's check if your system has everything needed to run TidyLLM.**")
+
+    render_step_1_system_check()
+
+def render_connections_tab():
+    """Connections tab - Database and cloud service setup."""
+    st.markdown("# 🔌 Connections")
+    st.markdown("**Configure your database and cloud connections.**")
+
+    render_step_4_chat_setup()
+
+def render_test_features_tab():
+    """Test Features tab - Validate AI functionality."""
+    st.markdown("# 🧪 Test Features")
+    st.markdown("**Test your AI chat and core features.**")
+
+    render_step_2_software_check()
+
+def render_get_started_tab():
+    """Get Started tab - Final steps and portal access."""
+    st.markdown("# 🚀 Get Started")
+    st.markdown("**You're all set! Here's how to start using TidyLLM.**")
+
+    st.markdown("## 🔍 Final Health Check")
+    render_step_5_health_check()
+
+    st.markdown("## 🌟 Explore Your Portals")
+    render_step_6_portal_guide()
+
+def check_step_completion():
+    """Check which steps are completed for structured flow."""
+    step1_complete = 'step1_results' in st.session_state and st.session_state.get('step1_results', {}).get('overall_status') == 'ready'
+    step2_complete = 'step2_results' in st.session_state and st.session_state.get('step2_results', {}).get('overall_status') == 'ready'
+    step3_complete = 'step3_results' in st.session_state and st.session_state.get('step3_results', {}).get('overall_status') == 'ready'
+    step4_complete = 'step4_results' in st.session_state and st.session_state.get('step4_results', {}).get('overall_status') == 'ready'
+
+    return step1_complete, step2_complete, step3_complete, step4_complete
+
 def main():
-    """Main application."""
+    """Main application with structured flow."""
     set_page_config()
     render_header()
 
-    # Navigation tabs
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
-        "1️⃣ System Check",
-        "2️⃣ Software Check",
-        "3️⃣ AI Chat Setup",
-        "4️⃣ Health Check",
-        "5️⃣ Explore Portals",
-        "⚡ Quick Actions"
-    ])
+    # Check step completion for structured flow
+    step1_done, step2_done, step3_done, step4_done = check_step_completion()
+
+    # Restructured tab labels for better installer journey
+    tab_labels = [
+        "🏠 Overview",
+        "🔧 Prerequisites",
+        "🔌 Integrations",
+        "📡 Connections",
+        "🧪 Test Features",
+        "🚀 Get Started"
+    ]
+
+    # Navigation tabs with structured flow
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(tab_labels)
 
     with tab1:
-        render_step_1_system_check()
+        render_overview_tab()
 
     with tab2:
-        render_step_2_software_check()
+        render_prerequisites_tab()
 
     with tab3:
-        render_step_3_chat_setup()
+        render_integrations_tab()
 
     with tab4:
-        render_step_4_health_check()
+        render_connections_tab()
 
     with tab5:
-        render_step_5_portal_guide()
+        render_test_features_tab()
 
     with tab6:
-        render_quick_actions()
+        render_get_started_tab()
 
-    # Footer with helpful information
-    st.markdown("---")
-    st.markdown("""
-    ### 📋 What Each Step Does:
-    - **Step 1**: Checks if your computer has everything it needs
-    - **Step 2**: Makes sure required software is installed
-    - **Step 3**: Sets up AI chat with 4 different models
-    - **Step 4**: Tests that everything works together
-    - **Step 5**: Shows you all the AI tools you can use
-
-    ### 🎯 Remember:
-    - **Green ✅** means everything is working
-    - **Red ❌** means something needs to be fixed
-    - **Yellow ⚠️** means there might be a small issue
-    - When you see problems, ask your teacher for help!
-    """)
 
 if __name__ == "__main__":
     main()

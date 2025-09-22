@@ -115,6 +115,25 @@ class ScriptGeneratorPort(ABC):
         pass
 
 
+class DatabasePort(ABC):
+    """Port for database service access."""
+
+    @abstractmethod
+    def test_connection(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """Test database connection with given configuration."""
+        pass
+
+    @abstractmethod
+    def health_check(self) -> Dict[str, Any]:
+        """Perform health check on database connections."""
+        pass
+
+    @abstractmethod
+    def update_settings(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """Update database configuration in settings."""
+        pass
+
+
 class AWSServicePort(ABC):
     """Port for AWS service access."""
 
@@ -131,6 +150,46 @@ class AWSServicePort(ABC):
     @abstractmethod
     def test_connection(self) -> Dict[str, Any]:
         """Test AWS connection."""
+        pass
+
+    @abstractmethod
+    def test_s3_access(self, bucket: str, prefix: str) -> Dict[str, Any]:
+        """Test S3 bucket access with specific credentials."""
+        pass
+
+    @abstractmethod
+    def update_s3_config(self, config: Dict[str, Any]) -> Dict[str, Any]:
+        """Update S3 configuration in settings."""
+        pass
+
+    @abstractmethod
+    def test_model_access(self, model_id: str, model_type: str = "text") -> Dict[str, Any]:
+        """Test access to a specific Bedrock model."""
+        pass
+
+    @abstractmethod
+    def test_multiple_models(self, models: List[Dict[str, str]]) -> Dict[str, Any]:
+        """Test access to multiple Bedrock models."""
+        pass
+
+    @abstractmethod
+    def get_available_models(self, model_type: str = None) -> Dict[str, Any]:
+        """Get list of available Bedrock models by type."""
+        pass
+
+    @abstractmethod
+    def test_embedding_model(self, model_id: str, test_text: str = None) -> Dict[str, Any]:
+        """Test embedding model with sample text."""
+        pass
+
+    @abstractmethod
+    def test_chat_model(self, model_id: str, test_message: str = None) -> Dict[str, Any]:
+        """Test chat model with sample message."""
+        pass
+
+    @abstractmethod
+    def validate_model_mapping(self, model_mapping: Dict[str, str]) -> Dict[str, Any]:
+        """Validate that all models in mapping are accessible."""
         pass
 
 
@@ -170,4 +229,9 @@ class SetupDependenciesPort(ABC):
     @abstractmethod
     def get_aws_service(self) -> AWSServicePort:
         """Get AWS service."""
+        pass
+
+    @abstractmethod
+    def get_database_service(self) -> DatabasePort:
+        """Get database service."""
         pass

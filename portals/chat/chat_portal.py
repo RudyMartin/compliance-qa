@@ -4,6 +4,11 @@ Chat Portal - AI Conversation Interface
 ========================================
 Real-time chat interface with 4 Claude models and 5 chat modes.
 Port: 8502
+
+UPDATED: Now uses consolidated infrastructure delegate pattern
+- Proper hexagonal architecture compliance
+- Uses parent infrastructure (ResilientPoolManager, credential_carrier)
+- No direct infrastructure imports
 """
 
 import streamlit as st
@@ -11,20 +16,18 @@ import sys
 from pathlib import Path
 from typing import Optional, Dict, Any, List
 
-# Add parent to path
+# Add parent path for imports
 qa_root = Path(__file__).parent.parent.parent
-sys.path.insert(0, str(qa_root))
+if str(qa_root) not in sys.path:
+    sys.path.insert(0, str(qa_root))
 
-# Initialize services
-# Since tidyllm is installed but services aren't exposed, use local import
+# Import services using new consolidated approach
 from packages.tidyllm.services.unified_chat_manager import UnifiedChatManager, ChatMode
-from infrastructure.yaml_loader import get_settings_loader
-from infrastructure.services.aws_service import get_aws_service
+from packages.tidyllm.infrastructure.infra_delegate import get_infra_delegate
 
-# Initialize managers
+# Initialize managers using consolidated infrastructure
 chat_manager = UnifiedChatManager()
-settings_loader = get_settings_loader()
-aws_service = get_aws_service()
+infra_delegate = get_infra_delegate()  # This uses parent infrastructure properly
 
 def set_page_config():
     """Configure the Streamlit page."""
@@ -65,16 +68,19 @@ def render_header():
     col1, col2, col3, col4 = st.columns(4)
 
     with col1:
-        st.metric("Current Model", st.session_state.current_model.replace('-', ' ').title())
+        model_display = st.session_state.current_model if st.session_state.current_model else 'claude-3-sonnet'
+        st.metric("Current Model", model_display.replace('-', ' ').title())
 
     with col2:
-        st.metric("Chat Mode", st.session_state.current_mode.upper())
+        mode_display = st.session_state.current_mode if st.session_state.current_mode else 'direct'
+        st.metric("Chat Mode", mode_display.upper())
 
     with col3:
-        st.metric("Messages", len(st.session_state.messages))
+        st.metric("Messages", len(st.session_state.messages) if 'messages' in st.session_state else 0)
 
     with col4:
-        bedrock_config = settings_loader.get_bedrock_config()
+        # Get model count from settings via infra_delegate
+        bedrock_config = infra_delegate.get_bedrock_config()
         model_count = len(bedrock_config.get('model_mapping', {}))
         st.metric("Models Available", model_count)
 
@@ -87,9 +93,14 @@ def render_chat_controls():
 
         # Model Selection
         st.subheader("🤖 Model Selection")
-        bedrock_config = settings_loader.get_bedrock_config()
+        # Get model mapping from settings.yaml via infra_delegate
+        bedrock_config = infra_delegate.get_bedrock_config()
         model_mapping = bedrock_config.get('model_mapping', {})
         models = list(model_mapping.keys())
+
+        # Ensure we have at least some models
+        if not models:
+            models = ['claude-3-haiku', 'claude-3-sonnet', 'claude-3-5-sonnet', 'claude-3-opus']
 
         st.session_state.current_model = st.selectbox(
             "Select AI Model:",
@@ -246,15 +257,15 @@ def get_ai_response(prompt: str) -> str:
                 mode=ChatMode(st.session_state.current_mode),
                 **params
             )
-        except:
-            # Fallback to direct AWS call if chat manager fails
-            bedrock_config = settings_loader.get_bedrock_config()
-            model_id = bedrock_config['model_mapping'][st.session_state.current_model]
+        except Exception as chat_error:
+            # Show actual error for debugging
+            st.error(f"Chat Manager Error: {str(chat_error)}")
 
-            # Simple direct call
+            # Fallback response with error details
             response = f"[Using {st.session_state.current_model} in {st.session_state.current_mode} mode]\n\n"
             response += f"Response to: {prompt[:100]}...\n\n"
-            response += "Chat functionality is being configured. Please check AWS Bedrock connection."
+            response += f"Chat functionality error: {str(chat_error)}\n\n"
+            response += "Please check TidyLLM configuration and AWS Bedrock connection."
 
         return response
 
@@ -292,7 +303,8 @@ def export_conversation():
 def render_model_info():
     """Render model information panel."""
     with st.expander("📊 Model Information", expanded=False):
-        bedrock_config = settings_loader.get_bedrock_config()
+        # Get model mapping from settings.yaml via infra_delegate
+        bedrock_config = infra_delegate.get_bedrock_config()
         model_mapping = bedrock_config.get('model_mapping', {})
 
         st.write("**Available Models:**")

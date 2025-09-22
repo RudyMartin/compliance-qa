@@ -4,35 +4,46 @@ Document PostgreSQL Database Schema
 Connects to PostgreSQL and documents all tables, columns, and relationships
 """
 
-    # #future_fix: Convert to use enhanced service infrastructure
-import psycopg2
+# Using infrastructure delegate for database connections
 import os
 from datetime import datetime
 import json
 
 def get_connection():
-    """Get PostgreSQL connection using environment variables or defaults"""
-    conn_params = {
-        'host': os.getenv('POSTGRES_HOST', 'localhost'),
-        'port': os.getenv('POSTGRES_PORT', '5432'),
-        'database': os.getenv('POSTGRES_DB', 'mlflow'),
-        'user': os.getenv('POSTGRES_USER', 'mlflowuser'),
-        'password': os.getenv('POSTGRES_PASSWORD', 'mlflowpassword')
-    }
-    
+    """Get PostgreSQL connection using infrastructure delegate"""
     try:
-    # #future_fix: Convert to use enhanced service infrastructure
-        return psycopg2.connect(**conn_params)
+        # Import here to avoid circular dependency
+        import sys
+        sys.path.append('.')
+        from infrastructure.infra_delegate import get_infra_delegate
+
+        infra = get_infra_delegate()
+        conn = infra.get_db_connection()
+
+        if not conn:
+            raise Exception("No database connection available from infrastructure")
+
+        # Return a wrapper that will properly return the connection
+        class ConnectionWrapper:
+            def __init__(self, conn, infra):
+                self.conn = conn
+                self.infra = infra
+                self.cursor = conn.cursor
+                self.execute = conn.execute if hasattr(conn, 'execute') else None
+                self.commit = conn.commit
+                self.rollback = conn.rollback
+
+            def close(self):
+                self.infra.return_db_connection(self.conn)
+
+            def __getattr__(self, name):
+                return getattr(self.conn, name)
+
+        return ConnectionWrapper(conn, infra)
+
     except Exception as e:
-        print(f"Connection failed with defaults, error: {e}")
-        # Try alternate database name
-        conn_params['database'] = 'postgres'
-        try:
-    # #future_fix: Convert to use enhanced service infrastructure
-            return psycopg2.connect(**conn_params)
-        except Exception as e2:
-            print(f"Connection failed with postgres db: {e2}")
-            raise
+        print(f"Connection failed: {e}")
+        raise
 
 def document_schema(conn):
     """Document all tables and their structure"""

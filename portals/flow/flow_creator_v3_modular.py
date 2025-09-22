@@ -84,19 +84,11 @@ class WorkflowRegistry:
     """Manages the comprehensive workflow registry with 17+ workflow definitions."""
 
     def __init__(self):
-        # Find the base path by looking for AI-Shipping directory
-        current = Path.cwd()
-        if "AI-Shipping" in str(current):
-            # Navigate to AI-Shipping root
-            while current.name != "AI-Shipping" and current.parent != current:
-                current = current.parent
-            base_path = current
-        else:
-            # Fallback to current directory
-            base_path = Path.cwd()
+        # Use PathManager for dynamic root detection
+        base_path = Path(get_path_manager().root_folder)
 
-        self.workflows_base_path = base_path / "tidyllm" / "workflows" / "projects"
-        self.workflow_registry_path = base_path / "tidyllm" / "workflows" / "projects"
+        self.workflows_base_path = base_path / "domain" / "workflows" / "projects"
+        self.workflow_registry_path = base_path / "domain" / "workflows" / "projects"
         self.workflows = self._load_workflow_registry()
 
     def _load_workflow_registry(self) -> Dict[str, Any]:

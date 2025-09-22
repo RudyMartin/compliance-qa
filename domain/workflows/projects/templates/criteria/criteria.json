@@ -1,0 +1,281 @@
+{
+  "workflow_criteria": {
+    "workflow_id": "sequential_analysis_001",
+    "workflow_name": "Sequential Document Analysis Flow",
+    "version": "1.0",
+    "created_at": "2025-01-15T12:00:00Z"
+  },
+  "document_qualifiers": {
+    "language": {
+      "value": "en",
+      "template_field": true,
+      "description": "Document language requirement"
+    },
+    "pages_max": {
+      "value": 20,
+      "template_field": true,
+      "description": "Maximum number of pages allowed"
+    },
+    "pages_min": {
+      "value": 1,
+      "template_field": false,
+      "description": "Minimum number of pages required"
+    },
+    "file_size_max_mb": {
+      "value": 50,
+      "template_field": false,
+      "description": "Maximum file size in megabytes"
+    },
+    "file_types": {
+      "value": ["pdf", "docx", "txt", "md"],
+      "template_field": false,
+      "description": "Supported file types"
+    },
+    "encoding": {
+      "value": "utf-8",
+      "template_field": false,
+      "description": "Text encoding requirement"
+    },
+    "quality_threshold": {
+      "value": 0.85,
+      "template_field": true,
+      "description": "Minimum quality score required (0.0-1.0)"
+    },
+    "content_completeness": {
+      "min_word_count": 100,
+      "required_sections": ["abstract", "introduction", "conclusion"],
+      "metadata_required": true
+    },
+    "document_validation": {
+      "text_extractable": true,
+      "images_supported": true,
+      "tables_supported": true,
+      "forms_supported": false
+    }
+  },
+  "whitepaper_fields": {
+    "title": {
+      "value": "",
+      "template_field": true,
+      "description": "Document title for analysis focus"
+    },
+    "abstract": {
+      "value": "",
+      "template_field": true,
+      "description": "Document abstract or executive summary"
+    },
+    "authors": {
+      "value": [],
+      "template_field": true,
+      "description": "Document authors or contributors"
+    },
+    "publication_date": {
+      "value": "",
+      "template_field": false,
+      "description": "Document publication or creation date"
+    },
+    "version": {
+      "value": "",
+      "template_field": false,
+      "description": "Document version number"
+    },
+    "keywords": {
+      "value": [],
+      "template_field": false,
+      "description": "Document keywords or tags"
+    },
+    "executive_summary": {
+      "value": "",
+      "template_field": false,
+      "description": "Executive summary section"
+    },
+    "introduction": {
+      "value": "",
+      "template_field": false,
+      "description": "Introduction section content"
+    },
+    "methodology": {
+      "value": "",
+      "template_field": false,
+      "description": "Methodology or approach section"
+    },
+    "key_findings": {
+      "value": [],
+      "template_field": false,
+      "description": "Key findings or results"
+    },
+    "conclusions": {
+      "value": "",
+      "template_field": false,
+      "description": "Conclusions section"
+    },
+    "recommendations": {
+      "value": [],
+      "template_field": false,
+      "description": "Recommendations or next steps"
+    },
+    "references": {
+      "value": [],
+      "template_field": false,
+      "description": "References or bibliography"
+    },
+    "appendices": {
+      "value": [],
+      "template_field": false,
+      "description": "Appendices or supplementary materials"
+    }
+  },
+  "extraction_criteria": {
+    "entity_types": {
+      "people": {
+        "required": true,
+        "min_confidence": 0.8,
+        "patterns": ["authors", "contributors", "researchers", "experts"]
+      },
+      "organizations": {
+        "required": true,
+        "min_confidence": 0.8,
+        "patterns": ["institutions", "companies", "agencies", "departments"]
+      },
+      "dates": {
+        "required": true,
+        "min_confidence": 0.9,
+        "patterns": ["publication_date", "research_period", "data_collection"]
+      },
+      "amounts": {
+        "required": false,
+        "min_confidence": 0.7,
+        "patterns": ["financial_figures", "statistics", "metrics", "percentages"]
+      },
+      "technical_terms": {
+        "required": true,
+        "min_confidence": 0.8,
+        "patterns": ["domain_concepts", "methodologies", "technologies"]
+      }
+    },
+    "content_sections": {
+      "abstract": {
+        "required": true,
+        "max_length": 500,
+        "keywords_required": ["purpose", "methodology", "findings"]
+      },
+      "introduction": {
+        "required": true,
+        "min_length": 200,
+        "context_indicators": ["background", "problem_statement", "objectives"]
+      },
+      "methodology": {
+        "required": false,
+        "patterns": ["approach", "methods", "framework", "process"]
+      },
+      "results": {
+        "required": true,
+        "patterns": ["findings", "outcomes", "analysis", "data"]
+      },
+      "conclusion": {
+        "required": true,
+        "patterns": ["summary", "implications", "future_work"]
+      }
+    }
+  },
+  "analysis_requirements": {
+    "domain_context": "{domain_context}",
+    "analysis_depth": "{analysis_depth}",
+    "comparative_analysis": {
+      "enabled": true,
+      "baseline_sources": ["industry_standards", "regulatory_guidelines", "best_practices"],
+      "comparison_metrics": ["compliance", "performance", "risk_assessment"]
+    },
+    "quality_metrics": {
+      "content_clarity": 0.8,
+      "technical_accuracy": 0.9,
+      "completeness": 0.85,
+      "consistency": 0.8
+    }
+  },
+  "output_requirements": {
+    "format": "json",
+    "schema_version": "1.0",
+    "include_metadata": true,
+    "include_audit_trail": true,
+    "confidence_scores": true,
+    "source_attribution": true,
+    "processing_statistics": true,
+    "validation_results": true
+  },
+  "template_fields": {
+    "input_files": {
+      "description": "List of input documents to analyze",
+      "type": "array",
+      "required": true,
+      "validation": "document_qualifiers"
+    },
+    "quality_threshold": {
+      "description": "Minimum quality score required (0.0-1.0)",
+      "type": "number",
+      "required": true,
+      "default": 0.85,
+      "range": [0.0, 1.0]
+    },
+    "domain_context": {
+      "description": "Domain-specific context for analysis",
+      "type": "string",
+      "required": true,
+      "enum": ["financial_analysis", "technical_research", "regulatory_compliance", "academic_research"]
+    },
+    "analysis_depth": {
+      "description": "Analysis depth level",
+      "type": "string",
+      "required": true,
+      "default": "comprehensive",
+      "enum": ["basic", "standard", "comprehensive", "deep_dive"]
+    },
+    "language": {
+      "description": "Document language requirement",
+      "type": "string",
+      "required": true,
+      "default": "en",
+      "enum": ["en", "es", "fr", "de", "zh", "ja"]
+    },
+    "pages_max": {
+      "description": "Maximum number of pages allowed",
+      "type": "integer",
+      "required": true,
+      "default": 20,
+      "range": [1, 100]
+    },
+    "title": {
+      "description": "Document title for analysis focus",
+      "type": "string",
+      "required": false,
+      "max_length": 200
+    },
+    "review_id": {
+      "description": "Unique identifier for this analysis job",
+      "type": "string",
+      "required": true,
+      "pattern": "REV[0-9]{8}_[0-9]{6}"
+    }
+  },
+  "validation_rules": {
+    "document_preprocessing": {
+      "text_extraction": true,
+      "language_detection": true,
+      "page_count_validation": true,
+      "file_size_check": true,
+      "format_compatibility": true
+    },
+    "content_validation": {
+      "minimum_content_length": 500,
+      "structural_completeness": true,
+      "metadata_presence": true,
+      "encoding_validation": true
+    },
+    "quality_assurance": {
+      "confidence_thresholds": true,
+      "source_verification": true,
+      "consistency_checks": true,
+      "completeness_validation": true
+    }
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "id": "code_review_criteria",
+  "name": "Code Review Validation Criteria",
+  "description": "Focused criteria for code review workflow - architectural compliance and quality validation",
+  "version": "1.0.0",
+  "created": "2025-09-14",
+
+  "forbidden_dependencies": [
+    "numpy",
+    "pandas",
+    "sklearn",
+    "sentence_transformers",
+    "tensorflow",
+    "pytorch",
+    "transformers"
+  ],
+
+  "approved_alternatives": {
+    "numpy": "tidyllm.tlm",
+    "pandas": "polars",
+    "sklearn": "tidyllm.tlm algorithms",
+    "sentence_transformers": "tidyllm_sentence",
+    "tensorflow": "tidyllm.tlm",
+    "pytorch": "tidyllm.tlm",
+    "transformers": "tidyllm_sentence"
+  },
+
+  "architectural_patterns": {
+    "required_patterns": [
+      "hexagonal_architecture",
+      "adapter_pattern",
+      "clean_architecture_layers",
+      "dependency_inversion"
+    ],
+    "forbidden_patterns": [
+      "gateway_pattern",
+      "direct_infrastructure_in_domain",
+      "circular_dependencies",
+      "god_objects"
+    ],
+    "naming_conventions": {
+      "use_adapter_not_gateway": true,
+      "interface_suffixes": ["Port", "Interface"],
+      "implementation_suffixes": ["Adapter", "Implementation"]
+    }
+  },
+
+  "security_requirements": {
+    "s3_first_mandatory": true,
+    "app_folder_cleanup_required": true,
+    "no_local_storage_patterns": [
+      "open(",
+      "with open",
+      "tempfile",
+      "/tmp/",
+      "local_file",
+      "save_to_disk"
+    ],
+    "credential_security": {
+      "no_hardcoded_secrets": true,
+      "forbidden_patterns": [
+        "password=",
+        "secret=",
+        "key=",
+        "token=",
+        "aws_access_key"
+      ],
+      "required_patterns": [
+        "aws_secrets_manager",
+        "environment_variables",
+        "unified_session_manager"
+      ]
+    }
+  },
+
+  "quality_thresholds": {
+    "test_coverage_minimum": 0.9,
+    "cyclomatic_complexity_maximum": 10,
+    "performance_degradation_maximum": 0.1,
+    "security_vulnerabilities_maximum": 0,
+    "documentation_completeness": 1.0
+  },
+
+  "file_format_requirements": {
+    "json_files_ascii_only": {
+      "description": "All JSON files must contain only ASCII characters",
+      "critical_files": ["specs.json", "registry.json", "criteria files"],
+      "forbidden_content": [
+        "unicode_checkmarks",
+        "unicode_arrows",
+        "unicode_symbols",
+        "non_ascii_characters"
+      ],
+      "ascii_alternatives": {
+        "checkmarks": "[OK] or PASS",
+        "x_marks": "[X] or FAIL",
+        "arrows": "->",
+        "bullets": "-"
+      },
+      "validation_rule": "File must parse with default system encoding"
+    }
+  },
+
+  "compliance_standards": [
+    "SR-11-7",
+    "Basel-III",
+    "SOX-404"
+  ],
+
+  "review_severities": {
+    "blocking": {
+      "description": "Code cannot be merged",
+      "triggers": [
+        "forbidden_dependencies",
+        "security_violations",
+        "s3_compliance_failures"
+      ]
+    },
+    "critical": {
+      "description": "Major issues requiring architect review",
+      "triggers": [
+        "architectural_pattern_violations",
+        "gateway_usage",
+        "layer_separation_violations"
+      ]
+    },
+    "warning": {
+      "description": "Issues requiring attention",
+      "triggers": [
+        "insufficient_test_coverage",
+        "performance_concerns",
+        "minor_compliance_issues"
+      ]
+    },
+    "info": {
+      "description": "Recommendations for improvement",
+      "triggers": [
+        "code_quality_suggestions",
+        "performance_optimizations",
+        "documentation_improvements"
+      ]
+    }
+  },
+
+  "escalation_rules": {
+    "architect_review_required": [
+      "architectural_ground_truth_changes",
+      "major_design_modifications",
+      "cross_component_integration_changes"
+    ],
+    "security_review_required": [
+      "security_pattern_modifications",
+      "data_handling_changes",
+      "authentication_authorization_changes"
+    ],
+    "compliance_review_required": [
+      "regulatory_impact_changes",
+      "audit_trail_modifications",
+      "compliance_reporting_changes"
+    ]
+  },
+
+  "dspy_integration": {
+    "signature_patterns": {
+      "comprehensive_review": "CodeReviewSignature",
+      "architectural_focus": "ArchitecturalReviewSignature",
+      "security_focus": "SecurityReviewSignature",
+      "dependency_focus": "DependencyReviewSignature"
+    },
+    "output_format": "structured_markdown",
+    "chain_of_thought": true,
+    "mlflow_logging": true
+  },
+
+  "validation_patterns": {
+    "architectural_compliance": {
+      "check_adapter_usage": "Look for 'Adapter' suffix, avoid 'Gateway'",
+      "verify_layer_separation": "Domain code should not import infrastructure",
+      "validate_interfaces": "Check for proper port definitions"
+    },
+    "security_compliance": {
+      "s3_pattern_check": "All data operations must use S3",
+      "app_cleanup_verification": "Temp files and app folders cleaned",
+      "credential_scanning": "No hardcoded credentials or secrets"
+    },
+    "dependency_validation": {
+      "import_scanning": "Check all import statements",
+      "alternative_suggestion": "Provide tidyllm equivalents",
+      "migration_guidance": "Step-by-step replacement instructions"
+    }
+  },
+
+  "report_structure": {
+    "executive_summary": {
+      "overall_score": "0.0-1.0 rating",
+      "approval_status": "APPROVED|APPROVED_WITH_CONDITIONS|CHANGES_REQUESTED|REJECTED",
+      "critical_issues_count": "Number of blocking/critical issues",
+      "escalation_required": "true/false"
+    },
+    "detailed_analysis": {
+      "architectural_compliance": "Hexagonal/adapter pattern analysis",
+      "security_compliance": "S3-first and credential security",
+      "dependency_validation": "Forbidden dependency check",
+      "performance_impact": "Benchmark and test coverage",
+      "regulatory_compliance": "SR-11-7, Basel-III, SOX-404"
+    },
+    "recommendations": {
+      "critical_fixes": "Must-fix items before merge",
+      "improvements": "Quality improvements",
+      "future_considerations": "Architectural evolution suggestions"
+    }
+  }
+}

@@ -48,30 +48,26 @@ class PathManager:
         logger.info(f"PathManager initialized with root: {self._root_folder}")
 
     def _detect_root_folder(self) -> str:
-        """Detect root folder for qa-shipping project."""
-        current_dir = os.getcwd()
+        """Detect root folder using settings.yaml configuration."""
+        # Try to load root path from settings.yaml
+        try:
+            import yaml
+            current_dir = Path.cwd()
 
-        # Look for qa-shipping directory in current path
-        if "qa-shipping" in current_dir:
-            # Find the qa-shipping directory
-            parts = Path(current_dir).parts
-            for i, part in enumerate(parts):
-                if part == "qa-shipping":
-                    # Return the qa-shipping directory path
-                    root_parts = parts[:i+1]
-                    return str(Path(*root_parts))
+            # Look for settings.yaml in current or parent directories
+            for parent in [current_dir] + list(current_dir.parents):
+                settings_file = parent / "infrastructure" / "settings.yaml"
+                if settings_file.exists():
+                    with open(settings_file, 'r') as f:
+                        settings = yaml.safe_load(f)
+                    if settings and 'paths' in settings and 'root_path' in settings['paths']:
+                        return settings['paths']['root_path']
+                    break
+        except Exception:
+            pass
 
-        # Look for tidyllm directory (legacy support)
-        if "tidyllm" in current_dir:
-            # Find the parent directory that contains tidyllm
-            parts = Path(current_dir).parts
-            for i, part in enumerate(parts):
-                if part == "tidyllm":
-                    root_parts = parts[:i]
-                    return str(Path(*root_parts)) if root_parts else "."
-
-        # Fallback to current directory
-        return current_dir
+        # Fallback: use current working directory
+        return os.getcwd()
 
     @property
     def root_folder(self) -> str:

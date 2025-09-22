@@ -78,7 +78,11 @@ class SettingsLoader:
     def get_database_config(self) -> Dict[str, Any]:
         """Get database configuration from settings."""
         settings = self._load_settings()
-        creds = settings.get('credentials', {}).get('postgresql', {})
+
+        # Try postgresql_primary first (new structure), then postgresql (old structure)
+        creds = settings.get('credentials', {}).get('postgresql_primary', {})
+        if not creds:
+            creds = settings.get('credentials', {}).get('postgresql', {})
 
         return {
             'host': os.getenv('DB_HOST', creds.get('host', 'localhost')),

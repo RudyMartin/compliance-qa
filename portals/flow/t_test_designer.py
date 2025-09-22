@@ -100,7 +100,7 @@ def render_test_designer_tab(workflow_manager, registry):
 
                     # Create queries directory in specific project folder
                     import os
-                    project_base = Path("C:/Users/marti/AI-Shipping/tidyllm/workflows/projects")
+                    project_base = Path(get_path_manager().root_folder) / "domain" / "workflows" / "projects"
                     queries_dir = project_base / selected_project / "saved_queries"
                     queries_dir.mkdir(parents=True, exist_ok=True)
 
@@ -133,7 +133,7 @@ This query can be used in the TidyLLM Test Designer for A/B/C/D testing experime
 
             with col_load:
                 # Load saved queries from current project
-                project_base = Path("C:/Users/marti/AI-Shipping/tidyllm/workflows/projects")
+                project_base = Path(get_path_manager().root_folder) / "domain" / "workflows" / "projects"
                 queries_dir = project_base / selected_project / "saved_queries"
                 if queries_dir.exists():
                     saved_files = list(queries_dir.glob("*.md"))

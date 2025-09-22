@@ -44,15 +44,8 @@ try:
 except ImportError:
     AWS_AVAILABLE = False
 
-# PostgreSQL imports
-try:
-    # #future_fix: Convert to use enhanced service infrastructure
-    import psycopg2
-    from psycopg2.extras import RealDictCursor, Json
-    from psycopg2.pool import SimpleConnectionPool
-    POSTGRES_AVAILABLE = True
-except ImportError:
-    POSTGRES_AVAILABLE = False
+# PostgreSQL imports - now using infrastructure delegate
+POSTGRES_AVAILABLE = True  # Always available through infra delegate
 
 # Configuration imports
 try:
@@ -294,11 +287,8 @@ class UnifiedSessionManager:
     def _parse_database_url(self, url: str):
         """Parse DATABASE_URL into components"""
         try:
-    # #future_fix: Convert to use enhanced service infrastructure
             # Format: postgresql://username:password@host:port/database
-    # #future_fix: Convert to use enhanced service infrastructure
             if url.startswith('postgresql://'):
-    # #future_fix: Convert to use enhanced service infrastructure
                 url = url.replace('postgresql://', '')
                 if '@' in url:
                     auth, location = url.split('@', 1)
@@ -345,16 +335,8 @@ class UnifiedSessionManager:
                 break
             current_dir = parent
 
-        # If not found by searching up, try explicit paths
-        if not settings_file:
-            fallback_paths = [
-                Path.home() / "github" / "tidyllm" / "admin" / "settings.yaml",
-                Path("C:/Users/marti/github/tidyllm/admin/settings.yaml"),
-            ]
-            for path in fallback_paths:
-                if path.exists():
-                    settings_file = path
-                    break
+        # If not found by searching up, settings file not available
+        # (Removed legacy tidyllm fallback paths - not relevant to qa-shipping)
 
         if settings_file and settings_file.exists():
             try:
@@ -523,26 +505,21 @@ class UnifiedSessionManager:
         try:
             start_time = time.time()
 
-            # Create connection pool
-            self._postgres_pool = SimpleConnectionPool(
-                minconn=1,
-                maxconn=self.config.postgres_pool_size,
-                host=self.config.postgres_host,
-                port=self.config.postgres_port,
-                database=self.config.postgres_database,
-                user=self.config.postgres_username,
-                password=self.config.postgres_password,
-                cursor_factory=RealDictCursor
-            )
+            # Use infrastructure delegate instead of direct pool
+            from infrastructure.infra_delegate import get_infra_delegate
+            self._infra_delegate = get_infra_delegate()
+            self._postgres_pool = None  # No longer using direct pool
 
             # Test connection
-            conn = self._postgres_pool.getconn()
+            conn = self._infra_delegate.get_db_connection()
+            if not conn:
+                raise Exception("No database connection available from infrastructure")
             try:
                 with conn.cursor() as cursor:
                     cursor.execute("SELECT version();")
                     version = cursor.fetchone()
             finally:
-                self._postgres_pool.putconn(conn)
+                self._infra_delegate.return_db_connection(conn)
 
             latency = (time.time() - start_time) * 1000
             self.health_status[ServiceType.POSTGRESQL] = ConnectionHealth(
@@ -588,15 +565,18 @@ class UnifiedSessionManager:
         return self._bedrock_runtime_client
 
     def get_postgres_connection(self):
-        """Get PostgreSQL connection from pool"""
-        if self._postgres_pool:
-            return self._postgres_pool.getconn()
-        return None
+        """Get PostgreSQL connection from infrastructure delegate"""
+        if hasattr(self, '_infra_delegate'):
+            return self._infra_delegate.get_db_connection()
+        # Initialize if not already done
+        from infrastructure.infra_delegate import get_infra_delegate
+        self._infra_delegate = get_infra_delegate()
+        return self._infra_delegate.get_db_connection()
 
     def return_postgres_connection(self, conn):
-        """Return PostgreSQL connection to pool"""
-        if self._postgres_pool and conn:
-            self._postgres_pool.putconn(conn)
+        """Return PostgreSQL connection to infrastructure delegate"""
+        if hasattr(self, '_infra_delegate') and conn:
+            self._infra_delegate.return_db_connection(conn)
 
     def test_connection(self, service: str = "all") -> Dict[str, Any]:
         """Test connections to specified services with detailed results."""
@@ -731,9 +711,8 @@ class UnifiedSessionManager:
 
     def cleanup(self):
         """Clean up connections"""
-        if self._postgres_pool:
-            self._postgres_pool.closeall()
-        logger.info("[CLEANUP] Cleaned up all connections")
+        # Infrastructure delegate handles connection cleanup
+        logger.info("[CLEANUP] Connections managed by infrastructure delegate")
 
 # Global session manager instance
 _global_session_manager = None

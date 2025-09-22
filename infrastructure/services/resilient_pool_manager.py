@@ -148,53 +148,44 @@ class ResilientPoolManager:
             return None
 
     def _create_fallback_pool(self, pool_name: str):
-        """Create fallback connection pool using psycopg2"""
-        # #future_fix: Convert to use enhanced service infrastructure
+        """Create fallback connection pool using infrastructure delegate"""
         try:
-    # #future_fix: Convert to use enhanced service infrastructure
-            import psycopg2.pool
+            # Use infrastructure delegate for connection management
+            from ..infra_delegate import get_infra_delegate
 
-            # Get credentials from credential carrier
-            if self._credential_carrier:
-                db_creds = self._credential_carrier.get_database_credentials()
-                if not db_creds:
-                    raise PoolException("No database credentials available")
-            else:
-                # #future_fix: Convert to use enhanced service infrastructure
-                # Fallback to environment variables
-                import os
-                db_creds = {
-    # #future_fix: Convert to use enhanced service infrastructure
-                    "host": os.getenv("DB_HOST"),
-    # #future_fix: Convert to use enhanced service infrastructure
-                    "port": os.getenv("DB_PORT", 5432),
-    # #future_fix: Convert to use enhanced service infrastructure
-                    "database": os.getenv("DB_NAME"),
-    # #future_fix: Convert to use enhanced service infrastructure
-                    "username": os.getenv("DB_USERNAME"),
-    # #future_fix: Convert to use enhanced service infrastructure
-                    "password": os.getenv("DB_PASSWORD")
-                }
+            infra = get_infra_delegate()
 
-            if not all([db_creds.get("host"), db_creds.get("database"),
-                       db_creds.get("username"), db_creds.get("password")]):
-                raise PoolException("Incomplete database credentials")
+            # Create a simple pool wrapper using infra delegate
+            class DelegatePool:
+                def __init__(self, infra_delegate, pool_name):
+                    self.infra = infra_delegate
+                    self.pool_name = pool_name
+                    self.connections = []
+                    self.min_conn = 2 if pool_name == "primary" else 1
+                    self.max_conn = 10 if pool_name == "primary" else 5
 
-            # Create connection string
-    # #future_fix: Convert to use enhanced service infrastructure
-            conn_str = f"postgresql://{db_creds['username']}:{db_creds['password']}@{db_creds['host']}:{db_creds['port']}/{db_creds['database']}"
+                def getconn(self):
+                    """Get connection from infra delegate"""
+                    conn = self.infra.get_db_connection()
+                    if conn:
+                        self.connections.append(conn)
+                        return conn
+                    raise PoolException("No connection available from infrastructure")
 
-            # Create threaded connection pool
-            min_conn = 2 if pool_name == "primary" else 1
-            max_conn = 10 if pool_name == "primary" else 5
+                def putconn(self, conn):
+                    """Return connection to infra delegate"""
+                    if conn in self.connections:
+                        self.connections.remove(conn)
+                    self.infra.return_db_connection(conn)
 
-            pool = psycopg2.pool.ThreadedConnectionPool(
-                min_conn, max_conn,
-                conn_str,
-                application_name=f"resilient_pool_{pool_name}"
-            )
+                def closeall(self):
+                    """Close all connections"""
+                    for conn in self.connections[:]:
+                        self.putconn(conn)
+                    self.connections.clear()
 
-            logger.info(f"Created fallback {pool_name} pool: {min_conn}-{max_conn} connections")
+            pool = DelegatePool(infra, pool_name)
+            logger.info(f"Created fallback {pool_name} pool using infrastructure delegate")
             return pool
 
         except Exception as e:
@@ -284,12 +275,16 @@ class ResilientPoolManager:
     def _get_connection_from_pool(self, pool, timeout: int):
         """Get connection from specific pool with timeout"""
         try:
-            if hasattr(pool, 'get_connection'):
-                # TidyLLM pool interface
-                return pool.get_connection(timeout=timeout)
-            elif hasattr(pool, 'getconn'):
-                # psycopg2 pool interface
+            if hasattr(pool, 'getconn'):
+                # psycopg2 pool interface (preferred)
                 return pool.getconn()
+            elif hasattr(pool, 'get_connection'):
+                # TidyLLM pool interface - try with timeout, fallback without
+                try:
+                    return pool.get_connection(timeout=timeout)
+                except TypeError:
+                    # Method doesn't accept timeout parameter
+                    return pool.get_connection()
             else:
                 raise PoolException(f"Unknown pool interface: {type(pool)}")
 
@@ -313,6 +308,85 @@ class ResilientPoolManager:
 
         except Exception as e:
             logger.error(f"Failed to return connection: {e}")
+
+    def getconn(self, timeout: int = None):
+        """
+        Get a raw database connection (psycopg2 pool interface).
+
+        This method provides compatibility with code expecting psycopg2 pool interface.
+        It extracts the raw connection from our context manager.
+
+        Returns:
+            Raw database connection
+        """
+        timeout = timeout or self._timeout_threshold
+        start_time = time.time()
+
+        # Try pools in order of preference
+        for pool_name in self._get_pool_priority():
+            try:
+                pool = self._get_pool_instance(pool_name)
+                if not pool:
+                    continue
+
+                # Test pool health first
+                if not self._is_pool_healthy(pool_name):
+                    logger.warning(f"{pool_name} pool unhealthy, skipping")
+                    continue
+
+                # Get connection from pool
+                connection = self._get_connection_from_pool(pool, timeout)
+                if connection:
+                    self._update_metrics(pool_name, "success", time.time() - start_time)
+
+                    # Track which pool this connection came from for putconn
+                    if not hasattr(self, '_connection_pool_map'):
+                        self._connection_pool_map = {}
+                    self._connection_pool_map[id(connection)] = (pool_name, pool)
+
+                    logger.debug(f"Connection obtained from {pool_name} pool via getconn")
+                    return connection
+
+            except (PoolTimeoutException, PoolHungException) as e:
+                logger.warning(f"{pool_name} pool failed: {e}")
+                self._update_metrics(pool_name, "failure", time.time() - start_time)
+                continue
+            except Exception as e:
+                logger.error(f"Unexpected error with {pool_name} pool: {e}")
+                self._update_metrics(pool_name, "error", time.time() - start_time)
+                continue
+
+        raise PoolException("All pools exhausted - no connections available")
+
+    def putconn(self, connection):
+        """
+        Return a connection to the pool (psycopg2 pool interface).
+
+        This method provides compatibility with code expecting psycopg2 pool interface.
+
+        Args:
+            connection: The connection to return
+        """
+        if connection is None:
+            return
+
+        # Find which pool this connection came from
+        if hasattr(self, '_connection_pool_map') and id(connection) in self._connection_pool_map:
+            pool_name, pool = self._connection_pool_map.pop(id(connection))
+            try:
+                self._return_connection_to_pool(pool, connection)
+                logger.debug(f"Connection returned to {pool_name} pool via putconn")
+            except Exception as e:
+                logger.error(f"Failed to return connection to {pool_name} pool: {e}")
+        else:
+            logger.warning("Connection not tracked, attempting to return to primary pool")
+            # Try to return to primary pool as fallback
+            try:
+                pool = self._get_pool_instance("primary")
+                if pool:
+                    self._return_connection_to_pool(pool, connection)
+            except Exception as e:
+                logger.error(f"Failed to return untracked connection: {e}")
 
     def _is_pool_healthy(self, pool_name: str) -> bool:
         """Check if pool is healthy"""

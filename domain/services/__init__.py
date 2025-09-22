@@ -20,7 +20,6 @@ from .safety_validation import (
     check_hardcoded_credentials,
     check_no_mlruns_folders,
     check_sqlite_files,
-    check_v2_architecture,
     run_safety_validation
 )
 
@@ -33,7 +32,6 @@ __all__ = [
     "check_hardcoded_credentials",
     "check_no_mlruns_folders",
     "check_sqlite_files",
-    "check_v2_architecture",
     "demonstrate_simple_tagging",
     "main",
     "run_safety_validation",

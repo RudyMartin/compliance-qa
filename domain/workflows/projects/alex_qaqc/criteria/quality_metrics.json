@@ -1,0 +1,53 @@
+{
+  "quality_metrics": {
+    "description": "Quality assessment metrics for QAQC workflow validation",
+    "version": "1.0",
+    "metrics": {
+      "completeness_score": {
+        "description": "Percentage of required fields completed",
+        "type": "percentage",
+        "weight": 0.25,
+        "threshold": 0.85,
+        "template_field": true,
+        "value": 0.90
+      },
+      "accuracy_score": {
+        "description": "Data accuracy validation score",
+        "type": "percentage",
+        "weight": 0.30,
+        "threshold": 0.80,
+        "template_field": true,
+        "value": 0.85
+      },
+      "consistency_score": {
+        "description": "Cross-reference consistency validation",
+        "type": "percentage",
+        "weight": 0.25,
+        "threshold": 0.75,
+        "template_field": true,
+        "value": 0.88
+      },
+      "timeliness_score": {
+        "description": "Processing time efficiency score",
+        "type": "percentage",
+        "weight": 0.20,
+        "threshold": 0.70,
+        "template_field": true,
+        "value": 0.92
+      }
+    },
+    "validation_rules": {
+      "overall_quality_threshold": 0.80,
+      "critical_metrics": ["completeness_score", "accuracy_score"],
+      "warning_threshold": 0.75,
+      "failure_threshold": 0.60
+    }
+  },
+  "scoring_rubric": {
+    "excellent": {"min": 0.90, "max": 1.0, "description": "Exceeds quality standards"},
+    "good": {"min": 0.80, "max": 0.89, "description": "Meets quality standards"},
+    "satisfactory": {"min": 0.70, "max": 0.79, "description": "Acceptable quality with minor issues"},
+    "poor": {"min": 0.60, "max": 0.69, "description": "Below standards, requires improvement"},
+    "failing": {"min": 0.0, "max": 0.59, "description": "Does not meet minimum requirements"}
+  }
+}
