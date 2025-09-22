@@ -2,7 +2,7 @@
 Common Layer - Foundational Utilities
 
 This layer contains shared utilities and foundational components
-used across the qa-shipping system. Part of the 4-layer architecture.
+used across the compliance-qa system. Part of the 4-layer architecture.
 
 Architecture:
 - Portals: Presentation layer

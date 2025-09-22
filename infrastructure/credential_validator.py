@@ -1,5 +1,5 @@
 """
-Credential Validator for qa-shipping Portal System
+Credential Validator for compliance-qa Portal System
 
 Validates all system credentials and connections at startup.
 Prevents runtime failures due to invalid or missing credentials.

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Portal Startup Script for qa-shipping Portal System
+Portal Startup Script for compliance-qa Portal System
 
 Orchestrated startup of all 7 portals with dependency management.
 Part of Phase 1: Security & Configuration Cleanup.
@@ -25,7 +25,7 @@ from config.credential_validator import quick_health_check
 def print_banner():
     """Print startup banner."""
     print("=" * 60)
-    print("QA-SHIPPING PORTAL SYSTEM - Portal Startup")
+    print("COMPLIANCE-QA PORTAL SYSTEM - Portal Startup")
     print("=" * 60)
     print("Orchestrated startup of 7 portal system")
     print()
@@ -92,7 +92,7 @@ class PortalStartupManager:
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
                 text=True,
-                cwd=str(Path(__file__).parent.parent)  # Run from qa-shipping root
+                cwd=str(Path(__file__).parent.parent)  # Run from compliance-qa root
             )
 
             self.running_portals[portal.name] = process

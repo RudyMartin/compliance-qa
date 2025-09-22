@@ -18,7 +18,7 @@ echo Press CTRL+C to stop the server
 echo ========================================
 echo.
 
-REM Run Streamlit with specified port
-streamlit run flow_portal_v4.py --server.port=%PORT% --server.headless=true
+REM Run unified launcher with specified port
+python launch_portal.py --port %PORT%
 
 pause

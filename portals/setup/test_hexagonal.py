@@ -41,7 +41,7 @@ def test_architecture():
         st.markdown("""
         ### Current Structure:
         ```
-        qa-shipping/
+        compliance-qa/
         ├── domain/          # Core business logic
         │   ├── models/      # Portal, Configuration
         │   └── ports/       # Interfaces

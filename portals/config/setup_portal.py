@@ -2,7 +2,7 @@
 Setup Portal - Credential & Configuration Management
 
 The central portal for reviewing, validating, and establishing system credentials
-and configuration. Integrates with the new qa-shipping configuration system.
+and configuration. Integrates with the new compliance-qa configuration system.
 
 Port: 8511
 Category: Infrastructure
@@ -18,7 +18,7 @@ from typing import Dict, Any
 import json
 import time
 
-# Add the qa-shipping root to Python path
+# Add the compliance-qa root to Python path
 qa_shipping_root = Path(__file__).parent.parent.parent.parent
 sys.path.insert(0, str(qa_shipping_root))
 
@@ -34,7 +34,7 @@ except ImportError as e:
 def set_page_config():
     """Configure the Streamlit page."""
     st.set_page_config(
-        page_title="Setup Portal - qa-shipping",
+        page_title="Setup Portal - compliance-qa",
         page_icon="⚙️",
         layout="wide",
         initial_sidebar_state="expanded"

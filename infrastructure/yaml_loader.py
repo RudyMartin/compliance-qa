@@ -119,7 +119,7 @@ class SettingsLoader:
         artifact_store = (
             mlflow_config.get('artifact_store') or
             services_mlflow.get('artifact_store') or
-            's3://nsc-mvp1/qa-shipping/mlflow/'
+            's3://nsc-mvp1/compliance-qa/mlflow/'
         )
 
         return {
@@ -134,7 +134,7 @@ class SettingsLoader:
 
         return {
             'bucket': s3_config.get('bucket', 'nsc-mvp1'),
-            'prefix': s3_config.get('prefix', 'qa-shipping/'),
+            'prefix': s3_config.get('prefix', 'compliance-qa/'),
             'region': s3_config.get('region', 'us-east-1')
         }
 
@@ -267,7 +267,7 @@ def setup_environment_from_settings():
 
 if __name__ == "__main__":
     # Demo the settings loader
-    print("QA-Shipping Settings Loader Demo")
+    print("Compliance-QA Settings Loader Demo")
     print("=" * 40)
 
     try:

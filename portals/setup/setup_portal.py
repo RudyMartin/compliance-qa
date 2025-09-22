@@ -19,7 +19,7 @@ from typing import Dict, Any
 import json
 import time
 
-# Add the qa-shipping root to Python path (now external to core packages)
+# Add the compliance-qa root to Python path (now external to core packages)
 qa_shipping_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(qa_shipping_root))
 
@@ -95,7 +95,7 @@ def get_architecture_info():
 def set_page_config():
     """Configure the Streamlit page."""
     st.set_page_config(
-        page_title="Setup Portal - qa-shipping",
+        page_title="Setup Portal - compliance-qa",
         page_icon="⚙️",
         layout="wide",
         initial_sidebar_state="expanded"
@@ -166,7 +166,7 @@ def render_architecture_info():
 
         st.write("**Layer Structure:**")
         st.code("""
-qa-shipping/
+compliance-qa/
 ├── portals/              # 🚪 PRESENTATION LAYER (External)
 │   ├── setup/           # This portal
 │   ├── chat/

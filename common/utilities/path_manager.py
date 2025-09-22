@@ -5,7 +5,7 @@ Moved from tidyllm/infrastructure/path_utils.py to common/utilities/
 Now properly positioned as foundational utility in 4-layer architecture.
 
 Handles cross-platform path resolution and root folder configuration.
-Supports the new qa-shipping 4-layer architecture.
+Supports the new compliance-qa 4-layer architecture.
 """
 
 import os
@@ -16,7 +16,7 @@ from typing import Optional, Dict, Any
 logger = logging.getLogger(__name__)
 
 class PathManager:
-    """Manages path resolution for qa-shipping system with 4-layer architecture support."""
+    """Manages path resolution for compliance-qa system with 4-layer architecture support."""
 
     def __init__(self, config: Optional[Dict[str, Any]] = None):
         """Initialize PathManager with configuration."""

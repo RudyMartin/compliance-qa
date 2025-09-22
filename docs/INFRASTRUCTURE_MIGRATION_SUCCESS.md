@@ -1,13 +1,13 @@
 # Infrastructure Migration Success Report
 
 ## Overview
-Successfully completed the infrastructure migration to implement proper 4-layer clean architecture in qa-shipping. The migration moved working components one-by-one, ensuring continuous functionality while establishing clean architectural boundaries.
+Successfully completed the infrastructure migration to implement proper 4-layer clean architecture in compliance-qa. The migration moved working components one-by-one, ensuring continuous functionality while establishing clean architectural boundaries.
 
 ## Architecture Evolution
 
 ### Before: Mixed Structure
 ```
-qa-shipping/
+compliance-qa/
 ├── config/
 ├── portals/
 ├── tidyllm/
@@ -16,7 +16,7 @@ qa-shipping/
 
 ### After: Clean 4-Layer Architecture
 ```
-qa-shipping/
+compliance-qa/
 ├── portals/              # [UI] PRESENTATION LAYER (External)
 │   ├── setup/           # Setup Portal (8511)
 │   ├── chat/            # Chat interfaces
@@ -76,14 +76,14 @@ Successfully moved critical infrastructure components:
 
 # Architecture summary output:
 {
-  'root': 'C:\\Users\\marti\\qa-shipping',
-  'portals': 'C:\\Users\\marti\\qa-shipping\\portals',
-  'packages': 'C:\\Users\\marti\\qa-shipping\\packages',
-  'adapters': 'C:\\Users\\marti\\qa-shipping\\adapters',
-  'common': 'C:\\Users\\marti\\qa-shipping\\common',
-  'config': 'C:\\Users\\marti\\qa-shipping\\config',
-  'data': 'C:\\Users\\marti\\qa-shipping\\data',
-  'logs': 'C:\\Users\\marti\\qa-shipping\\logs'
+  'root': 'C:\\Users\\marti\\compliance-qa',
+  'portals': 'C:\\Users\\marti\\compliance-qa\\portals',
+  'packages': 'C:\\Users\\marti\\compliance-qa\\packages',
+  'adapters': 'C:\\Users\\marti\\compliance-qa\\adapters',
+  'common': 'C:\\Users\\marti\\compliance-qa\\common',
+  'config': 'C:\\Users\\marti\\compliance-qa\\config',
+  'data': 'C:\\Users\\marti\\compliance-qa\\data',
+  'logs': 'C:\\Users\\marti\\compliance-qa\\logs'
 }
 ```
 

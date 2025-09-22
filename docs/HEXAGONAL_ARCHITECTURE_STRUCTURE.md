@@ -1,12 +1,12 @@
-# Hexagonal Architecture Structure - qa-shipping
+# Hexagonal Architecture Structure - compliance-qa
 
 ## Overview
-The qa-shipping portal system now implements proper hexagonal architecture principles with **physical separation** of layers. This structure supports clean boundaries, dependency inversion, and future architectural evolution.
+The compliance-qa portal system now implements proper hexagonal architecture principles with **physical separation** of layers. This structure supports clean boundaries, dependency inversion, and future architectural evolution.
 
 ## 🏗️ **Directory Structure**
 
 ```
-qa-shipping/                    # 🏠 PROJECT ROOT
+compliance-qa/                    # 🏠 PROJECT ROOT
 ├── portals/                   # 🎯 PRESENTATION LAYER (External)
 │   ├── setup/                 # ⚙️ Setup Portal (8511)
 │   │   └── setup_portal.py
@@ -197,4 +197,4 @@ With proper layer separation, we can now:
 
 **Architecture Status**: ✅ **HEXAGONAL COMPLIANT**
 
-The qa-shipping system now follows proper hexagonal architecture principles with physical layer separation, setting the foundation for maintainable, testable, and scalable portal development.
+The compliance-qa system now follows proper hexagonal architecture principles with physical layer separation, setting the foundation for maintainable, testable, and scalable portal development.

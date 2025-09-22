@@ -1,4 +1,4 @@
-# Portal Improvement Plan - AI-Shipping to qa-shipping Evolution
+# Portal Improvement Plan - AI-Shipping to compliance-qa Evolution
 
 ## 🎯 **OBJECTIVE: CLEANUP & ENHANCE (NOT FULL CONVERSION)**
 
@@ -38,7 +38,7 @@
 
 #### Implementation:
 ```python
-# qa-shipping/config/
+# compliance-qa/config/
 ├── environment_manager.py      # Centralized env management
 ├── credential_validator.py     # Validate all credentials
 └── portal_config.py           # Portal-specific configs
@@ -61,7 +61,7 @@
 
 #### Implementation:
 ```python
-# qa-shipping/portals/
+# compliance-qa/portals/
 ├── base_portal.py             # Common portal interface
 ├── portal_manager.py          # Portal lifecycle management
 └── portal_health.py           # Health monitoring
@@ -84,7 +84,7 @@
 
 #### Implementation:
 ```python
-# qa-shipping/services/
+# compliance-qa/services/
 ├── chat_service.py            # Business logic for chat
 ├── rag_service.py             # Business logic for RAG
 ├── flow_service.py            # Business logic for workflows
@@ -108,7 +108,7 @@
 
 #### Implementation:
 ```python
-# qa-shipping/infrastructure/
+# compliance-qa/infrastructure/
 ├── database_manager.py        # Centralized DB management
 ├── llm_adapter.py             # Standardized LLM integration
 ├── storage_adapter.py         # File/S3 storage abstraction
@@ -132,7 +132,7 @@
 
 #### Implementation:
 ```python
-# qa-shipping/orchestration/
+# compliance-qa/orchestration/
 ├── portal_discovery.py        # Find all running portals
 ├── portal_dashboard.py        # Central management UI
 ├── portal_deployer.py         # Ship portal bundles
@@ -150,7 +150,7 @@
 
 ### **Incremental Approach** (NOT Breaking Changes)
 
-1. **Copy AI-Shipping code to qa-shipping**
+1. **Copy AI-Shipping code to compliance-qa**
 2. **Apply improvements layer by layer**
 3. **Keep existing interfaces working**
 4. **Add new capabilities alongside old**

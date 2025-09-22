@@ -29,9 +29,9 @@ Based on user confirmation, these are the **7 key active working portals**:
 - **8502** (Simple Chat) - Chat interface testing
 - **8550** (Flow Creator V3) - Workflow management
 
-### 🎯 **qa-shipping FUNCTIONAL SPECIFICATIONS**
+### 🎯 **compliance-qa FUNCTIONAL SPECIFICATIONS**
 
-Based on these 7 confirmed portals, **qa-shipping** should provide:
+Based on these 7 confirmed portals, **compliance-qa** should provide:
 
 ## 1. **Portal Discovery Engine**
 ```python
@@ -92,7 +92,7 @@ class PortalShipping:
 
 ### 💡 **RECOMMENDED NEXT ACTIONS**
 
-The qa-shipping system should become the **"Mission Control"** for your 7-portal ecosystem:
+The compliance-qa system should become the **"Mission Control"** for your 7-portal ecosystem:
 
 - **Central command center** for all portal operations
 - **Health monitoring dashboard** showing real-time status

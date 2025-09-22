@@ -109,7 +109,7 @@ destination: "../completed/"     # VIOLATION: External path reference
 - Estimated effort: 4-6 hours
 
 ### Option C: Current State (Development Only)
-- Keep in qa-shipping parent structure
+- Keep in compliance-qa parent structure
 - Use for development and testing
 - Not suitable for independent deployment
 

@@ -1,7 +1,7 @@
 """
 Common Utilities Package
 
-Foundational utilities shared across the qa-shipping system.
+Foundational utilities shared across the compliance-qa system.
 Part of the 4-layer clean architecture as the Common layer.
 
 Available modules:
