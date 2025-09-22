@@ -1,0 +1,100 @@
+{
+  "workflow_id": "research_analysis",
+  "workflow_name": "AI Research and Analysis Pipeline",
+  "workflow_type": "research",
+  "description": "Comprehensive research workflow with source analysis, synthesis, and insight generation",
+  "prompt_steps": {
+    "1": {
+      "step_id": "research_scope_definition",
+      "step_name": "Research Scope and Question Refinement",
+      "step_type": "prompt",
+      "step_number": "1",
+      "template": "Analyze and refine this research request:\n\nResearch Topic: {research_topic}\nInitial Questions: {initial_questions}\nResearch Context: {research_context}\nTarget Audience: {target_audience}\n\nRefine the research by:\n1. Clarifying the core research questions\n2. Identifying key sub-questions\n3. Defining research scope and boundaries\n4. Suggesting relevant research methodologies\n5. Identifying potential sources and databases\n6. Estimating research complexity and timeline\n\nResearch Objectives: {research_objectives}\nAvailable Resources: {available_resources}",
+      "variables": ["research_topic", "initial_questions", "research_context", "target_audience", "research_objectives", "available_resources"],
+      "category": "planning",
+      "description": "Define and refine research scope, questions, and methodology",
+      "examples": ["Market research planning", "Academic research design"],
+      "kind": "analyze",
+      "params": {
+        "max_tokens": 700,
+        "temperature": 0.3,
+        "response_format": "research_plan"
+      }
+    },
+    "2": {
+      "step_id": "source_evaluation",
+      "step_name": "Source Material Evaluation",
+      "step_type": "prompt",
+      "step_number": "2",
+      "template": "Evaluate these research sources for quality and relevance:\n\nResearch Focus: {refined_research_scope}\nSource Materials: {source_materials}\nPublication Dates: {publication_dates}\nSource Types: {source_types}\n\nEvaluate each source on:\n1. Credibility and authority\n2. Relevance to research questions\n3. Recency and currency\n4. Methodology quality (if applicable)\n5. Bias assessment\n6. Citation worthiness\n\nRank sources by reliability and relevance. Identify any gaps in source coverage.",
+      "variables": ["refined_research_scope", "source_materials", "publication_dates", "source_types"],
+      "category": "evaluation",
+      "description": "Assess quality, credibility, and relevance of research sources",
+      "examples": ["Academic source evaluation", "Industry report assessment"],
+      "kind": "validate",
+      "params": {
+        "max_tokens": 900,
+        "temperature": 0.2,
+        "response_format": "source_evaluation"
+      }
+    },
+    "3": {
+      "step_id": "data_synthesis",
+      "step_name": "Information Synthesis and Analysis",
+      "step_type": "prompt",
+      "step_number": "3",
+      "template": "Synthesize information from the evaluated sources:\n\nHigh-Quality Sources: {evaluated_sources}\nResearch Questions: {research_questions}\nSource Content: {source_content}\n\nCreate a comprehensive synthesis that:\n1. Answers each research question systematically\n2. Identifies patterns and trends across sources\n3. Highlights agreements and contradictions\n4. Notes gaps in current knowledge\n5. Provides evidence-based conclusions\n6. Suggests areas for further investigation\n\nMaintain objectivity and cite sources appropriately. Focus Area: {focus_area}",
+      "variables": ["evaluated_sources", "research_questions", "source_content", "focus_area"],
+      "category": "synthesis",
+      "description": "Synthesize information from multiple sources into coherent analysis",
+      "examples": ["Literature review synthesis", "Market trend analysis"],
+      "kind": "summarize",
+      "params": {
+        "max_tokens": 1500,
+        "temperature": 0.4,
+        "response_format": "synthesis_report"
+      }
+    },
+    "4": {
+      "step_id": "insight_generation",
+      "step_name": "Insight and Recommendation Generation",
+      "step_type": "prompt",
+      "step_number": "4",
+      "template": "Generate insights and recommendations based on the research synthesis:\n\nResearch Synthesis: {synthesis_results}\nOriginal Objectives: {research_objectives}\nTarget Audience: {target_audience}\nDecision Context: {decision_context}\n\nGenerate:\n1. Key insights and findings\n2. Strategic implications\n3. Actionable recommendations\n4. Risk assessments and considerations\n5. Implementation suggestions\n6. Success metrics and KPIs\n\nPrioritize recommendations by impact and feasibility. Consider timeline: {implementation_timeline}",
+      "variables": ["synthesis_results", "research_objectives", "target_audience", "decision_context", "implementation_timeline"],
+      "category": "insights",
+      "description": "Generate actionable insights and recommendations from research findings",
+      "examples": ["Strategic recommendations", "Policy suggestions", "Investment insights"],
+      "kind": "analyze",
+      "params": {
+        "max_tokens": 1200,
+        "temperature": 0.5,
+        "response_format": "insights_report"
+      }
+    },
+    "5": {
+      "step_id": "research_validation",
+      "step_name": "Research Quality and Completeness Validation",
+      "step_type": "prompt",
+      "step_number": "5",
+      "template": "Validate the quality and completeness of this research:\n\nResearch Scope: {original_scope}\nSynthesis Report: {synthesis_report}\nInsights Generated: {generated_insights}\nSources Used: {source_list}\n\nValidate:\n1. Research question coverage completeness\n2. Source diversity and quality\n3. Analysis depth and rigor\n4. Conclusion validity and support\n5. Bias identification and mitigation\n6. Reproducibility of findings\n\nIdentify any limitations, suggest improvements, and provide a research quality score (1-10). Recommend next steps for research continuation or application.",
+      "variables": ["original_scope", "synthesis_report", "generated_insights", "source_list"],
+      "category": "validation",
+      "description": "Validate research quality, completeness, and methodology",
+      "examples": ["Research quality assessment", "Methodology validation"],
+      "kind": "validate",
+      "params": {
+        "max_tokens": 800,
+        "temperature": 0.2,
+        "response_format": "validation_report"
+      }
+    }
+  },
+  "metadata": {
+    "created_at": "2025-01-14T12:00:00Z",
+    "workflow_complexity": "high",
+    "expected_execution_time": "8-15 minutes",
+    "optimization_focus": ["thoroughness", "objectivity", "insight_quality"],
+    "typical_use_cases": ["market_research", "competitive_analysis", "academic_research", "policy_research", "trend_analysis"]
+  }
+}

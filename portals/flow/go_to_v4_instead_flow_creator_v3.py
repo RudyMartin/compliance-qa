@@ -20,6 +20,22 @@ from datetime import datetime
 from typing import Dict, List, Any, Optional
 import traceback
 
+# Import domain services for RL and step management
+try:
+    import sys
+    sys.path.append(str(Path(__file__).parent.parent.parent))
+    from domain.services.action_steps_manager import ActionStepsManager
+    from domain.services.prompt_steps_manager import PromptStepsManager
+    from domain.services.ask_ai_steps_manager import AskAIStepsManager
+    from domain.services.rl_factor_optimizer import RLFactorOptimizer
+    from domain.services.cumulative_learning_pipeline import CumulativeLearningPipeline
+    from domain.services.model_router_service import ModelRouterService
+    from domain.services.step_attributes import BaseStep
+    DOMAIN_SERVICES_AVAILABLE = True
+except ImportError as e:
+    print(f"Warning: Domain services not available: {e}")
+    DOMAIN_SERVICES_AVAILABLE = False
+
 # Import utilities from common package
 try:
     from common.utilities import (
@@ -2219,7 +2235,7 @@ class FlowCreatorV3Portal:
         return steps_config
 
     def _execute_qaqc_workflow_dspy(self, workflow: Dict, uploaded_files: List, field_values: Dict) -> Dict:
-        """Execute the real QAQC workflow using DSPy reasoning and MLflow tracking"""
+        """Execute the real QAQC workflow using DSPy reasoning, RL optimization, and MLflow tracking"""
         import tidyllm
         from datetime import datetime
         import json
@@ -2230,6 +2246,31 @@ class FlowCreatorV3Portal:
         base_user_id = f"qaqc_{project_id}"
 
         st.info(f"Executing QAQC workflow with session: {session_id}")
+
+        # Initialize RL-enhanced execution pipeline
+        if DOMAIN_SERVICES_AVAILABLE:
+            try:
+                # Initialize RL factor optimizer
+                rl_optimizer = RLFactorOptimizer(project_id=project_id)
+
+                # Initialize step managers
+                action_manager = ActionStepsManager(project_id)
+                prompt_manager = PromptStepsManager(project_id)
+                ask_ai_manager = AskAIStepsManager(project_id)
+
+                # Initialize cumulative learning pipeline
+                learning_pipeline = CumulativeLearningPipeline(
+                    project_id=project_id,
+                    rl_optimizer=rl_optimizer
+                )
+
+                st.success("🚀 RL-enhanced execution pipeline initialized")
+                rl_enabled = True
+            except Exception as e:
+                st.warning(f"RL optimization unavailable: {e}")
+                rl_enabled = False
+        else:
+            rl_enabled = False
 
         # Load dynamic step configuration
         steps_config = self._load_step_configuration(workflow)
@@ -2253,14 +2294,44 @@ class FlowCreatorV3Portal:
             else:
                 return [int(step_num), 0]  # Simple numeric step
 
-        # Execute steps dynamically based on step_number order
+        # Execute steps dynamically based on step_number order with RL optimization
         for step_config in sorted(steps_config.values(), key=_sort_step_number):
             step_id = step_config['step_id']
             step_name = step_config['step_name']
             step_number = step_config['step_number']
             step_type = step_config['step_type']
 
+            # RL-enhanced step execution
+            if rl_enabled:
+                try:
+                    # Convert step config to BaseStep for RL integration
+                    base_step = BaseStep(
+                        step_name=step_name,
+                        step_type=step_type,
+                        description=step_config.get('description', ''),
+                        requires=step_config.get('requires', []),
+                        produces=step_config.get('produces', []),
+                        position=int(step_config.get('order', 0)),
+                        params=step_config.get('params', {}),
+                        validation_rules=step_config.get('validation_rules', {}),
+                        kind=step_config.get('kind', step_type)  # Use kind for model routing
+                    )
+
+                    # Get RL-optimized factors for this step
+                    rl_factors = rl_optimizer.optimize_step_factors(
+                        step_type=step_type,
+                        historical_data=workflow_results,
+                        context={'project_id': project_id, 'session_id': session_id}
+                    )
+
+                    st.info(f"🧠 RL factors - ε:{rl_factors['epsilon']:.3f}, lr:{rl_factors['learning_rate']:.4f}, T:{rl_factors['temperature']:.2f}")
+
+                except Exception as rl_error:
+                    st.warning(f"RL optimization failed for step {step_name}: {rl_error}")
+                    rl_factors = None
+
             with st.spinner(f"Step {step_number}: {step_name}..."):
+                step_start_time = datetime.now()
                 try:
                     # Generate dynamic prompt based on step type and configuration
                     prompt = self._generate_step_prompt(
@@ -2295,6 +2366,35 @@ class FlowCreatorV3Portal:
                     })
                     st.success(f"✓ Step {step_number}: {step_name} completed")
 
+                    # RL feedback for successful step execution
+                    if rl_enabled and rl_factors:
+                        try:
+                            step_duration = (datetime.now() - step_start_time).total_seconds()
+
+                            # Calculate reward based on execution success and performance
+                            reward = learning_pipeline.calculate_step_reward(
+                                step=base_step,
+                                result=result,
+                                execution_time=step_duration,
+                                success=True
+                            )
+
+                            # Update RL factors with feedback
+                            rl_optimizer.update_with_feedback(
+                                step_type=step_type,
+                                reward=reward,
+                                context={'execution_time': step_duration, 'result_quality': len(str(result))}
+                            )
+
+                            # Update step attributes for tracking
+                            base_step.last_reward = reward
+                            base_step.last_modified = datetime.now().isoformat()
+
+                            st.success(f"🎯 RL feedback: reward={reward:.3f}, duration={step_duration:.2f}s")
+
+                        except Exception as rl_feedback_error:
+                            st.warning(f"RL feedback failed: {rl_feedback_error}")
+
                 except Exception as e:
                     st.error(f"Step {step_number} ({step_name}) failed: {e}")
                     workflow_results[step_id] = {'error': str(e)}
@@ -2305,6 +2405,25 @@ class FlowCreatorV3Portal:
                         'status': 'failed',
                         'error': str(e)
                     })
+
+                    # RL feedback for failed step execution
+                    if rl_enabled and rl_factors:
+                        try:
+                            step_duration = (datetime.now() - step_start_time).total_seconds()
+
+                            # Negative reward for failed execution
+                            reward = -0.5  # Penalty for failure
+
+                            rl_optimizer.update_with_feedback(
+                                step_type=step_type,
+                                reward=reward,
+                                context={'execution_time': step_duration, 'error': str(e)}
+                            )
+
+                            st.warning(f"🎯 RL feedback: reward={reward:.3f} (failure penalty)")
+
+                        except Exception as rl_feedback_error:
+                            st.warning(f"RL feedback failed: {rl_feedback_error}")
 
         # Step 2: QAQC Analysis Steps
         with st.spinner("Step 2: QAQC Analysis..."):
@@ -2677,6 +2796,41 @@ class FlowCreatorV3Portal:
 
         except Exception as save_error:
             st.warning(f"Failed to save outputs: {save_error}")
+
+        # RL Performance Summary
+        if rl_enabled:
+            try:
+                # Generate RL performance summary
+                rl_summary = rl_optimizer.get_performance_summary()
+                learning_summary = learning_pipeline.get_cumulative_performance()
+
+                st.success("🎯 **RL Optimization Summary**")
+                col1, col2, col3 = st.columns(3)
+
+                with col1:
+                    st.metric("Total Optimizations", rl_summary.get('total_optimizations', 0))
+                    st.metric("Avg Reward", f"{rl_summary.get('average_reward', 0):.3f}")
+
+                with col2:
+                    st.metric("Success Rate", f"{rl_summary.get('success_rate', 0):.1%}")
+                    st.metric("Exploration Rate", f"{rl_summary.get('current_epsilon', 0):.3f}")
+
+                with col3:
+                    st.metric("Learning Rate", f"{rl_summary.get('current_learning_rate', 0):.4f}")
+                    st.metric("Performance Trend", "↗️" if learning_summary.get('trend', 'stable') == 'improving' else "➡️")
+
+                # Add RL data to final output
+                final_output['rl_optimization'] = {
+                    'enabled': True,
+                    'performance_summary': rl_summary,
+                    'learning_summary': learning_summary,
+                    'optimization_timestamp': datetime.now().isoformat()
+                }
+
+            except Exception as rl_summary_error:
+                st.warning(f"RL summary generation failed: {rl_summary_error}")
+        else:
+            final_output['rl_optimization'] = {'enabled': False}
 
         return final_output
 

@@ -1,0 +1,51 @@
+{
+  "step_id": "unified_document_analysis",
+  "step_name": "Unified Document Analysis",
+  "step_type": "unified",
+  "description": "Extract document content using TidyLLM, then analyze with AI in a single unified step",
+  "phases": {
+    "action": {
+      "tidyllm_functions": [
+        {
+          "function": "extract_text_from_pdf",
+          "inputs": ["document_file"],
+          "output_variable": "extracted_text"
+        },
+        {
+          "function": "extract_document_metadata",
+          "inputs": ["document_file"],
+          "output_variable": "document_metadata"
+        },
+        {
+          "function": "generate_embeddings",
+          "inputs": ["extracted_text"],
+          "output_variable": "text_embeddings"
+        }
+      ],
+      "file_operations": [
+        {
+          "operation": "save_intermediate",
+          "data": "extracted_text",
+          "output_file": "extracted_content.txt"
+        }
+      ]
+    },
+    "prompt": {
+      "template_file": "step_01_document_analysis.md",
+      "variables": ["extracted_text", "document_metadata", "text_embeddings"],
+      "output_variables": ["ai_analysis", "content_summary", "key_insights"]
+    }
+  },
+  "rl_optimization": {
+    "optimize_extraction_quality": true,
+    "optimize_analysis_depth": true,
+    "temperature_adjustment": 0.7
+  },
+  "success_criteria": {
+    "text_extraction_success": true,
+    "metadata_complete": true,
+    "embeddings_generated": true,
+    "ai_analysis_complete": true,
+    "min_confidence_score": 0.8
+  }
+}

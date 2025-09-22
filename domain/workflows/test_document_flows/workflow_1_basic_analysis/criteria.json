@@ -1,0 +1,167 @@
+{
+  "workflow_success_criteria": {
+    "name": "Basic Document Analysis Success Criteria",
+    "version": "1.0.0",
+    "description": "Success criteria for validating document analysis workflow execution",
+
+    "global_criteria": {
+      "workflow_completion": {
+        "all_steps_executed": true,
+        "no_critical_errors": true,
+        "output_files_generated": true
+      },
+      "performance_targets": {
+        "total_execution_time_max_seconds": 180,
+        "memory_usage_max_mb": 512,
+        "api_calls_max": 10
+      },
+      "quality_thresholds": {
+        "overall_confidence_min": 0.75,
+        "data_completeness_min": 0.80
+      }
+    },
+
+    "step_criteria": {
+      "step_01_extract": {
+        "validation_rules": [
+          {
+            "rule": "text_extraction_success",
+            "condition": "extracted_text.length > 100",
+            "severity": "critical",
+            "message": "Document must contain at least 100 characters"
+          },
+          {
+            "rule": "metadata_complete",
+            "condition": "metadata contains required fields",
+            "required_fields": ["title", "pages", "creation_date"],
+            "severity": "warning"
+          },
+          {
+            "rule": "file_output_created",
+            "condition": "file exists at outputs/workflow_1/extracted_text.txt",
+            "severity": "critical"
+          }
+        ],
+        "performance_metrics": {
+          "max_execution_time_seconds": 30,
+          "min_extraction_rate_chars_per_second": 100
+        }
+      },
+
+      "step_02_analyze": {
+        "validation_rules": [
+          {
+            "rule": "entities_extracted",
+            "condition": "extracted_entities.count >= 5",
+            "severity": "critical",
+            "message": "Must extract at least 5 named entities"
+          },
+          {
+            "rule": "sentiment_confidence",
+            "condition": "sentiment_analysis.confidence >= 0.6",
+            "severity": "warning"
+          },
+          {
+            "rule": "intelligence_generated",
+            "condition": "content_intelligence is not null",
+            "severity": "critical"
+          }
+        ],
+        "quality_metrics": {
+          "entity_precision_min": 0.8,
+          "sentiment_accuracy_min": 0.75,
+          "classification_confidence_min": 0.85
+        }
+      },
+
+      "step_03_synthesize": {
+        "validation_rules": [
+          {
+            "rule": "insights_generated",
+            "condition": "strategic_insights.insights.count >= 3",
+            "severity": "critical",
+            "message": "Must generate at least 3 strategic insights"
+          },
+          {
+            "rule": "recommendations_provided",
+            "condition": "strategic_insights.recommendations.count >= 2",
+            "severity": "critical"
+          },
+          {
+            "rule": "markdown_output_valid",
+            "condition": "output file is valid markdown format",
+            "severity": "warning"
+          }
+        ],
+        "content_requirements": {
+          "executive_summary_min_words": 50,
+          "recommendations_actionable": true,
+          "risk_mitigation_included": true,
+          "success_metrics_defined": true
+        }
+      }
+    },
+
+    "output_validation": {
+      "required_files": [
+        {
+          "path": "outputs/workflow_1/extracted_text.txt",
+          "min_size_bytes": 100,
+          "format": "text/plain"
+        },
+        {
+          "path": "outputs/workflow_1/entities.json",
+          "min_size_bytes": 50,
+          "format": "application/json",
+          "schema_validation": true
+        },
+        {
+          "path": "outputs/workflow_1/sentiment.json",
+          "min_size_bytes": 30,
+          "format": "application/json"
+        },
+        {
+          "path": "outputs/workflow_1/intelligence_analysis.json",
+          "min_size_bytes": 200,
+          "format": "application/json"
+        },
+        {
+          "path": "outputs/workflow_1/strategic_insights.md",
+          "min_size_bytes": 500,
+          "format": "text/markdown"
+        }
+      ],
+      "content_validation": {
+        "json_files_valid": true,
+        "no_null_outputs": true,
+        "encoding": "utf-8"
+      }
+    },
+
+    "error_handling": {
+      "retry_policy": {
+        "max_retries": 2,
+        "retry_delay_seconds": 5,
+        "exponential_backoff": true
+      },
+      "fallback_strategies": {
+        "extraction_failure": "use_alternative_parser",
+        "api_timeout": "use_cached_model",
+        "analysis_failure": "use_simpler_prompt"
+      },
+      "critical_errors": [
+        "file_not_found",
+        "invalid_pdf",
+        "api_quota_exceeded"
+      ]
+    },
+
+    "reporting": {
+      "generate_report": true,
+      "report_format": "json",
+      "include_metrics": true,
+      "include_logs": false,
+      "report_output": "outputs/workflow_1/execution_report.json"
+    }
+  }
+}

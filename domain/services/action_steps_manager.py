@@ -18,6 +18,13 @@ import logging
 
 from .base_step_manager import BaseStepsManager
 
+# TidyLLM RL integration
+try:
+    from packages.tidyllm.services.workflow_rl_optimizer import create_rl_enhanced_step
+    TIDYLLM_RL_AVAILABLE = True
+except ImportError:
+    TIDYLLM_RL_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 
 
@@ -319,6 +326,15 @@ class ActionStepsManager(BaseStepsManager):
                 'created_at': datetime.now().isoformat()
             }
 
+            # Apply TidyLLM RL enhancement if available
+            if TIDYLLM_RL_AVAILABLE:
+                try:
+                    enhanced_step = create_rl_enhanced_step(action_step, self.project_id)
+                    action_step.update(enhanced_step)
+                    logger.info(f"Applied TidyLLM RL enhancement to step: {action_step['step_name']}")
+                except Exception as e:
+                    logger.warning(f"TidyLLM RL enhancement failed: {e}")
+
             # Save the action step
             step_name = action_step['step_name']
             return self.save_action_step(step_name, action_step)
@@ -328,6 +344,28 @@ class ActionStepsManager(BaseStepsManager):
                 'success': False,
                 'error': str(e)
             }
+
+    def enhance_step_with_rl(self, step_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Enhance a step with TidyLLM RL optimization.
+
+        Args:
+            step_data: Step data to enhance
+
+        Returns:
+            Enhanced step data with RL factors
+        """
+        if not TIDYLLM_RL_AVAILABLE:
+            logger.warning("TidyLLM RL not available for step enhancement")
+            return step_data
+
+        try:
+            enhanced_step = create_rl_enhanced_step(step_data, self.project_id)
+            logger.info(f"Successfully enhanced step with TidyLLM RL: {step_data.get('step_name', 'unnamed')}")
+            return enhanced_step
+        except Exception as e:
+            logger.error(f"Failed to enhance step with RL: {e}")
+            return step_data
 
     def get_action_step_summary(self) -> Dict[str, Any]:
         """Get a summary of all action steps."""

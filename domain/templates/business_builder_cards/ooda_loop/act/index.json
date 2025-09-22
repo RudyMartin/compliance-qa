@@ -1,0 +1,29 @@
+{
+  "ooda_level": "act",
+  "level_name": "Act Stage",
+  "level_description": "Execution, implementation, and action orchestration cards",
+  "level_purpose": "Execute strategic decisions through coordinated actions and workflow implementation",
+  "business_value": "Transform decisions into concrete results through effective execution",
+  "cards": [
+    {
+      "card_id": "unified_workflow_execution",
+      "card_name": "Unified Workflow Execution",
+      "complexity": "high",
+      "primary_function": "Strategic action execution through automated workflow orchestration",
+      "outputs": ["execution_plan", "execution_results", "execution_assessment"]
+    }
+  ],
+  "stage_characteristics": {
+    "focus": "Implementation and execution",
+    "output_types": ["results", "outcomes", "deliverables", "metrics", "status"],
+    "processing_style": "Execution-focused, action-heavy",
+    "ai_involvement": "Moderate - monitoring and coordination, less reasoning"
+  },
+  "recommended_flow": [
+    "Receive strategic recommendations from Decide stage",
+    "Create detailed execution plans",
+    "Orchestrate and coordinate actions",
+    "Monitor progress and handle errors",
+    "Generate results and metrics for Loop stage"
+  ]
+}

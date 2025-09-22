@@ -1,0 +1,100 @@
+{
+  "workflow_id": "code_analysis",
+  "workflow_name": "AI Code Analysis and Review",
+  "workflow_type": "code_review",
+  "description": "Comprehensive code analysis with security, performance, and best practices review",
+  "prompt_steps": {
+    "1": {
+      "step_id": "code_structure_analysis",
+      "step_name": "Code Structure Analysis",
+      "step_type": "prompt",
+      "step_number": "1",
+      "template": "Analyze the structure and organization of this code:\n\n```{programming_language}\n{code_content}\n```\n\nProvide analysis on:\n1. Code organization and modularity\n2. Design patterns used\n3. Architectural decisions\n4. Naming conventions\n5. Overall code structure quality\n\nLanguage: {programming_language}\nProject Type: {project_type}",
+      "variables": ["code_content", "programming_language", "project_type"],
+      "category": "analysis",
+      "description": "Analyze code structure, organization, and architectural patterns",
+      "examples": ["Python class structure", "JavaScript module organization"],
+      "kind": "analyze",
+      "params": {
+        "max_tokens": 800,
+        "temperature": 0.2,
+        "response_format": "structured"
+      }
+    },
+    "2": {
+      "step_id": "security_vulnerability_scan",
+      "step_name": "Security Vulnerability Analysis",
+      "step_type": "prompt",
+      "step_number": "2",
+      "template": "Perform a security analysis of this code:\n\n```{programming_language}\n{code_content}\n```\n\nCheck for:\n1. Common security vulnerabilities (OWASP Top 10)\n2. Input validation issues\n3. Authentication and authorization flaws\n4. Data exposure risks\n5. Injection attack vectors\n6. Cryptographic weaknesses\n\nSecurity Context: {security_context}\nRisk Tolerance: {risk_level}",
+      "variables": ["code_content", "programming_language", "security_context", "risk_level"],
+      "category": "security",
+      "description": "Identify security vulnerabilities and risks in code",
+      "examples": ["SQL injection detection", "XSS vulnerability scan"],
+      "kind": "validate",
+      "params": {
+        "max_tokens": 1000,
+        "temperature": 0.1,
+        "response_format": "security_report"
+      }
+    },
+    "3": {
+      "step_id": "performance_optimization",
+      "step_name": "Performance Analysis",
+      "step_type": "prompt",
+      "step_number": "3",
+      "template": "Analyze this code for performance optimization opportunities:\n\n```{programming_language}\n{code_content}\n```\n\nEvaluate:\n1. Algorithm efficiency and complexity\n2. Memory usage patterns\n3. I/O operations optimization\n4. Caching opportunities\n5. Concurrent processing potential\n6. Database query optimization\n\nPerformance Requirements: {performance_requirements}\nScale Expectations: {scale_expectations}",
+      "variables": ["code_content", "programming_language", "performance_requirements", "scale_expectations"],
+      "category": "optimization",
+      "description": "Identify performance bottlenecks and optimization opportunities",
+      "examples": ["Database query optimization", "Algorithm efficiency review"],
+      "kind": "analyze",
+      "params": {
+        "max_tokens": 900,
+        "temperature": 0.3,
+        "response_format": "performance_analysis"
+      }
+    },
+    "4": {
+      "step_id": "best_practices_review",
+      "step_name": "Best Practices Review",
+      "step_type": "prompt",
+      "step_number": "4",
+      "template": "Review this code against best practices:\n\n```{programming_language}\n{code_content}\n```\n\nCheck compliance with:\n1. Language-specific best practices\n2. Clean code principles\n3. SOLID principles (if applicable)\n4. Error handling patterns\n5. Testing considerations\n6. Documentation standards\n\nCoding Standards: {coding_standards}\nTeam Guidelines: {team_guidelines}",
+      "variables": ["code_content", "programming_language", "coding_standards", "team_guidelines"],
+      "category": "quality",
+      "description": "Review code against established best practices and standards",
+      "examples": ["Clean code review", "SOLID principles check"],
+      "kind": "validate",
+      "params": {
+        "max_tokens": 1200,
+        "temperature": 0.2,
+        "response_format": "checklist"
+      }
+    },
+    "5": {
+      "step_id": "improvement_recommendations",
+      "step_name": "Improvement Recommendations",
+      "step_type": "prompt",
+      "step_number": "5",
+      "template": "Based on the analysis results:\n\nStructure Analysis: {structure_analysis}\nSecurity Findings: {security_findings}\nPerformance Issues: {performance_issues}\nBest Practices Review: {best_practices_review}\n\nProvide prioritized improvement recommendations:\n1. Critical issues (security, major bugs)\n2. Performance improvements\n3. Code quality enhancements\n4. Maintainability improvements\n5. Documentation updates\n\nInclude specific code examples where helpful and estimated effort for each recommendation.",
+      "variables": ["structure_analysis", "security_findings", "performance_issues", "best_practices_review"],
+      "category": "recommendations",
+      "description": "Generate prioritized improvement recommendations based on analysis",
+      "examples": ["Security fix priorities", "Refactoring suggestions"],
+      "kind": "summarize",
+      "params": {
+        "max_tokens": 1500,
+        "temperature": 0.4,
+        "response_format": "action_plan"
+      }
+    }
+  },
+  "metadata": {
+    "created_at": "2025-01-14T12:00:00Z",
+    "workflow_complexity": "high",
+    "expected_execution_time": "3-8 minutes",
+    "optimization_focus": ["accuracy", "thoroughness", "actionability"],
+    "typical_use_cases": ["code_reviews", "security_audits", "performance_optimization", "technical_debt_assessment"]
+  }
+}

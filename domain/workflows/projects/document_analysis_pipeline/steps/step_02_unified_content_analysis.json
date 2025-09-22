@@ -1,0 +1,115 @@
+{
+  "step_id": "unified_content_analysis",
+  "step_name": "Unified Content Analysis & Entity Extraction",
+  "step_type": "unified",
+  "description": "Perform semantic analysis with TidyLLM, extract entities, then classify content with AI",
+  "phases": {
+    "action": {
+      "description": "Advanced content processing using TidyLLM semantic functions",
+      "tidyllm_functions": [
+        {
+          "function": "semantic_analysis",
+          "inputs": ["extracted_text", "text_embeddings"],
+          "parameters": {
+            "analysis_depth": "comprehensive",
+            "include_sentiment": true,
+            "detect_topics": true
+          },
+          "output_variable": "semantic_results"
+        },
+        {
+          "function": "extract_entities",
+          "inputs": ["extracted_text"],
+          "parameters": {
+            "entity_types": ["PERSON", "ORG", "GPE", "DATE", "MONEY", "PRODUCT"],
+            "confidence_threshold": 0.7,
+            "include_relationships": true
+          },
+          "output_variable": "extracted_entities"
+        },
+        {
+          "function": "calculate_similarity",
+          "inputs": ["text_embeddings"],
+          "parameters": {
+            "method": "cosine",
+            "create_similarity_matrix": true,
+            "identify_clusters": true
+          },
+          "output_variable": "similarity_analysis"
+        },
+        {
+          "function": "enhance_embeddings",
+          "inputs": ["text_embeddings", "semantic_results"],
+          "parameters": {
+            "enrichment_method": "contextual",
+            "include_topic_vectors": true
+          },
+          "output_variable": "enhanced_embeddings"
+        }
+      ],
+      "file_operations": [
+        {
+          "operation": "save_json",
+          "data": "semantic_results",
+          "output_file": "outputs/semantic_analysis.json"
+        },
+        {
+          "operation": "save_json",
+          "data": "extracted_entities",
+          "output_file": "outputs/entities.json"
+        },
+        {
+          "operation": "save_json",
+          "data": "similarity_analysis",
+          "output_file": "outputs/similarity_matrix.json"
+        }
+      ]
+    },
+    "prompt": {
+      "description": "AI classification and theme identification",
+      "template_file": "step_02_content_classification.md",
+      "variables": [
+        "extracted_text",
+        "semantic_results",
+        "extracted_entities",
+        "ai_structure_analysis",
+        "similarity_analysis"
+      ],
+      "ai_parameters": {
+        "model": "gpt-4",
+        "temperature": 0.4,
+        "max_tokens": 2000
+      },
+      "output_variables": [
+        "content_classification",
+        "identified_themes",
+        "key_concepts",
+        "content_quality_assessment"
+      ]
+    }
+  },
+  "dependencies": {
+    "required_inputs": ["extracted_text", "text_embeddings", "ai_structure_analysis"],
+    "optional_inputs": ["document_metadata"]
+  },
+  "success_criteria": {
+    "semantic_analysis_complete": true,
+    "entities_extracted": true,
+    "similarity_calculated": true,
+    "ai_classification_confidence": 0.75,
+    "min_themes_identified": 2
+  },
+  "validation_rules": {
+    "entity_count_threshold": 5,
+    "theme_confidence_minimum": 0.6,
+    "semantic_coherence_score": 0.7
+  },
+  "outputs_for_next_step": {
+    "semantic_results": "comprehensive semantic analysis results",
+    "extracted_entities": "identified entities with relationships",
+    "similarity_analysis": "content similarity and clustering data",
+    "enhanced_embeddings": "enriched vector representations",
+    "content_classification": "AI-generated content categories",
+    "identified_themes": "main themes and concepts identified by AI"
+  }
+}

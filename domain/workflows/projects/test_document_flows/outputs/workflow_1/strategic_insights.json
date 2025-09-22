@@ -1,0 +1,27 @@
+{
+  "executive_summary": "Document analysis reveals critical risk factors requiring immediate attention.",
+  "key_insights": [
+    "High concentration of compliance-related risks",
+    "Multiple operational vulnerabilities identified",
+    "Strategic alignment needed across departments"
+  ],
+  "recommendations": [
+    {
+      "priority": "HIGH",
+      "action": "Implement compliance framework"
+    },
+    {
+      "priority": "MEDIUM",
+      "action": "Enhance operational monitoring"
+    },
+    {
+      "priority": "LOW",
+      "action": "Schedule quarterly reviews"
+    }
+  ],
+  "metrics": {
+    "entities_found": 3,
+    "sentiment_score": "negative",
+    "risk_level": "HIGH"
+  }
+}

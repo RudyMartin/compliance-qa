@@ -1,0 +1,62 @@
+{
+  "card_id": "unified_content_intelligence",
+  "card_name": "Unified Content Intelligence",
+  "card_type": "unified_action",
+  "category": "orient",
+  "ooda_level": "orient",
+  "icon": "🧠",
+  "description": "Extract entities, analyze sentiment, classify content, and identify themes using combined TidyLLM + AI intelligence",
+  "business_value": "Deep content understanding through semantic analysis and intelligent classification",
+  "use_cases": [
+    "Entity extraction and relationship mapping",
+    "Content sentiment and topic analysis",
+    "Document classification and categorization",
+    "Theme and pattern identification"
+  ],
+  "step_definition": {
+    "step_type": "unified",
+    "phases": {
+      "action": {
+        "tidyllm_functions": [
+          {
+            "function": "extract_named_entities",
+            "inputs": ["extracted_content"],
+            "parameters": {
+              "entity_types": "{{entity_types}}",
+              "confidence_threshold": "{{confidence_threshold}}"
+            },
+            "output_variable": "extracted_entities"
+          },
+          {
+            "function": "analyze_sentiment",
+            "inputs": ["extracted_content"],
+            "parameters": {
+              "include_sentiment": "{{include_sentiment}}"
+            },
+            "output_variable": "sentiment_analysis"
+          }
+        ]
+      },
+      "prompt": {
+        "template_file": "step_02_content_intelligence_analysis.md",
+        "inputs": ["extracted_content", "extracted_entities", "sentiment_analysis"],
+        "ai_model": "{{llm_model}}",
+        "output_variable": "content_classification"
+      }
+    }
+  },
+  "inputs": {
+    "required": ["extracted_content"],
+    "optional": ["entity_extraction_options", "sentiment_options", "classification_preferences"]
+  },
+  "outputs": {
+    "extracted_entities": "Named entities with confidence scores and relationships",
+    "sentiment_analysis": "Emotional tone and sentiment metrics",
+    "content_classification": "Document type, themes, and intelligent categorization"
+  },
+  "configuration_form": "unified_content_intelligence_form.json",
+  "estimated_time": "1-3 minutes",
+  "complexity": "medium",
+  "ooda_stage_rationale": "Orient stage - understanding and contextualizing the content through intelligent analysis",
+  "tags": ["unified", "content_intelligence", "entities", "sentiment", "classification", "orient"]
+}

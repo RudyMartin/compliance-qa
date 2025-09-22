@@ -1,0 +1,100 @@
+{
+  "workflow_id": "creative_storytelling",
+  "workflow_name": "AI Creative Writing and Storytelling",
+  "workflow_type": "creative_writing",
+  "description": "Multi-stage creative writing process with character development, plot structure, and narrative refinement",
+  "prompt_steps": {
+    "1": {
+      "step_id": "story_concept_development",
+      "step_name": "Story Concept and World Building",
+      "step_type": "prompt",
+      "step_number": "1",
+      "template": "Develop a compelling story concept based on these elements:\n\nGenre: {story_genre}\nTheme: {central_theme}\nSetting: {story_setting}\nInitial Idea: {initial_concept}\nTarget Audience: {target_audience}\n\nCreate:\n1. A compelling premise and hook\n2. World-building details and rules\n3. Historical/cultural context\n4. Mood and atmosphere\n5. Potential conflicts and tensions\n6. Unique elements that set this story apart\n\nStory Length: {target_length}\nTone: {desired_tone}",
+      "variables": ["story_genre", "central_theme", "story_setting", "initial_concept", "target_audience", "target_length", "desired_tone"],
+      "category": "concept",
+      "description": "Develop story concept, world-building, and foundational elements",
+      "examples": ["Fantasy world creation", "Sci-fi concept development", "Historical fiction setting"],
+      "kind": "classify",
+      "params": {
+        "max_tokens": 800,
+        "temperature": 0.7,
+        "response_format": "creative_concept"
+      }
+    },
+    "2": {
+      "step_id": "character_development",
+      "step_name": "Character Creation and Development",
+      "step_type": "prompt",
+      "step_number": "2",
+      "template": "Create compelling characters for this story:\n\nStory Concept: {story_concept}\nWorld Details: {world_building}\nGenre Conventions: {genre_conventions}\n\nDevelop characters with:\n1. Protagonist(s) - goals, motivations, flaws, arc\n2. Antagonist(s) - opposing forces, motivations\n3. Supporting characters - roles, relationships\n4. Character backstories and personalities\n5. Dialogue voices and speech patterns\n6. Character dynamics and relationships\n\nEnsure characters serve the story theme and create compelling conflicts. Character Count: {character_count}",
+      "variables": ["story_concept", "world_building", "genre_conventions", "character_count"],
+      "category": "character",
+      "description": "Create and develop compelling characters with depth and motivation",
+      "examples": ["Protagonist development", "Villain motivation", "Supporting cast creation"],
+      "kind": "classify",
+      "params": {
+        "max_tokens": 1000,
+        "temperature": 0.6,
+        "response_format": "character_profiles"
+      }
+    },
+    "3": {
+      "step_id": "plot_structure_design",
+      "step_name": "Plot Structure and Outline",
+      "step_type": "prompt",
+      "step_number": "3",
+      "template": "Design the plot structure for this story:\n\nStory Concept: {story_concept}\nCharacters: {character_profiles}\nGenre: {story_genre}\nTarget Length: {target_length}\n\nCreate a structured plot with:\n1. Opening hook and inciting incident\n2. Rising action with escalating conflicts\n3. Multiple plot threads and subplots\n4. Character development arcs\n5. Climax and resolution\n6. Satisfying conclusion\n\nUse appropriate structure: {narrative_structure}\nPacing: {pacing_preference}\nPlot twists: {twist_level}",
+      "variables": ["story_concept", "character_profiles", "story_genre", "target_length", "narrative_structure", "pacing_preference", "twist_level"],
+      "category": "structure",
+      "description": "Design plot structure, pacing, and narrative flow",
+      "examples": ["Three-act structure", "Hero's journey", "Mystery plot structure"],
+      "kind": "summarize",
+      "params": {
+        "max_tokens": 1200,
+        "temperature": 0.5,
+        "response_format": "plot_outline"
+      }
+    },
+    "4": {
+      "step_id": "narrative_writing",
+      "step_name": "Narrative Writing and Scene Creation",
+      "step_type": "prompt",
+      "step_number": "4",
+      "template": "Write compelling narrative based on this outline:\n\nPlot Outline: {plot_outline}\nCharacter Details: {character_details}\nSelected Scene/Chapter: {scene_focus}\nWriting Style: {writing_style}\n\nWrite with attention to:\n1. Vivid scene setting and description\n2. Character voice and dialogue\n3. Narrative flow and pacing\n4. Show vs. tell balance\n5. Sensory details and atmosphere\n6. Tension and conflict progression\n\nPoint of View: {narrative_pov}\nTone: {narrative_tone}\nFocus: {scene_type}",
+      "variables": ["plot_outline", "character_details", "scene_focus", "writing_style", "narrative_pov", "narrative_tone", "scene_type"],
+      "category": "writing",
+      "description": "Write compelling narrative scenes with strong voice and pacing",
+      "examples": ["Opening scene", "Dialogue scene", "Action sequence", "Character moment"],
+      "kind": "classify",
+      "params": {
+        "max_tokens": 2000,
+        "temperature": 0.8,
+        "response_format": "narrative_text"
+      }
+    },
+    "5": {
+      "step_id": "story_refinement",
+      "step_name": "Story Review and Refinement",
+      "step_type": "prompt",
+      "step_number": "5",
+      "template": "Review and refine this narrative:\n\nWritten Narrative: {written_narrative}\nOriginal Concept: {original_concept}\nTarget Audience: {target_audience}\nGenre Expectations: {genre_expectations}\n\nEvaluate and improve:\n1. Story coherence and flow\n2. Character consistency and development\n3. Dialogue naturalness and voice\n4. Pacing and tension management\n5. Theme reinforcement\n6. Emotional impact and engagement\n\nSuggest specific revisions for:\n- Strengthening weak areas\n- Enhancing emotional resonance\n- Improving clarity and readability\n- Genre convention adherence",
+      "variables": ["written_narrative", "original_concept", "target_audience", "genre_expectations"],
+      "category": "refinement",
+      "description": "Review and refine narrative for quality, consistency, and impact",
+      "examples": ["Dialogue improvement", "Pacing adjustment", "Character consistency"],
+      "kind": "validate",
+      "params": {
+        "max_tokens": 1000,
+        "temperature": 0.4,
+        "response_format": "editorial_review"
+      }
+    }
+  },
+  "metadata": {
+    "created_at": "2025-01-14T12:00:00Z",
+    "workflow_complexity": "high",
+    "expected_execution_time": "10-20 minutes",
+    "optimization_focus": ["creativity", "coherence", "emotional_impact"],
+    "typical_use_cases": ["short_stories", "novel_chapters", "screenplays", "creative_nonfiction", "marketing_narratives"]
+  }
+}

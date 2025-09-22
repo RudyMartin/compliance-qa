@@ -1,0 +1,10 @@
+{
+  "query": "What are the main risk factors?",
+  "retrieved_chunks": 5,
+  "top_result": {
+    "source": "compliance_doc.pdf",
+    "relevance_score": 0.87,
+    "text_preview": "Risk factors include compliance, operational, and strategic..."
+  },
+  "response": "Based on the documents, the main risk factors are: 1) Regulatory compliance gaps, 2) Operational inefficiencies, 3) Data security vulnerabilities"
+}

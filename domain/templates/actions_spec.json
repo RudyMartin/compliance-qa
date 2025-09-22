@@ -332,6 +332,231 @@
       ],
       "errors": ["QUEUE_UNAVAILABLE", "ASSIGNEE_NOT_FOUND"],
       "metrics": ["tickets_created", "sla_due_at", "duration_ms"]
+    },
+    {
+      "type": "unified_document_analysis",
+      "title": "Unified Document Analysis",
+      "description": "Extract document content with TidyLLM, generate embeddings, then analyze structure and content with AI in a single step.",
+      "requires": [],
+      "produces": ["extracted_content", "document_embeddings", "ai_analysis"],
+      "inputs": {},
+      "params": {
+        "document_source": { "type": "string", "enum": ["upload", "s3", "local"], "default": "upload" },
+        "document_path": { "type": "string", "required": false, "description": "Path to document file" },
+        "extract_tables": { "type": "boolean", "default": true },
+        "extract_images": { "type": "boolean", "default": false },
+        "embedding_model": { "type": "string", "default": "text-embedding-3-small" },
+        "chunk_size": { "type": "integer", "default": 1000 },
+        "overlap": { "type": "integer", "default": 200 },
+        "analysis_depth": { "type": "string", "enum": ["basic", "comprehensive"], "default": "comprehensive" },
+        "llm_model": { "type": "string", "default": "auto" }
+      },
+      "output_schema": {
+        "extracted_content": {
+          "type": "object",
+          "properties": {
+            "text": { "type": "string" },
+            "metadata": {
+              "type": "object",
+              "properties": {
+                "filename": { "type": "string" },
+                "file_size": { "type": "integer" },
+                "page_count": { "type": "integer" },
+                "word_count": { "type": "integer" }
+              }
+            }
+          },
+          "required": ["text", "metadata"]
+        },
+        "document_embeddings": {
+          "type": "object",
+          "properties": {
+            "embeddings": { "type": "array", "items": { "type": "number" } },
+            "chunks": { "type": "array", "items": { "type": "string" } },
+            "model_used": { "type": "string" }
+          },
+          "required": ["embeddings", "chunks"]
+        },
+        "ai_analysis": {
+          "type": "object",
+          "properties": {
+            "document_type": { "type": "string" },
+            "structure_quality_score": { "type": "number" },
+            "section_hierarchy": { "type": "array" },
+            "content_quality": {
+              "type": "object",
+              "properties": {
+                "clarity_score": { "type": "number" },
+                "completeness_score": { "type": "number" },
+                "readability_level": { "type": "string" }
+              }
+            },
+            "confidence_score": { "type": "number" }
+          },
+          "required": ["document_type", "structure_quality_score", "confidence_score"]
+        }
+      },
+      "validation_rules": [
+        "chunk_size must be between 100 and 4000",
+        "overlap must be less than chunk_size",
+        "confidence_score must be above 0.7"
+      ],
+      "errors": ["DOCUMENT_NOT_FOUND", "EXTRACTION_FAILED", "EMBEDDING_FAILED", "AI_ANALYSIS_FAILED"],
+      "metrics": ["extraction_time_ms", "embedding_time_ms", "analysis_time_ms", "total_tokens", "confidence_score"]
+    },
+    {
+      "type": "unified_content_intelligence",
+      "title": "Unified Content Intelligence",
+      "description": "Perform semantic analysis with TidyLLM, extract entities, then classify and identify themes with AI.",
+      "requires": ["extracted_content", "document_embeddings"],
+      "produces": ["semantic_analysis", "extracted_entities", "content_classification"],
+      "inputs": {},
+      "params": {
+        "entity_types": { "type": "array", "items": { "type": "string" }, "default": ["PERSON", "ORG", "GPE", "DATE", "MONEY"] },
+        "confidence_threshold": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.7 },
+        "include_sentiment": { "type": "boolean", "default": true },
+        "detect_topics": { "type": "boolean", "default": true },
+        "classification_labels": { "type": "array", "items": { "type": "string" }, "default": ["research_paper", "technical_report", "business_document", "legal_document"] },
+        "min_themes": { "type": "integer", "default": 2 },
+        "llm_model": { "type": "string", "default": "auto" }
+      },
+      "output_schema": {
+        "semantic_analysis": {
+          "type": "object",
+          "properties": {
+            "topics": { "type": "array", "items": { "type": "string" } },
+            "sentiment_score": { "type": "number" },
+            "complexity_score": { "type": "number" },
+            "coherence_score": { "type": "number" }
+          },
+          "required": ["topics", "sentiment_score"]
+        },
+        "extracted_entities": {
+          "type": "object",
+          "properties": {
+            "entities": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "text": { "type": "string" },
+                  "label": { "type": "string" },
+                  "confidence": { "type": "number" },
+                  "start": { "type": "integer" },
+                  "end": { "type": "integer" }
+                },
+                "required": ["text", "label", "confidence"]
+              }
+            },
+            "entity_relationships": { "type": "array" }
+          },
+          "required": ["entities"]
+        },
+        "content_classification": {
+          "type": "object",
+          "properties": {
+            "document_class": { "type": "string" },
+            "confidence": { "type": "number" },
+            "identified_themes": { "type": "array", "items": { "type": "string" } },
+            "key_concepts": { "type": "array", "items": { "type": "string" } },
+            "content_quality_assessment": {
+              "type": "object",
+              "properties": {
+                "relevance_score": { "type": "number" },
+                "depth_score": { "type": "number" }
+              }
+            }
+          },
+          "required": ["document_class", "confidence", "identified_themes"]
+        }
+      },
+      "validation_rules": [
+        "At least min_themes themes must be identified",
+        "Entity confidence must be above confidence_threshold",
+        "Classification confidence must be above 0.6"
+      ],
+      "errors": ["SEMANTIC_ANALYSIS_FAILED", "ENTITY_EXTRACTION_FAILED", "CLASSIFICATION_FAILED"],
+      "metrics": ["entities_found", "themes_identified", "analysis_confidence", "processing_time_ms"]
+    },
+    {
+      "type": "unified_insight_synthesis",
+      "title": "Unified Insight Synthesis",
+      "description": "Create vector index with TidyLLM, perform similarity analysis, then generate comprehensive insights and recommendations with AI.",
+      "requires": ["semantic_analysis", "extracted_entities", "content_classification", "document_embeddings"],
+      "produces": ["vector_analysis", "strategic_insights", "final_report"],
+      "inputs": {},
+      "params": {
+        "index_type": { "type": "string", "enum": ["faiss", "simple"], "default": "faiss" },
+        "similarity_threshold": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.8 },
+        "insight_focus": { "type": "array", "items": { "type": "string" }, "default": ["business_value", "risks", "opportunities"] },
+        "recommendation_count": { "type": "integer", "minimum": 1, "default": 5 },
+        "include_implementation": { "type": "boolean", "default": true },
+        "report_format": { "type": "string", "enum": ["executive", "detailed", "technical"], "default": "executive" },
+        "llm_model": { "type": "string", "default": "auto" }
+      },
+      "output_schema": {
+        "vector_analysis": {
+          "type": "object",
+          "properties": {
+            "similarity_scores": { "type": "array", "items": { "type": "number" } },
+            "content_clusters": { "type": "array" },
+            "anomalies_detected": { "type": "array", "items": { "type": "string" } },
+            "quality_metrics": {
+              "type": "object",
+              "properties": {
+                "coherence_score": { "type": "number" },
+                "completeness_score": { "type": "number" }
+              }
+            }
+          },
+          "required": ["similarity_scores", "quality_metrics"]
+        },
+        "strategic_insights": {
+          "type": "object",
+          "properties": {
+            "key_findings": { "type": "array", "items": { "type": "string" } },
+            "business_implications": { "type": "array", "items": { "type": "string" } },
+            "risk_assessment": {
+              "type": "object",
+              "properties": {
+                "identified_risks": { "type": "array", "items": { "type": "string" } },
+                "risk_level": { "type": "string", "enum": ["low", "medium", "high"] }
+              }
+            },
+            "opportunities": { "type": "array", "items": { "type": "string" } }
+          },
+          "required": ["key_findings", "business_implications"]
+        },
+        "final_report": {
+          "type": "object",
+          "properties": {
+            "executive_summary": { "type": "string" },
+            "actionable_recommendations": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "recommendation": { "type": "string" },
+                  "priority": { "type": "string", "enum": ["low", "medium", "high"] },
+                  "effort": { "type": "string", "enum": ["low", "medium", "high"] },
+                  "timeline": { "type": "string" }
+                },
+                "required": ["recommendation", "priority"]
+              }
+            },
+            "implementation_roadmap": { "type": "array", "items": { "type": "string" } },
+            "confidence_score": { "type": "number" }
+          },
+          "required": ["executive_summary", "actionable_recommendations", "confidence_score"]
+        }
+      },
+      "validation_rules": [
+        "At least recommendation_count recommendations must be generated",
+        "Confidence score must be above 0.75",
+        "Executive summary must not be empty"
+      ],
+      "errors": ["VECTOR_INDEX_FAILED", "SIMILARITY_ANALYSIS_FAILED", "INSIGHT_GENERATION_FAILED"],
+      "metrics": ["insights_generated", "recommendations_count", "analysis_confidence", "total_processing_time_ms"]
     }
   ],
   "artifacts": {
@@ -345,6 +570,15 @@
     "report_meta": "Extra info about the report generation.",
     "notification_receipt": "Receipt from messaging provider.",
     "storage_receipts": "List of persisted objects/rows and their URIs/IDs.",
-    "review_ticket": "Queue ticket record or a created=false stub."
+    "review_ticket": "Queue ticket record or a created=false stub.",
+    "extracted_content": "Document text and metadata extracted with TidyLLM.",
+    "document_embeddings": "Vector embeddings of document content chunks.",
+    "ai_analysis": "AI-generated document structure and quality analysis.",
+    "semantic_analysis": "TidyLLM semantic analysis with topics and sentiment.",
+    "extracted_entities": "Named entities extracted from document content.",
+    "content_classification": "AI classification of document type and themes.",
+    "vector_analysis": "Vector similarity analysis and content clustering.",
+    "strategic_insights": "Business insights and risk assessment.",
+    "final_report": "Executive summary with actionable recommendations."
   }
 }

@@ -1,0 +1,22 @@
+{
+  "pipeline_run": "2025-09-22T01:25:14.355196",
+  "total_embeddings_created": 33,
+  "database_statistics": {
+    "total_documents": 3,
+    "total_embeddings": 33,
+    "avg_dimension": 768.0,
+    "dimension_range": [
+      768,
+      768
+    ],
+    "total_indices": 1,
+    "total_queries": 0,
+    "avg_query_time_ms": null
+  },
+  "configuration": {
+    "embedding_dimension": 768,
+    "chunk_method": "intelligent",
+    "chunk_size": 500,
+    "overlap": 100
+  }
+}

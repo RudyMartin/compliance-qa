@@ -1,0 +1,17 @@
+{
+  "entities": [
+    {
+      "type": "ORG",
+      "value": "Risk Management Department"
+    },
+    {
+      "type": "RISK",
+      "value": "Compliance Risk"
+    },
+    {
+      "type": "RISK",
+      "value": "Operational Risk"
+    }
+  ],
+  "total": 3
+}

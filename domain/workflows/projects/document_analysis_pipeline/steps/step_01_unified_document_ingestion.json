@@ -1,0 +1,88 @@
+{
+  "step_id": "unified_document_ingestion",
+  "step_name": "Unified Document Ingestion & Structure Analysis",
+  "step_type": "unified",
+  "description": "Extract document content with TidyLLM, generate embeddings, then analyze structure with AI",
+  "phases": {
+    "action": {
+      "description": "Technical document processing using TidyLLM functions",
+      "tidyllm_functions": [
+        {
+          "function": "extract_text_from_pdf",
+          "inputs": ["document_file"],
+          "parameters": {
+            "preserve_formatting": true,
+            "extract_tables": true,
+            "extract_images": false
+          },
+          "output_variable": "extracted_text"
+        },
+        {
+          "function": "extract_document_metadata",
+          "inputs": ["document_file"],
+          "parameters": {
+            "include_properties": true,
+            "calculate_stats": true
+          },
+          "output_variable": "document_metadata"
+        },
+        {
+          "function": "generate_embeddings",
+          "inputs": ["extracted_text"],
+          "parameters": {
+            "model": "text-embedding-3-small",
+            "chunk_size": 1000,
+            "overlap": 200
+          },
+          "output_variable": "text_embeddings"
+        }
+      ],
+      "file_operations": [
+        {
+          "operation": "save_text",
+          "data": "extracted_text",
+          "output_file": "outputs/extracted_text.txt"
+        },
+        {
+          "operation": "save_json",
+          "data": "document_metadata",
+          "output_file": "outputs/document_metadata.json"
+        },
+        {
+          "operation": "save_embeddings",
+          "data": "text_embeddings",
+          "output_file": "outputs/text_embeddings.npy"
+        }
+      ]
+    },
+    "prompt": {
+      "description": "AI analysis of document structure and organization",
+      "template_file": "step_01_document_structure_analysis.md",
+      "variables": ["extracted_text", "document_metadata", "text_embeddings"],
+      "ai_parameters": {
+        "model": "gpt-4",
+        "temperature": 0.3,
+        "max_tokens": 1500
+      },
+      "output_variables": ["ai_structure_analysis", "section_hierarchy", "content_quality_score"]
+    }
+  },
+  "success_criteria": {
+    "text_extraction_success": true,
+    "metadata_complete": true,
+    "embeddings_generated": true,
+    "ai_analysis_confidence": 0.8,
+    "min_extracted_words": 100
+  },
+  "error_handling": {
+    "action_phase_failure": "continue_with_mock_data",
+    "prompt_phase_failure": "continue_without_ai_analysis",
+    "partial_failure": "flag_for_manual_review"
+  },
+  "outputs_for_next_step": {
+    "extracted_text": "raw text content for further processing",
+    "document_metadata": "file statistics and properties",
+    "text_embeddings": "vector representations for similarity analysis",
+    "ai_structure_analysis": "AI assessment of document organization"
+  }
+}

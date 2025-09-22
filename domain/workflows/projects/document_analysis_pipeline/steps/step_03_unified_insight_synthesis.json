@@ -1,0 +1,144 @@
+{
+  "step_id": "unified_insight_synthesis",
+  "step_name": "Unified Insight Synthesis & Recommendation Generation",
+  "step_type": "unified",
+  "description": "Create vector index with TidyLLM, generate comprehensive insights and recommendations with AI",
+  "phases": {
+    "action": {
+      "description": "Advanced analytics and vector operations using TidyLLM",
+      "tidyllm_functions": [
+        {
+          "function": "create_vector_index",
+          "inputs": ["enhanced_embeddings", "extracted_entities"],
+          "parameters": {
+            "index_type": "faiss",
+            "dimension_reduction": true,
+            "include_metadata": true,
+            "optimization_level": "high"
+          },
+          "output_variable": "vector_index"
+        },
+        {
+          "function": "calculate_document_metrics",
+          "inputs": ["semantic_results", "similarity_analysis", "content_classification"],
+          "parameters": {
+            "include_readability": true,
+            "calculate_complexity": true,
+            "assess_coherence": true
+          },
+          "output_variable": "document_metrics"
+        },
+        {
+          "function": "generate_analytics_summary",
+          "inputs": ["vector_index", "document_metrics", "extracted_entities"],
+          "parameters": {
+            "aggregation_method": "comprehensive",
+            "include_statistical_analysis": true,
+            "create_performance_scores": true
+          },
+          "output_variable": "analytics_summary"
+        }
+      ],
+      "file_operations": [
+        {
+          "operation": "save_index",
+          "data": "vector_index",
+          "output_file": "outputs/document_vector_index.faiss"
+        },
+        {
+          "operation": "save_json",
+          "data": "document_metrics",
+          "output_file": "outputs/document_metrics.json"
+        },
+        {
+          "operation": "save_json",
+          "data": "analytics_summary",
+          "output_file": "outputs/analytics_summary.json"
+        }
+      ]
+    },
+    "prompt": {
+      "description": "AI-powered insight generation and strategic recommendations",
+      "template_file": "step_03_insight_generation.md",
+      "variables": [
+        "analytics_summary",
+        "document_metrics",
+        "identified_themes",
+        "content_classification",
+        "extracted_entities",
+        "semantic_results",
+        "ai_structure_analysis"
+      ],
+      "ai_parameters": {
+        "model": "gpt-4",
+        "temperature": 0.5,
+        "max_tokens": 3000
+      },
+      "output_variables": [
+        "strategic_insights",
+        "actionable_recommendations",
+        "executive_summary",
+        "key_findings",
+        "implementation_roadmap"
+      ]
+    }
+  },
+  "dependencies": {
+    "required_inputs": [
+      "enhanced_embeddings",
+      "extracted_entities",
+      "semantic_results",
+      "similarity_analysis",
+      "content_classification",
+      "identified_themes"
+    ],
+    "optional_inputs": ["document_metadata", "ai_structure_analysis"]
+  },
+  "success_criteria": {
+    "vector_index_created": true,
+    "metrics_calculated": true,
+    "analytics_complete": true,
+    "insights_generated": true,
+    "recommendations_actionable": true,
+    "executive_summary_complete": true,
+    "min_insights_count": 5,
+    "min_recommendations_count": 3
+  },
+  "quality_validation": {
+    "insight_relevance_threshold": 0.8,
+    "recommendation_feasibility_score": 0.75,
+    "executive_summary_clarity": 0.85,
+    "overall_coherence_score": 0.8
+  },
+  "final_outputs": {
+    "technical_artifacts": {
+      "vector_index": "searchable document vector index",
+      "document_metrics": "comprehensive document quality metrics",
+      "analytics_summary": "statistical analysis and performance scores"
+    },
+    "business_insights": {
+      "strategic_insights": "high-level strategic analysis and patterns",
+      "actionable_recommendations": "specific recommendations with implementation guidance",
+      "executive_summary": "concise summary for decision makers",
+      "key_findings": "most important discoveries and conclusions",
+      "implementation_roadmap": "step-by-step implementation plan"
+    }
+  },
+  "export_formats": [
+    {
+      "format": "json",
+      "file": "outputs/complete_analysis_results.json",
+      "include": ["all_outputs"]
+    },
+    {
+      "format": "markdown",
+      "file": "outputs/executive_report.md",
+      "include": ["executive_summary", "key_findings", "actionable_recommendations"]
+    },
+    {
+      "format": "pdf",
+      "file": "outputs/comprehensive_analysis_report.pdf",
+      "include": ["all_business_insights", "selected_technical_metrics"]
+    }
+  ]
+}

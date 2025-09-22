@@ -1,0 +1,416 @@
+Validating Models Effectively
+Anamaria Pieschacon PhD, Global Head of Model Validation for Consumer Credit Risk
+Michael Brisson PhD, Consumer Credit Risk Model DeveloperModel Validation
+ 2Agenda
+1.Our Approach
+2.Key Challenges: Scorecards, Stress Testing, CECL, IFRS 9
+3.Model Governance
+Model Validation
+ 3Validation Goes Beyond Ticking the Box
+Validation is about evaluating whether the 
+chosen model is capable of delivering 
+sound results and whether it meets the 
+needs for which it was designed .
+Model Validation
+ 4»Reliable Second Line of Defense
+»External validation can review and 
+challenge risk management without 
+conflicts of interest
+»Constructive criticism
+»Unbiased advice 
+»Guidance and direction
+»Top-notch expertiseOur Take on Validation
+Validation
+Why it is importantModel Validation
+ 5Moody’s follows Federal Reserve/ OCC supervisory letter 
+SR11 -7, along with EBA and PRA guidance on validation.
+»Model risk management, benchmarking, monitoring  Our Take on Validation
+Regulatory Guidance
+Model Validation
+ 6Three Elements to Our Validation Process
+Qualitative
+Documentation  
+Methodology
+Data use, description and 
+treatment
+Regulatory compliance
+Model governance Quantitative
+Data analysis
+Variable selection assessment
+Model replication
+Model performance 
+(out-of sample, out -of-time, etc.)
+Development of benchmark models 
+Challenge various shortcomings 
+identified in proposed model
+Check robustness of the model to 
+changes in modeling assumptionsFinal Assessment
+Written report and presentation
+Model evaluation
+Observations, findings (critical & non -critical), 
+recommendations and or remedial actionsUnfit for UseNeeds ImprovementSatisfactory with RecommendationsSatisfactoryACTION RATINGS:Model Validation
+ 7Model Evaluation
+Action Ratings
+Satisfactory
+The model has no critical 
+findings and is suitable for 
+deployment. 
+Satisfactory with 
+recommendations
+The model’s performance is 
+satisfactory and is suitable 
+for deployment. 
+Nevertheless, the validators 
+have identified areas where 
+the model could undergo 
+improvements that may 
+improve its overall 
+performance. 
+Needs improvement
+The validators have 
+identified multiple critical 
+findings that have a negative 
+impact on the model’s 
+performance. The current 
+model provides at least a 
+minimally adequate level of 
+performance and can be 
+used in its present form. 
+Unfit for Use
+There are important flaws in 
+the model’s underlying data, 
+conceptual framework, or 
+development process. Either i) 
+the model cannot perform its 
+intended function and should 
+not be used in any decision -
+making capacity or ii) there is 
+not enough evidence to show 
+that the model can perform its 
+intended function and it should 
+not be used in any decision -
+making capacity until such 
+evidence becomes available.Model Validation
+ 8Issues Identified and Recommended ActionsFinal Assessment: Model Ratings by Category
+Risk Category Rating Comments
+DocumentationThe documentation should include a comprehensive list of all the 
+variables considered. 
+Data …
+Variable Selection …
+Segmentation …
+Model Performance …
+Model Replication …
+Monitoring and Performance Tracking …Overall Rating Model Validation
+ 9We Validate Models to Meet Diverse Objectives
+Model Types
+Predictive scorecard models 
+Traditional logistic
+Machine learning
+Partnership Approach
+»Type of client: bank vs. start -up
+»Why are clients seeking validation: regulated vs. not
+»Appropriate level of validation given profile and needs
+»Level of experience the client has with validationPortfolio -
+levelVintage -
+levelAccount -
+level
+Arms -length
+ Hand -holding
+Either way, we 
+preserve and protect 
+our autonomy and 
+independenceEconometric forecast models for ECL 
+Survival, competing risk 
+Transition matrix model
+Model Validation
+ 10Example 1
+Qualitative
+Documentation
+Data quality analysis
+Model design & statistical 
+techniques
+Stability & robustness
+Governance
+Quantitative
+Data collection & cleansing
+Classing
+Feature (variable) selection criteria 
+Model replication
+Model performance 
+Challenger models
+Final Assessment
+Written report and presentation
+Model evaluation 
+Observations , findings (critical 
+& non -critical), 
+recommendations and or 
+remedial actions
+FinTech
+Purpose: Underwriting
+Model type: Machine Learning Ensemble
+Platform: MS AzureModel Validation
+ 11Example 2: Impairment Model Validation
+Qualitative
+Documentation
+Data quality
+Model design & statistical techniques
+Stability & robustness
+Governance
+BAU use & integration into 
+origination, pricing, stress testing & 
+portfolio management
+Quantitative
+Macroeconomic scenarios 
+(forecast paths + probabilities)
+PiT, 12m & lifetime PD 
+PiT, 12m & lifetime LGD
+(unsecure + collateral modelling)
+PiT, 12m & lifetime EAD
+(cash flow generation + behavioural modelling)
+Stage allocation criteria
+Lifetime ECL
+(combining PD/LGD/EAD + discounting + 
+comparison with actual losses)
+Final Assessment
+Written report and presentation
+Model evaluation (rating)
+Observations, findings and 
+recommendations and or remedial 
+actions
+Mid-size European Bank   
+Purpose: IFRS9
+Model type: Vintage -level PD modelModel Validation
+ 12Roles and Responsibilities
+Our recommendations
+Developers
+Validators»Provide an independent 
+opinion of model
+»Benchmark, then 
+benchmark some more
+»Write an effective, 
+useful validation report 
+»Avoid the “checking the 
+box” trap»Develop multiple models
+»Write effective, relevant 
+documentation
+»Archive data, scripts, 
+etc., for future reference
+»Respond to validators 
+promptlyKey Challenges
+Model Validation
+ 14Key Challenges: Scorecards
+Target Variable Definition & 
+Classification
+‘Bad’ definition based on the 
+objective of the scorecard.
+Classification based on 
+performance window Variable / Feature  
+Selection
+Relevant credit and loan 
+characteristics should be 
+included to be selected as 
+predictors.External                     
+Validity
+Is the snapshot 
+representative of future 
+traffic?Model Validation
+ 15
+Key Challenges: Stress Testing
+»Internal data availability vs. economic cycle
+»How does the bank’s experience compare to its peers?
+»Will the next severely adverse shock generate a 
+recession that looks like the previous financial crisis?Model Validation
+ 161.How am I incorporating forward -looking information? 
+2.How do I determine and defend reasonable and 
+supportable horizon?
+3.How do I determine the lifetime of the loan?
+4.How are TDR’s accounted for?QuestionsCECL Model ValidationModel Validation
+ 17
+»CECL models need consider current 
+and future economic conditions.
+»No need to use more than one 
+scenario.
+»Must determine reasonable and 
+supportable period.Forward Looking InformationCECL Model Validation
+246810
+06 10 14 18 22 26 30 34 38 42 46 Historical Baseline Consensus S1 S3Unemployment rate, %Model Validation
+ 18Reasonable and Supportable PeriodCECL Model Validation
+LIFETIME EXPECTED LOSS ESTIMATEFORECAST OVER R&S PERIOD REVERSION PERIOD
+Depends on credit 
+loss model and 
+economic 
+forecastsReversion of 
+forecasted losses
+CECL estimate over life of each asset based on 
+historical information, current conditions and 
+reasonable and supportable forecastsReporting dateLoan terminationModel Validation
+ 19»Many loans will use contractual end date
+»Methodology for revolving loans will be scrutinized
+»Appropriateness of lifetime assumption needs to be tested against actuals.Determining LifetimeCECL Model Validation
+Model Validation
+ 20»How are reasonably expected TDRs determined?
+–General institution specific policy matters
+»Reasonably expected TDRs need to be 
+accounted for using DCF method
+»Term extensions and interest rate concessions 
+can complicate if built into model functionalities
+»Look at how the expected interest rate on a TDR 
+is determined. Troubled Debt Restructurings (TDR)CECL Model Validation
+Model Validation
+ 21Key Challenges: IFRS 9
+Macroeconomic Scenario Forecast
+Minimum 3 scenarios (baseline, upside 
+& downside)
+Scenario Probability Weights
+Macro -dependent, Point -in-Time, 
+Forward -Looking Probability of 
+Default
+Credit Stage
+1, 2 or 3 based on credit risk
+Point -in-Time Conversion
+If through -the-cycle
+Default Risk Measure
+PD model; external or internal ratingLoss Given 
+DefaultExposure at 
+DefaultDiscount FactorExpected Credit 
+LossX X X =Model 
+Governance
+Model Validation
+ 23Model Governance
+Robust model governance is of paramount importance for banks these days for several reasons,
+Well-structured model governance framework is an important precondition for enabling banks 
+develop models and manage associated risks in an efficient mannerGreater Model 
+ComplexityAmplified          
+SupervisionSignificant 
+Financial ImpactIncreased Data 
+RequirementsMore 
+ModelsModel Validation
+ 24»Complete ownership of model 
+risk is assigned to 1stline of 
+defense –owner, modeler, 
+implementation manager
+»2ndand 3rdlines of defense 
+should be fully independent 
+from the former to avoid conflict 
+of interest
+»Different decision -making 
+authorities are formed based 
+on proportionality principle, e.g. 
+model specific committees, 
+bank risk committee and board 
+of directorsTypical Model Governance Structuring
+About Us
+Model Validation
+ 26Validation & Advisory Services
+Custom services for all aspects of model risk management
+Loan Lifecycle 
+Management Models
+Application , Pricing, Origination, Monitoring, Loss Mitigation, Disposition
+Credit Portfolio 
+Management Models 
+Risk Appetite, Concentration Risk, Counterparty, Operational, etc. 
+Business & Strategic 
+Planning Models
+Credit Policy, Marketing, etc.
+Other Advisory 
+Services 
+Gap Analysis, Best Practices and Model Governance
+Regulatory Capital & 
+Stress Testing Models 
+Basel, CCAR, PRA, EBA etc.
+Financial 
+Reporting
+IFRS 9  and CECL
+Model Validation
+ 27
+»Economic, statistical and econometric expertise
+»Our team has more than 100 economists; over 40% hold PhD degrees
+»Leverage our stress scenarios and macroeconomic data to benchmark 
+stress testing, IFRS 9 and CECL modelsWhat Sets Us Apart
+Model Validation
+ 28What Sets Us Apart
+Model Validation
+ 29Questions? Contact us at help@economy.comQ&AModel Validation
+ 30© 2019 Moody’s Corporation, Moody’s Investors Service, Inc., Moody’s Analytics, Inc. and/or their licensors and affiliates 
+(collectively, “MOODY’S”). All rights reserved.
+CREDIT RATINGS ISSUED BY MOODY'S INVESTORS SERVICE, INC. AND ITS RATINGS AFFILIATES (“MIS”) ARE 
+MOODY’S CURRENT OPINIONS OF THE RELATIVE FUTURE CREDIT RISK OF ENTITIES, CREDIT COMMITMENTS, 
+OR DEBT OR DEBT -LIKE SECURITIES, AND MOODY’S PUBLICATIONS MAY INCLUDE MOODY’S CURRENT 
+OPINIONS OF THE RELATIVE FUTURE CREDIT RISK OF ENTITIES, CREDIT COMMITMENTS, OR DEBT OR DEBT -
+LIKE SECURITIES. MOODY’S DEFINES CREDIT RISK AS THE RISK THAT AN ENTITY MAY NOT MEET ITS 
+CONTRACTUAL, FINANCIAL OBLIGATIONS AS THEY COME DUE AND ANY ESTIMATED FINANCIAL LOSS IN THE 
+EVENT OF DEFAULT. CREDIT RATINGS DO NOT ADDRESS ANY OTHER RISK, INCLUDING BUT NOT LIMITED TO: 
+LIQUIDITY RISK, MARKET VALUE RISK, OR PRICE VOLATILITY. CREDIT RATINGS AND MOODY’S OPINIONS 
+INCLUDED IN MOODY’S PUBLICATIONS ARE NOT STATEMENTS OF CURRENT OR HISTORICAL FACT. MOODY’S 
+PUBLICATIONS MAY ALSO INCLUDE QUANTITATIVE MODEL -BASED ESTIMATES OF CREDIT RISK AND RELATED 
+OPINIONS OR COMMENTARY PUBLISHED BY MOODY’S ANALYTICS, INC. CREDIT RATINGS AND MOODY’S 
+PUBLICATIONS DO NOT CONSTITUTE OR PROVIDE INVESTMENT OR FINANCIAL ADVICE, AND CREDIT RATINGS 
+AND MOODY’S PUBLICATIONS ARE NOT AND DO NOT PROVIDE RECOMMENDATIONS TO PURCHASE, SELL, OR 
+HOLD PARTICULAR SECURITIES. NEITHER CREDIT RATINGS NOR MOODY’S PUBLICATIONS COMMENT ON THE 
+SUITABILITY OF AN INVESTMENT FOR ANY PARTICULAR INVESTOR. MOODY’S ISSUES ITS CREDIT RATINGS AND 
+PUBLISHES MOODY’S PUBLICATIONS WITH THE EXPECTATION AND UNDERSTANDING THAT EACH INVESTOR 
+WILL, WITH DUE CARE, MAKE ITS OWN STUDY AND EVALUATION OF EACH SECURITY THAT IS UNDER 
+CONSIDERATION FOR PURCHASE, HOLDING, OR SALE. 
+MOODY’S CREDIT RATINGS AND MOODY’S PUBLICATIONS ARE NOT INTENDED FOR USE BY RETAIL INVESTORS 
+AND IT WOULD BE RECKLESS AND INAPPROPRIATE FOR RETAIL INVESTORS TO USE MOODY’S CREDIT RATINGS 
+OR MOODY’S PUBLICATIONS WHEN MAKING AN 
+INVESTMENT DECISION. IF IN DOUBT YOU SHOULD CONTACT YOUR FINANCIAL OR OTHER PROFESSIONAL 
+ADVISER.
+ALL INFORMATION CONTAINED HEREIN IS PROTECTED BY LAW, INCLUDING BUT NOT LIMITED TO, COPYRIGHT 
+LAW, AND NONE OF SUCH INFORMATION MAY BE COPIED OR OTHERWISE REPRODUCED, REPACKAGED, 
+FURTHER TRANSMITTED, TRANSFERRED, DISSEMINATED, REDISTRIBUTED OR RESOLD, OR STORED FOR 
+SUBSEQUENT USE FOR ANY SUCH PURPOSE, IN WHOLE OR IN PART, IN ANY FORM OR MANNER OR BY ANY 
+MEANS WHATSOEVER, BY ANY PERSON WITHOUT MOODY’S PRIOR WRITTEN CONSENT. 
+All information contained herein is obtained by MOODY’S from sources believed by it to be accurate and reliable. Because 
+of the possibility of human or mechanical error as well as other factors, however, all information contained herein is provid ed 
+“AS IS” without warranty of any kind. MOODY'S adopts all necessary measures so that the information it uses in assigning a 
+credit rating is of sufficient quality and from sources MOODY'S considers to be reliable including, when appropriate, 
+independent third -party sources. However, MOODY’S is not an auditor and cannot in every instance independently verify or 
+validate information received in the rating process or in preparing the Moody’s publications. 
+To the extent permitted by law, MOODY’S and its directors, officers, employees, agents, representatives, licensors and 
+suppliers disclaim liability to any person or entity for any indirect, special, consequential, or incidental losses or damage s 
+whatsoever arising from or in connection with the information contained herein or the use of or inability to use any such 
+information, even if MOODY’S or any of its directors, officers, employees, agents, representatives, licensors or suppliers is
+advised in advance of the possibility of such losses or damages, including but not limited to: (a) any loss of present or 
+prospective profits or (b) any loss or damage arising where the relevant financial instrument is not the subject of a particu lar
+credit rating assigned by MOODY’S.To the extent permitted by law, MOODY’S and its directors, officers, employees, agents, representatives, licensors and 
+suppliers disclaim liability for any direct or compensatory losses or damages caused to any person or entity, including but 
+not limited to by any negligence (but excluding fraud, willful misconduct or any other type of liability that, for the avoida nceof 
+doubt, by law cannot be excluded) on the part of, or any contingency within or beyond the control of, MOODY’S or any of its 
+directors, officers, employees, agents, representatives, licensors or suppliers, arising from or in connection with the 
+information contained herein or the use of or inability to use any such information.
+NO WARRANTY, EXPRESS OR IMPLIED, AS TO THE ACCURACY, TIMELINESS, COMPLETENESS, 
+MERCHANTABILITY OR FITNESS FOR ANY PARTICULAR PURPOSE OF ANY SUCH RATING OR OTHER OPINION OR 
+INFORMATION IS GIVEN OR MADE BY MOODY’S IN ANY FORM OR MANNER WHATSOEVER.
+Moody’s Investors Service, Inc., a wholly -owned credit rating agency subsidiary of Moody’s Corporation (“MCO”), hereby 
+discloses that most issuers of debt securities (including corporate and municipal bonds, debentures, notes and commercial 
+paper) and preferred stock rated by Moody’s Investors Service, Inc. have, prior to assignment of any rating, agreed to pay to
+Moody’s Investors Service, Inc. for appraisal and rating services rendered by it fees ranging from $1,500 to approximately 
+$2,500,000. MCO and MIS also maintain policies and procedures to address the independence of MIS’s ratings and rating 
+processes. Information regarding certain affiliations that may exist between directors of MCO and rated entities, and 
+between entities who hold ratings from MIS and have also publicly reported to the SEC an ownership interest in MCO of 
+more than 5%, is posted annually at www.moodys.com under the heading “Investor Relations —Corporate Governance —
+Director and Shareholder Affiliation Policy.”
+Additional terms for Australia only: Any publication into Australia of this document is pursuant to the Australian Financial 
+Services License of MOODY’S affiliate, Moody’s Investors Service Pty Limited ABN 61 003 399 657AFSL 336969 and/or 
+Moody’s Analytics Australia Pty Ltd ABN 94 105 136 972 AFSL 383569 (as applicable). This document is intended to be 
+provided only to “wholesale clients” within the meaning of section 761G of the Corporations Act 2001. By continuing to 
+access this document from within Australia, you represent to MOODY’S that you are, or are accessing the document as a 
+representative of, a “wholesale client” and that neither you nor the entity you represent will directly or indirectly dissemi nate 
+this document or its contents to “retail clients” within the meaning of section 761G of the Corporations Act 2001. MOODY’S 
+credit rating is an opinion as to the creditworthiness of a debt obligation of the issuer, not on the equity securities of th e 
+issuer or any form of security that is available to retail investors. It would be reckless and inappropriate for retail inves tors to 
+use MOODY’S credit ratings or publications when making an investment decision. If in doubt you should contact your 
+financial or other professional adviser.
+Additional terms for Japan only: Moody's Japan K.K. (“MJKK”) is a wholly -owned credit rating agency subsidiary of Moody's 
+Group Japan G.K., which is wholly -owned by Moody’s Overseas Holdings Inc., a wholly -owned subsidiary of MCO. Moody’s 
+SF Japan K.K. (“MSFJ”) is a wholly -owned credit rating agency subsidiary of MJKK. MSFJ is not a Nationally Recognized 
+Statistical Rating Organization (“NRSRO”). Therefore, credit ratings assigned by MSFJ are Non -NRSRO Credit Ratings. 
+Non-NRSRO Credit Ratings are assigned by an entity that is not a NRSRO and, consequently, the rated obligation will not 
+qualify for certain types of treatment under U.S. laws. MJKK and MSFJ are credit rating agencies registered with the Japan 
+Financial Services Agency and their registration numbers are FSA Commissioner (Ratings) No. 2 and 3 respectively.
+MJKK or MSFJ (as applicable) hereby disclose that most issuers of debt securities (including corporate and municipal 
+bonds, debentures, notes and commercial paper) and preferred stock rated by MJKK or MSFJ (as applicable) have, prior to 
+assignment of any rating, agreed to pay to MJKK or MSFJ (as applicable) for appraisal and rating services rendered by it 
+fees ranging from JPY200,000 to approximately JPY350,000,000.
+MJKK and MSFJ also maintain policies and procedures to address Japanese regulatory requirements .

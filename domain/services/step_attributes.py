@@ -15,10 +15,12 @@ from datetime import datetime
 class BaseStep:
     """Base step with 8 standard attributes for all workflow steps."""
 
-    # Core 8 attributes
+    # Core 8 attributes (required fields first)
     step_name: str                              # 1. Unique identifier
     step_type: str                              # 2. Category (process, transform, analyze, etc.)
     description: str                            # 3. Human-readable explanation
+
+    # Core 8 attributes (optional fields with defaults)
     requires: List[str] = field(default_factory=list)    # 4. Input dependencies
     produces: List[str] = field(default_factory=list)    # 5. Output artifacts
     position: int = 0                          # 6. Order in sequence
@@ -71,12 +73,12 @@ class BaseStep:
 class ActionStep(BaseStep):
     """Action step with workflow-specific attributes."""
 
-    # Action-specific defaults
-    step_type: str = "process"
-
     def __post_init__(self):
         """Set action-specific defaults."""
-        if self.step_type not in ["process", "transform", "analyze", "output", "validation"]:
+        # Set default step_type if not already set
+        if not self.step_type:
+            self.step_type = "process"
+        elif self.step_type not in ["process", "transform", "analyze", "output", "validation"]:
             self.step_type = "process"
 
 
@@ -90,11 +92,13 @@ class PromptStep(BaseStep):
     category: str = "custom"                    # Prompt category
     examples: List[str] = field(default_factory=list)   # Example outputs
 
-    # Override step_type default
-    step_type: str = "prompt"
 
     def __post_init__(self):
         """Extract variables from template if not provided."""
+        # Set default step_type if not already set
+        if not self.step_type:
+            self.step_type = "prompt"
+
         if self.template and not self.variables:
             import re
             # Extract {variable_name} patterns
@@ -124,8 +128,11 @@ class AIInteractionStep(BaseStep):
     confidence_score: float = 0.0               # Confidence in suggestion
     reasoning: str = ""                         # AI's reasoning
 
-    # Override step_type default
-    step_type: str = "ai_interaction"
+
+    def __post_init__(self):
+        """Set default step_type if not already set."""
+        if not self.step_type:
+            self.step_type = "ai_interaction"
 
     def add_suggestion(self, suggestion: Dict[str, Any]):
         """Add an AI suggestion to this step."""

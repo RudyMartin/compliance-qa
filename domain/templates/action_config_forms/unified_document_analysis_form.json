@@ -1,0 +1,166 @@
+{
+  "action_type": "unified_document_analysis",
+  "form_title": "Configure Document Analysis",
+  "form_description": "Set up document extraction, embedding generation, and AI analysis",
+  "form_sections": [
+    {
+      "section_id": "document_input",
+      "section_title": "Document Input",
+      "section_description": "Configure how to access and process the document",
+      "fields": [
+        {
+          "field_id": "document_source",
+          "field_name": "Document Source",
+          "field_type": "select",
+          "required": true,
+          "options": [
+            {"value": "upload", "label": "Upload File", "description": "Upload document directly"},
+            {"value": "s3", "label": "S3 Bucket", "description": "Load from AWS S3"},
+            {"value": "local", "label": "Local Path", "description": "Use local file system"}
+          ],
+          "default_value": "upload",
+          "help_text": "Choose where your document is located"
+        },
+        {
+          "field_id": "document_path",
+          "field_name": "Document Path",
+          "field_type": "text",
+          "required": false,
+          "placeholder": "e.g., s3://bucket/document.pdf or /path/to/file.pdf",
+          "depends_on": {
+            "field": "document_source",
+            "values": ["s3", "local"]
+          },
+          "help_text": "Full path to the document file"
+        }
+      ]
+    },
+    {
+      "section_id": "extraction_options",
+      "section_title": "Extraction Options",
+      "section_description": "Configure how content is extracted from the document",
+      "fields": [
+        {
+          "field_id": "extract_tables",
+          "field_name": "Extract Tables",
+          "field_type": "checkbox",
+          "default_value": true,
+          "help_text": "Include table content in text extraction"
+        },
+        {
+          "field_id": "extract_images",
+          "field_name": "Extract Image Descriptions",
+          "field_type": "checkbox",
+          "default_value": false,
+          "help_text": "Generate descriptions of images and figures"
+        }
+      ]
+    },
+    {
+      "section_id": "embedding_settings",
+      "section_title": "Embedding Generation",
+      "section_description": "Configure how text embeddings are created",
+      "fields": [
+        {
+          "field_id": "embedding_model",
+          "field_name": "Embedding Model",
+          "field_type": "select",
+          "required": true,
+          "options": [
+            {"value": "text-embedding-3-small", "label": "OpenAI Small (Fast)", "description": "Good balance of speed and quality"},
+            {"value": "text-embedding-3-large", "label": "OpenAI Large (Quality)", "description": "Higher quality, slower processing"},
+            {"value": "all-MiniLM-L6-v2", "label": "Sentence Transformers", "description": "Open source, local processing"}
+          ],
+          "default_value": "text-embedding-3-small",
+          "help_text": "Choose the embedding model for vector generation"
+        },
+        {
+          "field_id": "chunk_size",
+          "field_name": "Chunk Size (words)",
+          "field_type": "number",
+          "min_value": 100,
+          "max_value": 4000,
+          "default_value": 1000,
+          "help_text": "Size of text chunks for embedding generation"
+        },
+        {
+          "field_id": "overlap",
+          "field_name": "Chunk Overlap (words)",
+          "field_type": "number",
+          "min_value": 0,
+          "max_value": 500,
+          "default_value": 200,
+          "help_text": "Overlap between consecutive chunks"
+        }
+      ]
+    },
+    {
+      "section_id": "ai_analysis",
+      "section_title": "AI Analysis Settings",
+      "section_description": "Configure how AI analyzes the document",
+      "fields": [
+        {
+          "field_id": "analysis_depth",
+          "field_name": "Analysis Depth",
+          "field_type": "select",
+          "required": true,
+          "options": [
+            {"value": "basic", "label": "Basic Analysis", "description": "Quick overview and structure"},
+            {"value": "comprehensive", "label": "Comprehensive Analysis", "description": "Detailed analysis with quality metrics"}
+          ],
+          "default_value": "comprehensive",
+          "help_text": "How deep should the AI analysis go?"
+        },
+        {
+          "field_id": "llm_model",
+          "field_name": "AI Model",
+          "field_type": "select",
+          "required": true,
+          "options": [
+            {"value": "auto", "label": "Auto Select", "description": "System chooses best model"},
+            {"value": "gpt-4", "label": "GPT-4", "description": "High quality, slower"},
+            {"value": "gpt-3.5-turbo", "label": "GPT-3.5 Turbo", "description": "Fast, good quality"},
+            {"value": "claude-3-sonnet", "label": "Claude 3 Sonnet", "description": "Balanced performance"}
+          ],
+          "default_value": "auto",
+          "help_text": "Which AI model to use for analysis"
+        }
+      ]
+    }
+  ],
+  "validation_rules": [
+    {
+      "rule": "chunk_overlap_less_than_chunk_size",
+      "message": "Chunk overlap must be less than chunk size",
+      "fields": ["chunk_size", "overlap"]
+    },
+    {
+      "rule": "document_path_required_for_s3_local",
+      "message": "Document path is required when using S3 or local source",
+      "fields": ["document_source", "document_path"]
+    }
+  ],
+  "output_preview": {
+    "artifacts_generated": [
+      "extracted_content: Document text and metadata",
+      "document_embeddings: Vector embeddings of content chunks",
+      "ai_analysis: AI assessment of document structure and quality"
+    ],
+    "estimated_time": "2-5 minutes depending on document size",
+    "estimated_cost": "$0.10-$0.50 depending on model and document length"
+  },
+  "json_template": {
+    "type": "unified_document_analysis",
+    "params": {
+      "document_source": "{{document_source}}",
+      "document_path": "{{document_path}}",
+      "extract_tables": "{{extract_tables}}",
+      "extract_images": "{{extract_images}}",
+      "embedding_model": "{{embedding_model}}",
+      "chunk_size": "{{chunk_size}}",
+      "overlap": "{{overlap}}",
+      "analysis_depth": "{{analysis_depth}}",
+      "llm_model": "{{llm_model}}"
+    }
+  }
+}

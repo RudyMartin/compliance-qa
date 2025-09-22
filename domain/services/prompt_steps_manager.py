@@ -18,6 +18,13 @@ from datetime import datetime
 import logging
 
 from .base_step_manager import BaseStepsManager
+
+# TidyLLM RL integration
+try:
+    from packages.tidyllm.services.workflow_rl_optimizer import create_rl_enhanced_step
+    TIDYLLM_RL_AVAILABLE = True
+except ImportError:
+    TIDYLLM_RL_AVAILABLE = False
 from .step_attributes import PromptStep
 
 logger = logging.getLogger(__name__)
@@ -221,6 +228,45 @@ class PromptStepsManager(BaseStepsManager):
                 'success': False,
                 'error': str(e)
             }
+
+    def enhance_prompt_with_rl(self, prompt_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Enhance a prompt step with TidyLLM RL optimization.
+
+        Args:
+            prompt_data: Prompt data to enhance
+
+        Returns:
+            Enhanced prompt data with RL factors
+        """
+        if not TIDYLLM_RL_AVAILABLE:
+            logger.warning("TidyLLM RL not available for prompt enhancement")
+            return prompt_data
+
+        try:
+            # Convert to step format for RL enhancement
+            step_data = {
+                'step_name': prompt_data.get('template', 'unnamed_prompt')[:50],
+                'step_type': 'prompt',
+                'description': prompt_data.get('description', ''),
+                'template': prompt_data.get('template', ''),
+                'variables': prompt_data.get('variables', [])
+            }
+
+            enhanced_step = create_rl_enhanced_step(step_data, self.project_id)
+
+            # Merge back RL enhancements
+            prompt_data.update({
+                'rl_factors': enhanced_step.get('rl_factors', {}),
+                'rl_enhanced': True,
+                'rl_enhancement_timestamp': datetime.now().isoformat()
+            })
+
+            logger.info(f"Successfully enhanced prompt with TidyLLM RL: {prompt_data.get('template', 'unnamed')[:30]}...")
+            return prompt_data
+        except Exception as e:
+            logger.error(f"Failed to enhance prompt with RL: {e}")
+            return prompt_data
 
     def export_prompts(self, export_path: Path = None) -> Dict[str, Any]:
         """

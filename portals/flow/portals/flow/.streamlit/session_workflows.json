@@ -1,0 +1,365 @@
+{
+  "Document Test Suite": {
+    "name": "Document Test Suite",
+    "version": "2.0",
+    "created": "today",
+    "cards": [
+      {
+        "id": "extract_doc",
+        "name": "\ud83d\udcc4 Extract Document",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "extract_metadata",
+        "name": "\ud83d\udcca Extract Metadata",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "analyze_content",
+        "name": "\ud83d\udca1 Analyze Content",
+        "category": "orient",
+        "ai_level": "Assist"
+      },
+      {
+        "id": "extract_entities",
+        "name": "\ud83d\udd0d Extract Entities",
+        "category": "orient",
+        "ai_level": "Assist"
+      },
+      {
+        "id": "analyze_sentiment",
+        "name": "\ud83d\ude0a Analyze Sentiment",
+        "category": "orient",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "generate_insights",
+        "name": "\ud83c\udfaf Generate Insights",
+        "category": "decide",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "create_report",
+        "name": "\ud83d\udcdd Create Report",
+        "category": "act",
+        "ai_level": "Assist"
+      }
+    ]
+  },
+  "Document Comparison": {
+    "name": "Document Comparison",
+    "version": "1.5",
+    "created": "today",
+    "cards": [
+      {
+        "id": "extract_doc1",
+        "name": "\ud83d\udcc4 Extract First Doc",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "extract_doc2",
+        "name": "\ud83d\udcc4 Extract Second Doc",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "compare_docs",
+        "name": "\ud83d\udd04 Compare Documents",
+        "category": "orient",
+        "ai_level": "Assist"
+      },
+      {
+        "id": "find_similarities",
+        "name": "\ud83d\udd0d Find Similarities",
+        "category": "orient",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "generate_recommendations",
+        "name": "\ud83d\udca1 Generate Recommendations",
+        "category": "decide",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "create_comparison_report",
+        "name": "\ud83d\udcca Create Comparison Report",
+        "category": "act",
+        "ai_level": "Assist"
+      }
+    ]
+  },
+  "RAG Knowledge Base": {
+    "name": "RAG Knowledge Base",
+    "version": "3.0",
+    "created": "today",
+    "cards": [
+      {
+        "id": "batch_extract",
+        "name": "\ud83d\udcda Batch Extract Documents",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "create_chunks",
+        "name": "\u2702\ufe0f Create Text Chunks",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "generate_embeddings",
+        "name": "\ud83e\uddec Generate Embeddings",
+        "category": "orient",
+        "ai_level": "None"
+      },
+      {
+        "id": "create_vector_index",
+        "name": "\ud83d\uddc2\ufe0f Create Vector Index",
+        "category": "orient",
+        "ai_level": "None"
+      },
+      {
+        "id": "test_rag_query",
+        "name": "\ud83d\udd0e Test RAG Query",
+        "category": "decide",
+        "ai_level": "Assist"
+      },
+      {
+        "id": "validate_responses",
+        "name": "\u2705 Validate Responses",
+        "category": "decide",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "deploy_rag",
+        "name": "\ud83d\ude80 Deploy RAG System",
+        "category": "act",
+        "ai_level": "None"
+      }
+    ]
+  },
+  "MVR Analysis": {
+    "name": "MVR Analysis",
+    "version": "4.1",
+    "created": "today",
+    "cards": [
+      {
+        "id": "mvr_extract",
+        "name": "\ud83d\udcc4 Extract MVR Document",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "mvr_tag",
+        "name": "\ud83c\udff7\ufe0f MVR Tagging",
+        "category": "observe",
+        "ai_level": "Assist"
+      },
+      {
+        "id": "mvr_qa",
+        "name": "\u2753 MVR QA Analysis",
+        "category": "orient",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "mvr_peer",
+        "name": "\ud83d\udc65 MVR Peer Review",
+        "category": "decide",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "mvr_report",
+        "name": "\ud83d\udcca MVR Report Generation",
+        "category": "act",
+        "ai_level": "Assist"
+      }
+    ]
+  },
+  "Code Review": {
+    "name": "Code Review",
+    "version": "2.2",
+    "created": "today",
+    "cards": [
+      {
+        "id": "extract_code",
+        "name": "\ud83d\udcbb Extract Code",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "analyze_complexity",
+        "name": "\ud83d\udcca Analyze Complexity",
+        "category": "orient",
+        "ai_level": "None"
+      },
+      {
+        "id": "check_standards",
+        "name": "\u2705 Check Standards",
+        "category": "orient",
+        "ai_level": "Assist"
+      },
+      {
+        "id": "security_scan",
+        "name": "\ud83d\udd12 Security Scan",
+        "category": "orient",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "generate_review",
+        "name": "\ud83d\udcdd Generate Review",
+        "category": "decide",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "create_action_items",
+        "name": "\ud83d\udccb Create Action Items",
+        "category": "act",
+        "ai_level": "Assist"
+      }
+    ]
+  },
+  "Financial Analysis": {
+    "name": "Financial Analysis",
+    "version": "1.8",
+    "created": "today",
+    "cards": [
+      {
+        "id": "load_financial_data",
+        "name": "\ud83d\udcb0 Load Financial Data",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "extract_metrics",
+        "name": "\ud83d\udcc8 Extract Metrics",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "analyze_trends",
+        "name": "\ud83d\udcca Analyze Trends",
+        "category": "orient",
+        "ai_level": "Assist"
+      },
+      {
+        "id": "risk_assessment",
+        "name": "\u26a0\ufe0f Risk Assessment",
+        "category": "decide",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "generate_forecast",
+        "name": "\ud83d\udd2e Generate Forecast",
+        "category": "decide",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "create_financial_report",
+        "name": "\ud83d\udcd1 Create Financial Report",
+        "category": "act",
+        "ai_level": "Assist"
+      }
+    ]
+  },
+  "Compliance Check": {
+    "name": "Compliance Check",
+    "version": "3.5",
+    "created": "today",
+    "cards": [
+      {
+        "id": "load_regulations",
+        "name": "\ud83d\udcdc Load Regulations",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "extract_requirements",
+        "name": "\ud83d\udccb Extract Requirements",
+        "category": "observe",
+        "ai_level": "Assist"
+      },
+      {
+        "id": "scan_documents",
+        "name": "\ud83d\udd0d Scan Documents",
+        "category": "orient",
+        "ai_level": "None"
+      },
+      {
+        "id": "check_compliance",
+        "name": "\u2705 Check Compliance",
+        "category": "decide",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "identify_gaps",
+        "name": "\u26a0\ufe0f Identify Gaps",
+        "category": "decide",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "generate_audit_report",
+        "name": "\ud83d\udcca Generate Audit Report",
+        "category": "act",
+        "ai_level": "Assist"
+      }
+    ]
+  },
+  "Quick Document Test": {
+    "name": "Quick Document Test",
+    "version": "1.0",
+    "created": "today",
+    "cards": [
+      {
+        "id": "extract",
+        "name": "\ud83d\udcc4 Extract Document",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "analyze",
+        "name": "\ud83d\udca1 Analyze Content",
+        "category": "orient",
+        "ai_level": "Assist"
+      },
+      {
+        "id": "report",
+        "name": "\ud83d\udcdd Create Report",
+        "category": "act",
+        "ai_level": "Assist"
+      }
+    ]
+  },
+  "RAG Q&A Pipeline": {
+    "name": "RAG Q&A Pipeline",
+    "version": "1.2",
+    "created": "today",
+    "cards": [
+      {
+        "id": "load_knowledge",
+        "name": "\ud83d\udcda Load Knowledge Base",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "rag_search",
+        "name": "\ud83d\udd0e RAG Search",
+        "category": "observe",
+        "ai_level": "None"
+      },
+      {
+        "id": "ask_expert",
+        "name": "\ud83e\udd14 Ask Expert",
+        "category": "orient",
+        "ai_level": "Auto"
+      },
+      {
+        "id": "format_answer",
+        "name": "\ud83d\udcdd Format Answer",
+        "category": "act",
+        "ai_level": "Assist"
+      }
+    ]
+  }
+}

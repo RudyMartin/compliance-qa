@@ -1,0 +1,86 @@
+{
+  "card_id": "unified_ask_expert",
+  "card_name": "Unified Ask An Expert",
+  "card_type": "unified_action",
+  "category": "orient",
+  "ooda_level": "orient",
+  "icon": "🎓",
+  "description": "Connect to expert LLM interfaces (chat, specialized models) for domain-specific insights and professional consultation",
+  "business_value": "Access specialized expertise and professional insights through integrated LLM interfaces",
+  "use_cases": [
+    "Domain expert consultation",
+    "Technical deep-dive analysis",
+    "Professional opinion gathering",
+    "Specialized model integration",
+    "Expert system interaction"
+  ],
+  "step_definition": {
+    "step_type": "unified",
+    "phases": {
+      "action": {
+        "tidyllm_functions": [
+          {
+            "function": "identify_expert_domain",
+            "inputs": ["query_content", "context_data"],
+            "parameters": {
+              "domain_detection": "{{domain_detection}}",
+              "expertise_matching": "{{expertise_matching}}"
+            },
+            "output_variable": "expert_domain"
+          },
+          {
+            "function": "route_to_expert_interface",
+            "inputs": ["expert_domain", "query_content"],
+            "parameters": {
+              "interface_type": "{{interface_type}}",
+              "expert_model": "{{expert_model}}",
+              "consultation_mode": "{{consultation_mode}}"
+            },
+            "output_variable": "expert_routing"
+          },
+          {
+            "function": "format_expert_query",
+            "inputs": ["query_content", "context_data"],
+            "parameters": {
+              "query_enhancement": "{{query_enhancement}}",
+              "context_inclusion": "{{context_inclusion}}"
+            },
+            "output_variable": "formatted_expert_query"
+          }
+        ]
+      },
+      "prompt": {
+        "template_file": "ask_expert_analysis.md",
+        "inputs": ["formatted_expert_query", "expert_routing", "context_data"],
+        "ai_model": "{{coordinator_model}}",
+        "output_variable": "expert_consultation_result"
+      }
+    }
+  },
+  "inputs": {
+    "required": ["query_content"],
+    "optional": ["context_data", "preferred_expert_type", "consultation_depth"]
+  },
+  "outputs": {
+    "expert_domain": "Identified domain and expertise requirements",
+    "expert_routing": "Selected expert interface and routing information",
+    "formatted_expert_query": "Optimized query for expert consultation",
+    "expert_consultation_result": "Expert insights and recommendations"
+  },
+  "expert_interfaces": {
+    "chat_portal": "Interactive chat interface for conversational expertise",
+    "specialized_models": "Domain-specific fine-tuned models",
+    "professional_apis": "External expert system integrations",
+    "knowledge_bases": "Curated expert knowledge repositories"
+  },
+  "configuration_form": "unified_ask_expert_form.json",
+  "estimated_time": "2-5 minutes",
+  "complexity": "medium",
+  "ooda_stage_rationale": "Orient stage - gaining expert understanding and professional insights to inform decision-making",
+  "integration_points": {
+    "chat_integration": "portals/chat/chat_portal.py",
+    "llm_interfaces": "Multiple LLM model access points",
+    "expert_routing": "Intelligent routing based on query domain"
+  },
+  "tags": ["unified", "expert_consultation", "llm_integration", "domain_expertise", "orient"]
+}

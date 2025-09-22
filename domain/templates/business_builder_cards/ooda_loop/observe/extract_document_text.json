@@ -1,0 +1,68 @@
+{
+  "card_id": "extract_document_text",
+  "card_name": "Extract Document Text",
+  "card_type": "action",
+  "category": "document_processing",
+  "icon": "📄",
+  "description": "Extract text content from PDF, DOCX, and other document formats using TidyLLM",
+  "business_value": "Convert documents into processable text for analysis",
+  "use_cases": [
+    "PDF text extraction",
+    "Document digitization",
+    "Content preparation for analysis"
+  ],
+  "step_definition": {
+    "step_type": "action",
+    "phases": {
+      "action": {
+        "tidyllm_functions": [
+          {
+            "function": "extract_text_from_pdf",
+            "inputs": ["document_file"],
+            "parameters": {
+              "preserve_formatting": true,
+              "extract_tables": true,
+              "extract_images": false
+            },
+            "output_variable": "extracted_text"
+          }
+        ],
+        "file_operations": [
+          {
+            "operation": "save_text",
+            "data": "extracted_text",
+            "output_file": "outputs/extracted_text.txt"
+          }
+        ]
+      }
+    }
+  },
+  "inputs": {
+    "required": ["document_file"],
+    "optional": ["extraction_options"]
+  },
+  "outputs": {
+    "extracted_text": "Raw text content from document",
+    "text_file": "Saved text file for further processing"
+  },
+  "configuration_options": {
+    "preserve_formatting": {
+      "type": "boolean",
+      "default": true,
+      "description": "Maintain original document formatting"
+    },
+    "extract_tables": {
+      "type": "boolean",
+      "default": true,
+      "description": "Extract table content"
+    },
+    "extract_images": {
+      "type": "boolean",
+      "default": false,
+      "description": "Extract image descriptions"
+    }
+  },
+  "estimated_time": "30-60 seconds",
+  "complexity": "low",
+  "tags": ["text_extraction", "pdf", "document_processing", "tidyllm"]
+}
