@@ -393,7 +393,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For questions or issues:
 - Create an issue in the repository
-- Contact the QA team at qa-support@company.com
 - Check the [FAQ](docs/FAQ.md)
 
 ---
