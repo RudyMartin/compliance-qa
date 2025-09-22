@@ -396,4 +396,4 @@ For questions or issues:
 - Check the [FAQ](docs/FAQ.md)
 
 ---
-*Last Updated: December 2024*
+*Last Updated: September 2025*
