@@ -279,7 +279,7 @@ Business Input → Tool Execution → Business Output → Performance Tracking �
 ## File Structure
 
 ```
-qa-shipping/
+compliance-qa/
 ├── domain/
 │   ├── services/
 │   │   ├── business_signature_service.py     # Core business signature logic

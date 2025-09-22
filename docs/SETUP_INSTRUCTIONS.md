@@ -1,4 +1,4 @@
-# QA-Shipping Setup Instructions
+# Compliance-QA Setup Instructions
 
 ## Quick Start
 
@@ -42,10 +42,10 @@ python -m streamlit run portals\setup\setup_portal.py --server.port 8512
 
 ## Architecture Overview
 
-QA-Shipping uses a clean 4-layer architecture:
+Compliance-QA uses a clean 4-layer architecture:
 
 ```
-qa-shipping/
+compliance-qa/
 ├── portals/              # [UI] PRESENTATION LAYER
 │   └── setup/           # Setup Portal (8512)
 ├── packages/             # [PKG] DOMAIN PACKAGES
@@ -157,8 +157,8 @@ echo $DB_HOST                                            # Should show AWS RDS h
 
 **Import Errors:**
 ```bash
-# Ensure you're in the qa-shipping directory
-cd qa-shipping
+# Ensure you're in the compliance-qa directory
+cd compliance-qa
 python -c "from infrastructure.yaml_loader import setup_environment_from_settings"
 ```
 

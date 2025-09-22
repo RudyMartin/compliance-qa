@@ -683,7 +683,7 @@ def render_integrations_tab():
 
                                     # Delete all objects under mlflow prefix
                                     bucket = s3_config['bucket']
-                                    prefix = 'qa-shipping/mlflow/'
+                                    prefix = 'compliance-qa/mlflow/'
 
                                     # List and delete all objects
                                     paginator = s3_client.get_paginator('list_objects_v2')
@@ -744,7 +744,7 @@ def render_integrations_tab():
                                 subprocess.Popen(
                                     ["mlflow", "server",
                                      "--backend-store-uri", mlflow_db_uri,
-                                     "--default-artifact-root", "s3://nsc-mvp1/qa-shipping/mlflow/",
+                                     "--default-artifact-root", "s3://nsc-mvp1/compliance-qa/mlflow/",
                                      "--host", "0.0.0.0",
                                      "--port", "5000"],
                                     shell=True

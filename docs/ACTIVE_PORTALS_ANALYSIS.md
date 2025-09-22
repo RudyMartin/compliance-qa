@@ -63,9 +63,9 @@ Also discovered these active ports that may be additional portals:
 - **8503-8510** - Various development/testing portals
 - **8521-8540** - Extended portal ecosystem
 
-### 🎯 **qa-shipping PORTAL REQUIREMENTS**
+### 🎯 **compliance-qa PORTAL REQUIREMENTS**
 
-Based on this analysis, the **qa-shipping** folder should provide:
+Based on this analysis, the **compliance-qa** folder should provide:
 
 1. **Unified Portal Management**
    - Central dashboard to access all 7+ portals
@@ -87,9 +87,9 @@ Based on this analysis, the **qa-shipping** folder should provide:
    - Environment-specific portal configurations
    - Portal versioning and updates
 
-### 💡 **FUNCTIONAL SPECIFICATIONS FOR qa-shipping**
+### 💡 **FUNCTIONAL SPECIFICATIONS FOR compliance-qa**
 
-The qa-shipping system should be designed as a **Portal Management & Shipping Platform** that:
+The compliance-qa system should be designed as a **Portal Management & Shipping Platform** that:
 
 - **Discovers** all active portals automatically
 - **Manages** portal lifecycle (start/stop/restart)

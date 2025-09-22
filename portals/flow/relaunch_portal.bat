@@ -13,7 +13,7 @@ for /f "tokens=5" %%a in ('netstat -aon ^| findstr :8516') do (
 timeout /t 2 /nobreak >nul
 
 REM Change to flow portal directory
-cd /d "C:\Users\marti\qa-shipping\portals\flow"
+cd /d "C:\Users\marti\compliance-qa\portals\flow"
 
 REM Launch the portal
 echo Starting Flow Portal V4 on port 8516...
@@ -24,4 +24,4 @@ echo Press Ctrl+C to stop the portal
 echo ========================================
 echo.
 
-python -m streamlit run flow_portal_v4.py --server.port=8516 --server.headless=false --browser.gatherUsageStats=false
+python relaunch.py

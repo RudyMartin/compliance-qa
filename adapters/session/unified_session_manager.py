@@ -166,7 +166,7 @@ class UnifiedSessionManager:
         # Load from environment first
         self._load_from_environment()
 
-        # Load from settings file if available (now looks for qa-shipping config)
+        # Load from settings file if available (now looks for compliance-qa config)
         self._load_from_settings()
 
         # Restore original config if it was intentionally set
@@ -233,9 +233,9 @@ class UnifiedSessionManager:
             logger.info("[OK] Found AWS credentials in environment")
 
     def _load_from_settings(self):
-        """Load from qa-shipping configuration system"""
+        """Load from compliance-qa configuration system"""
         try:
-            # Try to use qa-shipping environment manager
+            # Try to use compliance-qa environment manager
             from core.config.environment_manager import get_environment_manager
             env_manager = get_environment_manager()
 
@@ -255,14 +255,14 @@ class UnifiedSessionManager:
             self.config.s3_secret_access_key = aws_config.secret_access_key
             self.config.aws_profile = aws_config.profile
 
-            logger.info("[OK] Loaded configuration from qa-shipping environment manager")
+            logger.info("[OK] Loaded configuration from compliance-qa environment manager")
             self.config.credential_source = CredentialSource.SETTINGS_FILE
             return
 
         except ImportError:
-            logger.debug("qa-shipping environment manager not available, falling back to legacy settings")
+            logger.debug("compliance-qa environment manager not available, falling back to legacy settings")
         except Exception as e:
-            logger.warning(f"Failed to load from qa-shipping environment manager: {e}")
+            logger.warning(f"Failed to load from compliance-qa environment manager: {e}")
 
         # Fallback to original settings loading
         self._load_from_settings_direct()
@@ -336,7 +336,7 @@ class UnifiedSessionManager:
             current_dir = parent
 
         # If not found by searching up, settings file not available
-        # (Removed legacy tidyllm fallback paths - not relevant to qa-shipping)
+        # (Removed legacy tidyllm fallback paths - not relevant to compliance-qa)
 
         if settings_file and settings_file.exists():
             try:
@@ -679,7 +679,7 @@ class UnifiedSessionManager:
                     "message": "PostgreSQL connection failed: Connection pool not initialized or database credentials missing.",
                     "troubleshooting": [
                         "Set environment variables: DB_HOST, DB_PORT, DB_NAME, DB_USERNAME, DB_PASSWORD",
-                        "Or configure via qa-shipping environment manager",
+                        "Or configure via compliance-qa environment manager",
                         "Check if PostgreSQL server is running and accessible"
                     ]
                 }

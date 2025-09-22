@@ -14,7 +14,7 @@ echo Press CTRL+C to stop
 echo ============================================
 echo.
 
-REM Run the special edition on port 8510
-python setup_portal_special.py
+REM Run unified launcher on special port with special theme
+python launch_portal.py --port 8510 --theme special
 
 pause

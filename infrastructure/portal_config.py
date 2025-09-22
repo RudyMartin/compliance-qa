@@ -1,5 +1,5 @@
 """
-Portal Configuration Manager for qa-shipping
+Portal Configuration Manager for compliance-qa
 
 Centralized configuration management for all 7 portals.
 Provides consistent configuration access and validation.
@@ -36,7 +36,7 @@ class PortalDefinition:
 
 class PortalConfigManager:
     """
-    Configuration manager for all qa-shipping portals.
+    Configuration manager for all compliance-qa portals.
 
     Manages the 7 confirmed portals with centralized configuration,
     health monitoring, and deployment coordination.

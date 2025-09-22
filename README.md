@@ -1,4 +1,4 @@
-# QA-Shipping System
+# Compliance-QA System
 
 A comprehensive AI-powered Quality Assurance and Compliance system built with hexagonal architecture for regulatory document processing, workflow automation, and multi-model AI orchestration.
 
@@ -7,7 +7,7 @@ A comprehensive AI-powered Quality Assurance and Compliance system built with he
 The system implements a 4-layer hexagonal (ports & adapters) architecture:
 
 ```
-qa-shipping/
+compliance-qa/
 ├── adapters/          # External interface implementations
 │   ├── primary/       # User-facing adapters (CLI, API)
 │   └── secondary/     # Infrastructure adapters (DB, external services)
@@ -80,7 +80,7 @@ This system depends on three specialized packages, each maintained as separate r
 ### Step 1: Clone Main Repository
 ```bash
 git clone https://github.com/RudyMartin/compliance-qa.git
-cd qa-shipping
+cd compliance-qa
 ```
 
 ### Step 2: Install Package Dependencies
@@ -119,7 +119,7 @@ cd ../..
 
 ### Step 3: Install Main System Requirements
 ```bash
-# From qa-shipping root directory
+# From compliance-qa root directory
 pip install -r requirements.txt
 ```
 

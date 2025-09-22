@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Environment Validation Script for qa-shipping Portal System
+Environment Validation Script for compliance-qa Portal System
 
 Validates all system prerequisites before portal startup.
 Part of Phase 1: Security & Configuration Cleanup.
@@ -30,7 +30,7 @@ logger = logging.getLogger(__name__)
 def print_banner():
     """Print startup banner."""
     print("=" * 60)
-    print("QA-SHIPPING PORTAL SYSTEM - Environment Validation")
+    print("COMPLIANCE-QA PORTAL SYSTEM - Environment Validation")
     print("=" * 60)
     print("Phase 1: Security & Configuration Cleanup")
     print("Validating system prerequisites...")

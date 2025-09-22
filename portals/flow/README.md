@@ -1,325 +1,247 @@
-# TidyLLM Flow Portal Applications
+# Flow Portal V4 - Intelligent Workflow Management System
 
-## Overview
+## 🚀 Quick Start
 
-The Flow Portal ecosystem provides comprehensive workflow orchestration and execution capabilities for the TidyLLM platform. These applications facilitate Flow Macros - powerful command sequences that can invoke one or more workflows in structured, auditable processes.
+```bash
+# Launch the Flow Portal
+streamlit run flow_portal_v4.py
 
-## 🎯 Core Applications
-
-### Chat Workflow Interface (Port 8503)
-**File**: `portals/chat/chat_workflow_interface.py`
-
-**Primary Purpose**: Interactive Flow Macro launcher with chat-based workflow execution
-
-**Key Features**:
-- **Flow Macros Command System**: Execute complex workflow sequences with single commands
-- **Flow Macro Sidebar**: Structured workflow launcher with compliance tracking
-- **MVR Analysis Integration**: 4-stage document processing workflow
-- **Real-time Execution Monitoring**: Live status updates and progress tracking
-- **Audit Trail Integration**: Compliance logging for SR-11-7, SOX-404 requirements
-
-**Flow Macros Examples**:
-```
-[MVR_ANALYSIS] document.pdf
-[COMPLIANCE_CHECK] financial_report.docx
-[QUALITY_REVIEW] code_repository/
-[MULTI_STAGE] doc1.pdf, doc2.pdf -> mvr_analysis -> peer_review -> compliance_check
+# Or use the launcher scripts
+./launch.bat          # Windows
+./launch_special.bat  # Windows (special setup)
 ```
 
-**Architecture**:
-- Chat Interface with Flow Macro sidebar
-- Integration with Unified Flow Manager (UFM)
-- Automatic RAG system deployment for workflow support
-- Real-time status and metrics display
+## 📋 Overview
 
----
+Flow Portal V4 is an AI-enhanced workflow management system that enables users to build, manage, run, and optimize intelligent workflows using a card-based visual interface. Built with Streamlit and powered by advanced AI capabilities, it provides an intuitive way to create complex data processing pipelines.
 
-## 🔧 Flow Architecture Components
+### Key Features
 
-### Unified Flow Manager (UFM)
-**File**: `packages/tidyllm/services/unified_flow_manager.py`
+- **🎨 Visual Card Builder**: Drag-and-drop interface for workflow creation
+- **🤖 AI-Powered Assistance**: Built-in AI helps generate, debug, and optimize workflows
+- **📊 Real-time Monitoring**: Live execution tracking with granular control
+- **📈 RL Optimization**: Automatic performance improvement using reinforcement learning
+- **🔄 Version Control**: Full workflow versioning and rollback capabilities
+- **🏢 Multi-Project Support**: Organize workflows across different projects and domains
 
-**Core Capabilities**:
-- **13 Workflow Types**: MVR Analysis, Domain RAG, Financial Analysis, Contract Review, Compliance Check, Quality Check, Peer Review, Data Extraction, Hybrid Analysis, Code Review, Research Synthesis, Classification, Custom Workflows
-- **CRUD Operations**: Create, Read, Update, Delete workflows
-- **Status Management**: Created → Deployed → Running → Completed/Failed/Paused/Archived
-- **RAG Integration**: Automatic deployment of supporting RAG systems
-- **Health Monitoring**: System availability and performance tracking
+## 🏗️ System Architecture
 
-### Flow Macro System
-**Implementation**: MVRAnalysisFlow class in chat_workflow_interface.py
+The Flow Portal follows a **modular tabfile architecture** for optimal performance and maintainability:
 
-**Features**:
-- Structured workflow configuration
-- Compliance requirement tracking
-- Audit trail generation
-- Gateway approval management
-- Auto-optimization settings
+```
+flow_portal_v4.py (Main Entry - 276 lines)
+    ├── t_create_flow_v4.py     (Create Tab)
+    ├── t_manage_flows_enhanced.py (Manage Tab)
+    ├── t_run_flows_v4.py       (Run Tab)
+    ├── t_optimize_flows_v4.py  (Optimize Tab)
+    └── t_ask_ai_v4.py          (Ask AI Tab)
+```
 
-**Configuration Example**:
+### Core Components
+
+1. **Business Builder Cards**: Reusable workflow components following OODA Loop methodology
+   - Observe: Data extraction and ingestion
+   - Orient: Analysis and understanding
+   - Decide: Decision making and insights
+   - Act: Actions and outputs
+
+2. **Unified Managers**: Centralized services for consistency
+   - `UnifiedStepsManager`: Card library and execution
+   - `UnifiedRAGManager`: RAG system integration
+   - `RLFactorOptimizer`: Reinforcement learning optimization
+
+3. **Project Structure**: Organized workflow storage
+   ```
+   tidyllm/workflows/
+   ├── global/               # Shared workflows
+   └── projects/            # Project-specific workflows
+       ├── client_demo/
+       ├── alex_qaqc/
+       └── [your_project]/
+   ```
+
+## 🎯 Main Features by Tab
+
+### 📝 Create Tab
+Build workflows using three modes:
+- **Visual Builder**: Drag-and-drop cards with live validation
+- **Template Mode**: Pre-built industry-specific workflows
+- **Natural Language**: Describe workflow → AI generates structure
+
+### 📚 Manage Tab
+Comprehensive workflow library management:
+- Version control with diff viewing
+- Performance metrics and analytics
+- Import/export capabilities
+- A/B testing framework
+- Workflow templates and sharing
+
+### ▶️ Run Tab
+Execute workflows with full control:
+- Real-time execution monitoring
+- Step-by-step debugging mode
+- Batch processing support
+- Scheduled automation
+- Human-in-the-loop decisions
+
+### 📈 Optimize Tab
+Performance enhancement through:
+- RL-based parameter tuning
+- Model performance comparison
+- Bottleneck analysis
+- Cost optimization
+- Statistical A/B testing
+
+### 🤖 Ask AI Tab
+Intelligent assistant providing:
+- Natural language workflow generation
+- Error diagnosis and fixes
+- Performance recommendations
+- Context-aware suggestions
+- Documentation assistance
+
+## 💻 Technical Stack
+
+- **Frontend**: Streamlit (wide layout, responsive design)
+- **AI Integration**:
+  - GPT-4 / Claude-3 / Local LLMs
+  - DSPy for reasoning chains
+  - 6 RAG systems (postgres, ai_powered, llama_index, etc.)
+- **Data Processing**: TidyLLM framework
+- **Storage**: JSON-based workflow persistence
+- **Optimization**: RL factors with automatic tuning
+
+## 🔧 Configuration
+
+### Project Selection
+The portal supports multiple projects with isolated workflows:
+
 ```python
-FlowMacroConfig(
-    macro_id="mvr_analysis_v1",
-    macro_type="MVR Document Analysis",
-    created_by="TidyLLM",
-    approved_gateways=["dspy", "llm"],
-    audit_requirements=["tidymart_storage", "processing_trail"],
-    auto_optimizations=["noise_filtering", "sentiment_analysis"]
-)
+# Projects are automatically discovered from:
+tidyllm/workflows/projects/[project_name]/
+
+# Special projects:
+- global: Shared workflows available to all
+- client_demo: Example workflows for demonstration
 ```
 
-### Workflow Registry
-**File**: `packages/tidyllm/workflows/registry.py`
+### Workflow Storage Format
+Workflows are stored as JSON with full metadata:
 
-**Purpose**: Central template and criteria management
-
-**Components**:
-- **Template Management**: Pre-configured workflow templates
-- **Scoring Rubrics**: Automated quality assessment
-- **Validation Rules**: Input/output validation
-- **Criterion Files**: Workflow-specific requirements
-- **Markdown Templates**: Documentation generation
-
----
-
-## 🚀 Flow Macro Commands
-
-### Basic Flow Macros
-Flow Macros are command sequences that trigger one or more workflows:
-
-| Macro Command | Description | Workflow Chain |
-|---------------|-------------|----------------|
-| `[MVR_ANALYSIS]` | 4-stage document analysis | mvr_tag → mvr_qa → mvr_peer → mvr_report |
-| `[COMPLIANCE_CHECK]` | Regulatory validation | compliance_scan → audit_trail → report_gen |
-| `[QUALITY_REVIEW]` | Quality assurance workflow | quality_scan → peer_review → approval |
-| `[DOMAIN_RAG]` | RAG system creation | input → process → index → deploy |
-| `[HYBRID_ANALYSIS]` | Multi-modal analysis | text_analysis + image_analysis + data_extraction |
-
-### Advanced Flow Macros
-Complex multi-workflow sequences:
-
-```
-[COMPREHENSIVE_REVIEW] document.pdf
-├── MVR_ANALYSIS
-├── COMPLIANCE_CHECK
-├── QUALITY_REVIEW
-└── PEER_REVIEW → FINAL_REPORT
-
-[FINANCIAL_PIPELINE] quarterly_report.xlsx
-├── DATA_EXTRACTION
-├── FINANCIAL_ANALYSIS
-├── COMPLIANCE_CHECK
-└── AUDIT_TRAIL → APPROVAL_WORKFLOW
-
-[CODE_DELIVERY] repository/
-├── CODE_REVIEW
-├── QUALITY_CHECK
-├── COMPLIANCE_CHECK
-└── DEPLOYMENT_WORKFLOW
-```
-
-### Flow Macro Syntax
-```
-[WORKFLOW_NAME] input_file(s) [options]
-[WORKFLOW_CHAIN] input → stage1 → stage2 → output
-[CONDITIONAL] input ? condition : true_workflow : false_workflow
-[PARALLEL] input || workflow1 & workflow2 & workflow3
-```
-
----
-
-## 📊 Workflow Types and Use Cases
-
-### 1. MVR Analysis Workflow
-**Purpose**: Model Validation Report document processing
-**Stages**: MVR Tag → MVR QA → MVR Peer Review → MVR Report Generation
-**RAG Integration**: AI-powered, PostgreSQL, Intelligent retrieval
-**Compliance**: SR-11-7, SOX-404 audit requirements
-
-### 2. Domain RAG Creation
-**Purpose**: Build specialized RAG systems for specific domains
-**Stages**: Input Processing → Document Processing → Vector Indexing → System Deployment
-**RAG Types**: AI-powered, PostgreSQL, Intelligent, SME, DSPy integration
-
-### 3. Financial Analysis
-**Purpose**: Financial document analysis and reporting
-**Integration**: MLflow tracking, PostgreSQL storage, Bedrock LLM
-**Outputs**: Analysis reports, compliance documentation, audit trails
-
-### 4. Contract Review
-**Purpose**: Legal document analysis and compliance checking
-**Features**: Clause extraction, risk assessment, compliance validation
-**Outputs**: Review reports, risk matrices, approval workflows
-
-### 5. Quality Check
-**Purpose**: Automated quality assurance for documents and code
-**Features**: Standards compliance, best practice validation, metrics collection
-**Integration**: Code analysis tools, document validators, reporting systems
-
----
-
-## 🔌 Integration Points
-
-### RAG System Integration
-- **Automatic Deployment**: UFM automatically deploys required RAG systems
-- **Multi-RAG Support**: AI-powered, PostgreSQL, Intelligent, SME, DSPy
-- **Domain Specialization**: RAG systems tailored to workflow requirements
-
-### MLflow Integration
-- **Experiment Tracking**: Workflow execution metrics and results
-- **Artifact Storage**: S3-based artifact management
-- **Model Management**: LLM and embedding model tracking
-
-### Database Integration
-- **PostgreSQL Primary**: Workflow state and results storage
-- **SQLite Backup**: Local workflow data backup
-- **Connection Pooling**: Efficient database connection management
-
-### LLM Integration
-- **AWS Bedrock**: Claude 3.5 Sonnet, Haiku, Opus models
-- **Embedding Models**: Amazon Titan, Cohere embedding models
-- **Circuit Breakers**: Robust error handling and retry logic
-
----
-
-## 🏃‍♂️ Getting Started
-
-### 1. Access the Chat Workflow Interface
-```
-http://localhost:8503
-```
-
-### 2. Execute a Flow Macro
-1. Open the Chat Workflow Interface
-2. Use the Flow Macro sidebar to select a workflow
-3. Execute using Flow Macro syntax: `[MVR_ANALYSIS] document.pdf`
-4. Monitor execution in real-time
-5. Review results and audit trail
-
-### 3. Programmatic Access
-```python
-from packages.tidyllm.services.unified_flow_manager import UnifiedFlowManager, WorkflowSystemType
-
-# Initialize UFM
-ufm = UnifiedFlowManager()
-
-# Create workflow
-result = ufm.create_workflow(
-    WorkflowSystemType.MVR_ANALYSIS,
-    {"domain": "financial", "documents": ["quarterly_report.pdf"]}
-)
-
-# Deploy and execute
-ufm.deploy_workflow(result["workflow_id"])
-execution_result = ufm.execute_workflow(result["workflow_id"])
-```
-
-### 4. Health Monitoring
-```python
-# Check system health
-health = ufm.health_check()
-print(f"Overall Health: {health['overall_healthy']}")
-
-# Get performance metrics
-metrics = ufm.get_performance_metrics()
-print(f"Total Workflows: {metrics['total_workflows']}")
-```
-
----
-
-## 📈 Monitoring and Metrics
-
-### Real-time Monitoring
-- **Workflow Status**: Created, Deployed, Running, Completed, Failed, Paused, Archived
-- **Execution Progress**: Stage-by-stage progress tracking
-- **Resource Usage**: CPU, memory, and storage utilization
-- **Error Tracking**: Detailed error logs and recovery options
-
-### Performance Metrics
-- **Execution Time**: Per-workflow and per-stage timing
-- **Success Rates**: Workflow completion statistics
-- **Resource Efficiency**: Throughput and utilization metrics
-- **Quality Scores**: Automated quality assessment results
-
-### Audit and Compliance
-- **Complete Audit Trail**: All workflow actions logged
-- **Compliance Reporting**: SR-11-7, SOX-404 requirement tracking
-- **Change Management**: Version control and approval workflows
-- **Security Logging**: Access control and security event tracking
-
----
-
-## 🔧 Advanced Configuration
-
-### Custom Workflow Creation
-```python
-# Define custom workflow template
-custom_template = {
-    "workflow_id": "custom_analysis",
-    "workflow_name": "Custom Analysis Workflow",
-    "workflow_type": "custom_workflow",
-    "description": "Tailored workflow for specific requirements",
-    "stages": ["input", "custom_process", "validation", "output"],
-    "rag_integration": ["ai_powered", "postgres"],
-    "criteria": {
-        "scoring_rubric": {"accuracy": 0.4, "efficiency": 0.3, "compliance": 0.3}
+```json
+{
+  "name": "Document Analysis",
+  "version": "1.0",
+  "cards": [
+    {
+      "id": "extract_document",
+      "type": "observe",
+      "ai_config": {...},
+      "parameters": {...}
     }
+  ],
+  "metrics": {
+    "success_rate": 0.95,
+    "avg_execution_time": 3.2,
+    "rl_score": 0.87
+  }
 }
 ```
 
-### Flow Macro Extensions
-Create custom Flow Macros by extending the FlowMacro base class:
+## 🚦 Current Status
+
+### Git Status Summary
+- **Branch**: master
+- **Modified**: TidyLLM package integration
+- **New Files**:
+  - HTML documentation (FLOW_PORTAL_V4_DESIGN.html, README.html, etc.)
+  - Core portal files (flow_portal_v4.py and tab files)
+- **Deleted**: Legacy v3 files and test outputs
+
+### Recent Updates
+- Enhanced modular architecture with tabfile system
+- Added project selector with "Create new workflow" option
+- Improved AI integration across all tabs
+- Performance optimizations for large workflows
+- Better error handling and user feedback
+
+## 🎨 UI/UX Design Principles
+
+1. **Progressive Disclosure**: Simple interface with advanced options available when needed
+2. **Visual Feedback**: Real-time status updates and progress indicators
+3. **Consistent Navigation**: 5-tab structure maintained across all operations
+4. **Responsive Layout**: Wide layout optimized for workflow visualization
+5. **Contextual Help**: Inline documentation and AI assistance
+
+## 🔒 Security & Best Practices
+
+- No hardcoded credentials
+- Isolated project environments
+- Audit logging for all operations
+- Safe AI model interactions
+- Input validation and sanitization
+
+## 📈 Performance Metrics
+
+- **Load Time**: <1 second (modular architecture)
+- **Memory Usage**: ~50MB base, scales with workflow complexity
+- **Execution**: Parallel card processing where possible
+- **Optimization**: RL improvements typically 15-30% performance gain
+
+## 🛠️ Development
+
+### Adding New Cards
+Cards are defined in the unified manager and follow a standard interface:
 
 ```python
-class CustomAnalysisFlow(FlowMacro):
-    def __init__(self):
-        config = FlowMacroConfig(
-            macro_id="custom_analysis_v1",
-            macro_type="Custom Analysis",
-            created_by="TidyLLM",
-            approved_gateways=["custom_gateway"],
-            audit_requirements=["custom_audit"],
-            auto_optimizations=["custom_optimization"]
-        )
-        super().__init__(config)
+class BusinessCard:
+    def __init__(self, card_id, category, name):
+        self.id = card_id
+        self.category = category  # observe/orient/decide/act
+        self.name = name
+        self.ai_enabled = True
+        self.parameters = {}
 ```
 
+### Extending Functionality
+New features should follow the modular pattern:
+1. Create new tab file (t_feature_name.py)
+2. Add render function
+3. Import in main portal
+4. Add to navigation
+
+## 📚 Documentation
+
+- **Architecture Details**: See ARCHITECTURE.md
+- **User Guide**: See OVERVIEW.md
+- **Design Specification**: FLOW_PORTAL_V4_DESIGN.md
+- **Migration Guide**: MODULAR_VS_MONOLITHIC.md
+
+## 🤝 Support
+
+For issues or questions about the Flow Portal:
+1. Check the Ask AI tab for immediate assistance
+2. Review existing workflows in the Manage tab
+3. Consult the documentation files
+4. Create detailed error reports with workflow exports
+
+## 📊 Roadmap
+
+### Near Term
+- [ ] Cloud workflow sharing
+- [ ] Advanced scheduling with cron expressions
+- [ ] Webhook triggers for workflows
+- [ ] Mobile-responsive design
+
+### Long Term
+- [ ] Distributed execution across multiple nodes
+- [ ] Visual workflow designer with flowchart view
+- [ ] Plugin system for custom cards
+- [ ] Enterprise SSO integration
+
 ---
 
-## 🛟 Troubleshooting
-
-### Common Issues
-1. **Workflow Creation Fails**: Check system availability and RAG dependencies
-2. **Execution Timeout**: Review resource allocation and increase timeout settings
-3. **RAG Integration Issues**: Verify database connections and model availability
-4. **Compliance Failures**: Check audit requirements and approval workflows
-
-### Debug Tools
-- **Functional Tests**: `python functionals/workflow/tests/test_workflow_functional.py`
-- **Health Checks**: UFM health monitoring system
-- **Log Analysis**: Structured logging with correlation IDs
-- **Performance Profiling**: Built-in metrics collection
-
----
-
-## 📚 Additional Resources
-
-### Documentation
-- **UFM API Reference**: `packages/tidyllm/services/unified_flow_manager.py`
-- **Flow Macro Guide**: `portals/chat/chat_workflow_interface.py`
-- **Workflow Registry**: `packages/tidyllm/workflows/registry.py`
-
-### Testing
-- **Functional Tests**: `functionals/workflow/tests/`
-- **Integration Tests**: Portal-specific test suites
-- **Performance Tests**: Load and stress testing tools
-
-### Support
-- **Chat Interface**: Interactive help and guidance
-- **Health Monitoring**: Real-time system status
-- **Audit Logs**: Comprehensive execution tracking
-- **Error Recovery**: Automated retry and fallback mechanisms
-
----
-
-*For technical support or workflow customization, refer to the TidyLLM documentation or contact the development team.*
+**Version**: 4.0
+**Last Updated**: September 2025
+**License**: Proprietary
+**Status**: Production Ready

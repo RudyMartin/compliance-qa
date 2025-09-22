@@ -11,7 +11,7 @@
 
 
 
-<title>ab_test_comparison_report_1758149962</title>
+<title>TAB_TO_T_FILE_MAPPING</title>
 
 <script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
 // be compatible with the behavior of Pandoc < 2.8).
@@ -352,132 +352,136 @@ display: none;
 </div>
 
 
-<div id="abc-test-comparison-report" class="section level1">
-<h1>A/B/C Test Comparison Report</h1>
-<p>Generated: 2025-09-17T17:59:22.264269 Project: alex_qaqc</p>
-<div id="performance-metrics" class="section level2">
-<h2>Performance Metrics</h2>
-<table style="width:100%;">
-<colgroup>
-<col width="8%" />
-<col width="19%" />
-<col width="19%" />
-<col width="23%" />
-<col width="30%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Test</th>
-<th>Stage1 Model</th>
-<th>Stage2 Model</th>
-<th>Total Time (ms)</th>
-<th>Confidence Improvement</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Test A: Speed Focus</td>
-<td>claude-3-haiku</td>
-<td>claude-3-sonnet</td>
-<td>39598</td>
-<td>0.30</td>
-</tr>
-<tr class="even">
-<td>Test B: Quality Focus</td>
-<td>claude-3-sonnet</td>
-<td>claude-3-5-sonnet</td>
-<td>12962</td>
-<td>0.30</td>
-</tr>
-<tr class="odd">
-<td>Test C: Premium Focus</td>
-<td>claude-3-haiku</td>
-<td>claude-3-5-sonnet</td>
-<td>6751</td>
-<td>0.30</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="token-usage-analysis" class="section level2">
-<h2>Token Usage Analysis</h2>
-<table>
-<colgroup>
-<col width="8%" />
-<col width="22%" />
-<col width="22%" />
-<col width="20%" />
-<col width="25%" />
-</colgroup>
-<thead>
-<tr class="header">
-<th>Test</th>
-<th>Stage1 Tokens</th>
-<th>Stage2 Tokens</th>
-<th>Total Tokens</th>
-<th>Cost Efficiency</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Test A: Speed Focus</td>
-<td>366.6</td>
-<td>937.3000000000001</td>
-<td>1303.9</td>
-<td>0.0002</td>
-</tr>
-<tr class="even">
-<td>Test B: Quality Focus</td>
-<td>319.8</td>
-<td>31.200000000000003</td>
-<td>351.0</td>
-<td>0.0009</td>
-</tr>
-<tr class="odd">
-<td>Test C: Premium Focus</td>
-<td>397.8</td>
-<td>31.200000000000003</td>
-<td>429.0</td>
-<td>0.0007</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div id="quality-metrics" class="section level2">
-<h2>Quality Metrics</h2>
-<div id="test-a-speed-focus" class="section level3">
-<h3>Test A: Speed Focus</h3>
+<div id="flow-creator-v3-tab-to-t_-file-mapping" class="section level1">
+<h1>Flow Creator V3: Tab to T_ File Mapping</h1>
+<div id="current-architecture-problem" class="section level2">
+<h2>Current Architecture Problem</h2>
 <ul>
-<li><strong>Description</strong>: Ultra-fast initial + solid enhancement
-for maximum throughput</li>
-<li><strong>Initial Confidence</strong>: 0.60</li>
-<li><strong>Final Confidence</strong>: 0.90</li>
-<li><strong>Improvement Summary</strong>: Significantly expanded
-content; Increased confidence by 0.3</li>
+<li><strong>flow_creator_v3.py</strong>: 5,555 lines (MONOLITHIC!)</li>
+<li><strong>t_ files</strong>: Modular, smaller, focused components</li>
 </ul>
 </div>
-<div id="test-b-quality-focus" class="section level3">
-<h3>Test B: Quality Focus</h3>
+<div id="main-portal-tabs-t_-files" class="section level2">
+<h2>Main Portal Tabs → T_ Files</h2>
+<div id="primary-tabs-line-574-579" class="section level3">
+<h3>Primary Tabs (line 574-579):</h3>
+<ol style="list-style-type: decimal">
+<li><strong>“➕ Create”</strong> → <code>t_create_flow.py</code> (12,564
+bytes)
 <ul>
-<li><strong>Description</strong>: Strong initial + premium enhancement
-for higher quality</li>
-<li><strong>Initial Confidence</strong>: 0.60</li>
-<li><strong>Final Confidence</strong>: 0.90</li>
-<li><strong>Improvement Summary</strong>: Increased confidence by
-0.3</li>
+<li>Creates new workflows from prompts</li>
+<li>Integrates with workflow templates</li>
+</ul></li>
+<li><strong>“📁 Manage”</strong> → <code>t_existing_flows.py</code>
+(31,675 bytes)
+<ul>
+<li>Browse and manage existing workflows</li>
+<li>View workflow history and status</li>
+</ul></li>
+<li><strong>“🚀 Run”</strong> → <code>t_run.py</code> (29,020 bytes)
+<ul>
+<li>Execute workflows with selected inputs</li>
+<li>Real-time execution monitoring</li>
+</ul></li>
+<li><strong>“⚡ Optimize”</strong> → <code>t_test_designer.py</code>
+(34,444 bytes)
+<ul>
+<li>A/B testing and optimization</li>
+<li>Performance tuning</li>
+</ul></li>
+<li><strong>“🤖 Ask AI”</strong> → <code>t_ai_advisor.py</code> (18,240
+bytes)
+<ul>
+<li>AI-powered workflow assistance</li>
+<li>Intelligent recommendations</li>
+</ul></li>
+</ol>
+</div>
+<div id="additional-components-currently-commented-out" class="section level3">
+<h3>Additional Components (Currently Commented Out):</h3>
+<ul>
+<li><strong>“Flow Designer”</strong> → <code>t_flow_designer.py</code>
+(2,620 bytes)</li>
+<li><strong>“Test Runner”</strong> → <code>t_test_runner.py</code>
+(2,625 bytes)</li>
+<li><strong>“Workflow Monitor”</strong> →
+<code>t_workflow_monitor.py</code> (2,992 bytes)</li>
+<li><strong>“Health Dashboard”</strong> →
+<code>t_health_dashboard.py</code> (3,849 bytes)</li>
 </ul>
 </div>
-<div id="test-c-premium-focus" class="section level3">
-<h3>Test C: Premium Focus</h3>
+</div>
+<div id="recommendation-refactor-to-modular-architecture" class="section level2">
+<h2>RECOMMENDATION: Refactor to Modular Architecture</h2>
+<div id="current-bad" class="section level3">
+<h3>Current (BAD):</h3>
+<pre class="python"><code># flow_creator_v3.py - 5,555 lines!
+class FlowCreatorV3Portal:
+    def _render_create_flow_page(self):  # 500+ lines
+    def _render_existing_flows_page(self):  # 600+ lines
+    def _render_run_page(self):  # 400+ lines
+    # etc...</code></pre>
+</div>
+<div id="proposed-good" class="section level3">
+<h3>Proposed (GOOD):</h3>
+<pre class="python"><code># flow_creator_v3_modular.py - ~200 lines
+from t_create_flow import CreateFlowTab
+from t_existing_flows import ExistingFlowsTab
+from t_run import RunTab
+from t_test_designer import TestDesignerTab
+from t_ai_advisor import AIAdvisorTab
+
+class FlowCreatorV3Portal:
+    def __init__(self):
+        self.create_tab = CreateFlowTab()
+        self.manage_tab = ExistingFlowsTab()
+        self.run_tab = RunTab()
+        self.optimize_tab = TestDesignerTab()
+        self.ai_tab = AIAdvisorTab()
+
+    def render_portal(self):
+        tab1, tab2, tab3, tab4, tab5 = st.tabs([
+            &quot;➕ Create&quot;, &quot;📁 Manage&quot;, &quot;🚀 Run&quot;,
+            &quot;⚡ Optimize&quot;, &quot;🤖 Ask AI&quot;
+        ])
+
+        with tab1:
+            self.create_tab.render()
+        with tab2:
+            self.manage_tab.render()
+        # etc...</code></pre>
+</div>
+</div>
+<div id="benefits-of-using-t_-files" class="section level2">
+<h2>Benefits of Using T_ Files:</h2>
+<ol style="list-style-type: decimal">
+<li><strong>Maintainability</strong>: Each tab is a separate file</li>
+<li><strong>Testability</strong>: Can test each component
+independently</li>
+<li><strong>Performance</strong>: Load only what’s needed</li>
+<li><strong>Collaboration</strong>: Multiple developers can work on
+different tabs</li>
+<li><strong>Debugging</strong>: Easier to find and fix issues</li>
+</ol>
+</div>
+<div id="file-sizes-comparison" class="section level2">
+<h2>File Sizes Comparison:</h2>
 <ul>
-<li><strong>Description</strong>: Fast initial + premium 3.5 Sonnet
-enhancement for superior quality</li>
-<li><strong>Initial Confidence</strong>: 0.60</li>
-<li><strong>Final Confidence</strong>: 0.90</li>
-<li><strong>Improvement Summary</strong>: Increased confidence by
-0.3</li>
+<li><strong>Monolithic</strong>: flow_creator_v3.py = 5,555 lines</li>
+<li><strong>Modular Total</strong>: All t_ files = ~3,000 lines
+combined</li>
+<li><strong>Reduction</strong>: ~45% less code with better
+organization</li>
 </ul>
 </div>
+<div id="action-items" class="section level2">
+<h2>Action Items:</h2>
+<ol style="list-style-type: decimal">
+<li>✅ Map tabs to t_ files (DONE)</li>
+<li>🔄 Create modular loader that uses t_ files</li>
+<li>🔄 Test modular version</li>
+<li>🔄 Deprecate monolithic version</li>
+</ol>
 </div>
 </div>
 

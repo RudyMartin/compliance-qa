@@ -30,7 +30,7 @@ def main():
     print("=" * 60)
 
     # Get the portal file path (go up from domain/scripts to root, then to portals/setup)
-    # Path: domain/scripts/run_new_setup_portal.py -> qa-shipping/portals/setup/new_setup_portal.py
+    # Path: domain/scripts/run_new_setup_portal.py -> compliance-qa/portals/setup/new_setup_portal.py
     portal_file = Path(__file__).parent.parent.parent / "portals" / "setup" / "new_setup_portal.py"
 
     # Check if the file exists
@@ -46,7 +46,7 @@ def main():
             portal_file = alt_portal
             print(f"Found portal at alternative location: {portal_file}")
         else:
-            print("\nPlease ensure you're running this from the qa-shipping root directory")
+            print("\nPlease ensure you're running this from the compliance-qa root directory")
             return 1
 
     print(f"\nLaunching portal from: {portal_file}")

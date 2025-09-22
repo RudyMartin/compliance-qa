@@ -1,7 +1,7 @@
 # Phase 1 Completion Summary: Security & Configuration Cleanup
 
 ## Overview
-Phase 1 of the qa-shipping portal improvement project has been successfully completed. This phase focused on eliminating security vulnerabilities and implementing secure configuration management using lessons learned from hexagonal architecture without requiring full conversion.
+Phase 1 of the compliance-qa portal improvement project has been successfully completed. This phase focused on eliminating security vulnerabilities and implementing secure configuration management using lessons learned from hexagonal architecture without requiring full conversion.
 
 ## Completed Tasks
 
@@ -147,13 +147,13 @@ AWS_REGION=us-east-1
 
 ### Validate System
 ```bash
-cd C:\Users\marti\qa-shipping
+cd C:\Users\marti\compliance-qa
 python scripts/validate_environment.py
 ```
 
 ### Start All Portals
 ```bash
-cd C:\Users\marti\qa-shipping
+cd C:\Users\marti\compliance-qa
 python scripts/portal_startup.py
 ```
 

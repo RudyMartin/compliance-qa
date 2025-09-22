@@ -1,5 +1,5 @@
 """
-Environment Manager for qa-shipping Portal System
+Environment Manager for compliance-qa Portal System
 
 Centralized environment variable and configuration management.
 Eliminates hardcoded credentials and provides secure config access.
@@ -59,7 +59,7 @@ class MLflowConfig:
 
 class EnvironmentManager:
     """
-    Centralized environment management for qa-shipping.
+    Centralized environment management for compliance-qa.
 
     Handles secure credential loading, environment validation,
     and configuration management across all portals.
