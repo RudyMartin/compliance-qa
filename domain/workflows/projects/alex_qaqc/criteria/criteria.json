@@ -1,0 +1,113 @@
+{
+  "workflow_criteria": {
+    "name": "Alex QAQC - Quality Assurance & Quality Control",
+    "description": "4-step QAQC workflow for comprehensive document analysis with metadata extraction, analysis, aggregation, and recording of 5 analysis questions",
+    "version": "1.0",
+    "supports_pdf": true
+  },
+  "processing_criteria": {
+    "file_types": ["pdf"],
+    "max_file_size_mb": 50,
+    "max_files_per_batch": 5,
+    "timeout_per_file_ms": 45000,
+    "quality_threshold": 0.85,
+    "confidence_threshold": 0.8
+  },
+  "analysis_criteria": {
+    "metadata_extraction": {
+      "required_fields": [
+        "document_title",
+        "document_type",
+        "author",
+        "version",
+        "creation_date",
+        "page_count",
+        "text_length"
+      ],
+      "optional_fields": [
+        "subject",
+        "keywords",
+        "language",
+        "file_size"
+      ],
+      "min_confidence": 0.8
+    },
+    "quality_assessment": {
+      "criteria": [
+        "text_clarity",
+        "structure_coherence",
+        "content_completeness",
+        "formatting_consistency",
+        "readability_score"
+      ],
+      "scoring_scale": "0.0-1.0",
+      "min_acceptable_score": 0.7
+    },
+    "compliance_check": {
+      "standards": [
+        "document_structure",
+        "required_sections",
+        "formatting_standards",
+        "content_requirements"
+      ],
+      "validation_rules": [
+        "has_title",
+        "has_author",
+        "has_version",
+        "has_content"
+      ]
+    },
+    "technical_analysis": {
+      "focus_areas": [
+        "technical_accuracy",
+        "procedure_clarity",
+        "safety_requirements",
+        "implementation_feasibility"
+      ],
+      "depth_levels": ["surface", "detailed", "comprehensive"]
+    }
+  },
+  "question_criteria": {
+    "required_questions": 6,
+    "question_categories": [
+      "Quality Assessment",
+      "Compliance Status",
+      "Technical Analysis",
+      "Content Validation",
+      "Recommendations"
+    ],
+    "answer_requirements": {
+      "min_length": 50,
+      "max_length": 500,
+      "include_evidence": true,
+      "include_confidence_score": true
+    }
+  },
+  "output_criteria": {
+    "primary_outputs": [
+      "alex_qaqc_complete_report.json",
+      "five_analysis_questions.json",
+      "alex_qaqc_summary.json"
+    ],
+    "supporting_outputs": [
+      "document_metadata.json",
+      "quality_assessment.json",
+      "compliance_results.json",
+      "technical_analysis.json",
+      "aggregated_analysis.json"
+    ],
+    "format_requirements": {
+      "encoding": "utf-8",
+      "structure": "json",
+      "include_timestamps": true,
+      "include_confidence_scores": true,
+      "include_source_references": true
+    }
+  },
+  "performance_criteria": {
+    "max_processing_time_ms": 45000,
+    "min_success_rate": 0.95,
+    "min_quality_score": 0.85,
+    "max_retry_attempts": 2
+  }
+}

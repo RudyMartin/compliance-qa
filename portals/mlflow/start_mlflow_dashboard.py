@@ -7,7 +7,22 @@ import yaml
 import subprocess
 import webbrowser
 import time
+import os
 from pathlib import Path
+
+# PathManager import with fallback
+try:
+    from core.utilities.path_manager import get_path_manager
+except ImportError:
+    try:
+        from common.utilities.path_manager import get_path_manager
+    except ImportError:
+        def get_path_manager():
+            class MockPathManager:
+                @property
+                def root_folder(self):
+                    return os.getcwd()
+            return MockPathManager()
 
 def start_mlflow_dashboard():
     """Start MLflow UI dashboard on port 5000"""
@@ -15,7 +30,8 @@ def start_mlflow_dashboard():
     print("=" * 50)
     
     # Load credentials
-    settings_path = Path("C:/Users/marti/AI-Scoring/tidyllm/admin/settings.yaml")
+    path_manager = get_path_manager()
+    settings_path = Path(path_manager.root_folder) / "tidyllm" / "admin" / "settings.yaml"
     with open(settings_path, 'r') as f:
         config = yaml.safe_load(f)
     

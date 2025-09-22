@@ -1,6 +1,6 @@
 """
-TidyLLM Chat Workflow Interface
-===============================
+Chat Workflow Interface
+=======================
 
 Simple chat interface with Flow Agreement sidebar for workflow launching.
 Supports both predefined Flow Agreements and bracket commands like [mvr_analysis].
@@ -601,7 +601,7 @@ What type of document analysis do you need help with?
 def main():
     """Main Streamlit app."""
     st.set_page_config(
-        page_title="TidyLLM Workflow Chat",
+        page_title="Chat Workflow Interface",
         page_icon="💬",
         layout="wide",
         initial_sidebar_state="expanded"

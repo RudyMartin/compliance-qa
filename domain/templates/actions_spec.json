@@ -1,0 +1,350 @@
+{
+  "spec_version": "1.0.0",
+  "name": "Business Workflow Actions",
+  "default_llm_model": "bedrock.claude-sonnet-3.5",
+  "actions": [
+    {
+      "type": "ingest_docs",
+      "title": "Ingest Docs",
+      "description": "Load documents from upload, S3, or local path and normalize to text + metadata.",
+      "requires": [],
+      "produces": ["documents"],
+      "inputs": {},
+      "params": {
+        "source": { "type": "string", "enum": ["upload", "s3", "local"], "default": "s3" },
+        "path_or_glob": { "type": "string", "required": false, "description": "e.g., s3://bucket/path/*.pdf" },
+        "include_types": { "type": "array", "items": { "type": "string" }, "default": ["pdf","docx","txt"] },
+        "exclude_glob": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "max_files": { "type": "integer", "minimum": 1, "default": 100 },
+        "recursive": { "type": "boolean", "default": true },
+        "ocr": { "type": "boolean", "default": false }
+      },
+      "output_schema": {
+        "documents": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "doc_id": { "type": "string" },
+              "uri": { "type": "string" },
+              "text": { "type": "string" },
+              "metadata": {
+                "type": "object",
+                "properties": {
+                  "mime_type": { "type": "string" },
+                  "pages": { "type": "integer" },
+                  "size_bytes": { "type": "integer" },
+                  "sha256": { "type": "string" },
+                  "created_at": { "type": "string" }
+                },
+                "required": ["mime_type"]
+              }
+            },
+            "required": ["doc_id", "uri", "text", "metadata"]
+          }
+        }
+      },
+      "validation_rules": [
+        "If source in ['s3','local'] then path_or_glob must be provided",
+        "include_types must not be empty"
+      ],
+      "errors": ["PATH_NOT_FOUND", "FILETYPE_UNSUPPORTED", "READ_ERROR"],
+      "metrics": ["files_seen", "files_loaded", "bytes_total", "duration_ms"]
+    },
+    {
+      "type": "classify_intent",
+      "title": "Classify Intent",
+      "description": "Determine the business goal/topic to guide downstream steps.",
+      "requires": [],
+      "produces": ["intent"],
+      "inputs": { "brief": { "type": "string", "required": false } },
+      "params": {
+        "labels": { "type": "array", "items": { "type": "string" }, "default": ["supplier_risk","policy_review","invoice_audit"] },
+        "llm_model": { "type": "string", "default": "auto" },
+        "confidence_threshold": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.6 }
+      },
+      "output_schema": {
+        "intent": {
+          "type": "object",
+          "properties": {
+            "label": { "type": "string" },
+            "confidence": { "type": "number" },
+            "rationale": { "type": "string" },
+            "needs_review": { "type": "boolean" }
+          },
+          "required": ["label", "confidence"]
+        }
+      },
+      "validation_rules": [
+        "If confidence < confidence_threshold then set needs_review=true"
+      ],
+      "errors": ["NO_SIGNAL"],
+      "metrics": ["confidence", "tokens", "duration_ms"]
+    },
+    {
+      "type": "extract_key_terms",
+      "title": "Extract Key Terms",
+      "description": "Find specific fields/clauses in documents and return best snippets.",
+      "requires": ["documents"],
+      "produces": ["extracted_terms"],
+      "inputs": {},
+      "params": {
+        "schema": { "type": "array", "items": { "type": "string" }, "default": ["termination","payment_terms","penalties"] },
+        "method": { "type": "string", "enum": ["regex","llm","hybrid"], "default": "hybrid" },
+        "regex_map": { "type": "object", "additionalProperties": { "type": "string" }, "required": false },
+        "top_k_snippets": { "type": "integer", "minimum": 1, "default": 3 }
+      },
+      "output_schema": {
+        "extracted_terms": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "status": { "type": "string", "enum": ["found","missing","ambiguous"], "default": "missing" },
+              "values": { "type": "array", "items": { "type": "string" } },
+              "snippets": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "text": { "type": "string" },
+                    "page": { "type": "integer" },
+                    "start": { "type": "integer" },
+                    "end": { "type": "integer" },
+                    "score": { "type": "number" }
+                  },
+                  "required": ["text"]
+                }
+              }
+            },
+            "required": ["status","values","snippets"]
+          }
+        }
+      },
+      "validation_rules": ["All fields in schema must exist in extracted_terms map"],
+      "errors": ["NO_DOCUMENTS", "EXTRACTION_FAILED"],
+      "metrics": ["fields_requested", "fields_found", "tokens", "duration_ms"]
+    },
+    {
+      "type": "summarize_findings",
+      "title": "Summarize Findings",
+      "description": "Produce a concise human summary of the key findings.",
+      "requires": ["extracted_terms"],
+      "produces": ["summary"],
+      "inputs": {},
+      "params": {
+        "style": { "type": "string", "enum": ["bullet","narrative"], "default": "bullet" },
+        "length": { "type": "string", "enum": ["short","medium","long"], "default": "short" },
+        "tone": { "type": "string", "enum": ["neutral","executive","detailed"], "default": "neutral" },
+        "llm_model": { "type": "string", "default": "auto" }
+      },
+      "output_schema": { "summary": { "type": "string" } },
+      "validation_rules": ["summary must not be empty"],
+      "errors": ["SUMMARIZATION_FAILED"],
+      "metrics": ["tokens", "duration_ms"]
+    },
+    {
+      "type": "score_risk",
+      "title": "Score Risk",
+      "description": "Compute a 0–100 risk score using deterministic rules; optionally add LLM rationale.",
+      "requires": ["extracted_terms"],
+      "produces": ["risk_score"],
+      "inputs": {},
+      "params": {
+        "ruleset": { "type": "string", "description": "ID or URI of rules JSON/CSV", "default": "finance_risk_v1" },
+        "llm_justify": { "type": "boolean", "default": true },
+        "bounds": {
+          "type": "object",
+          "properties": { "min": { "type": "number", "default": 0 }, "max": { "type": "number", "default": 100 } }
+        }
+      },
+      "output_schema": {
+        "risk_score": {
+          "type": "object",
+          "properties": {
+            "score": { "type": "number" },
+            "drivers": { "type": "array", "items": { "type": "string" } },
+            "rationale": { "type": "string" }
+          },
+          "required": ["score","drivers"]
+        }
+      },
+      "validation_rules": [
+        "score must be between bounds.min and bounds.max"
+      ],
+      "errors": ["RULESET_NOT_FOUND", "SCORING_FAILED"],
+      "metrics": ["score", "drivers_count", "tokens", "duration_ms"]
+    },
+    {
+      "type": "validate_evidence",
+      "title": "Validate Evidence",
+      "description": "Check coverage of required evidence against extracted terms and documents.",
+      "requires": ["extracted_terms","documents"],
+      "produces": ["evidence_report"],
+      "inputs": {},
+      "params": {
+        "checklist_id": { "type": "string", "default": "supplier_finance_minimum" },
+        "min_coverage": { "type": "number", "minimum": 0, "maximum": 1, "default": 0.8 },
+        "require_snippet": { "type": "boolean", "default": true }
+      },
+      "output_schema": {
+        "evidence_report": {
+          "type": "object",
+          "properties": {
+            "coverage": { "type": "number" },
+            "present_items": { "type": "array", "items": { "type": "string" } },
+            "missing_items": { "type": "array", "items": { "type": "string" } },
+            "examples": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": { "item": { "type": "string" }, "snippet": { "type": "string" }, "doc_id": { "type": "string" } },
+                "required": ["item"]
+              }
+            },
+            "needs_fix": { "type": "boolean" }
+          },
+          "required": ["coverage","present_items","missing_items"]
+        }
+      },
+      "validation_rules": [
+        "If coverage < min_coverage then set needs_fix=true"
+      ],
+      "errors": ["CHECKLIST_NOT_FOUND"],
+      "metrics": ["coverage", "missing_count", "duration_ms"]
+    },
+    {
+      "type": "generate_report",
+      "title": "Generate Report",
+      "description": "Render a stakeholder-ready PDF/DOCX with summary, findings, score, and next steps.",
+      "requires": ["summary","risk_score","evidence_report"],
+      "produces": ["report_file","report_meta"],
+      "inputs": {},
+      "params": {
+        "format": { "type": "string", "enum": ["pdf","docx"], "default": "pdf" },
+        "sections": { "type": "array", "items": { "type": "string" }, "default": ["summary","findings","risk_score","next_steps"] },
+        "template_id": { "type": "string", "required": false },
+        "include_pii_scan": { "type": "boolean", "default": true },
+        "out_path": { "type": "string", "required": false }
+      },
+      "output_schema": {
+        "report_file": {
+          "type": "object",
+          "properties": { "uri": { "type": "string" }, "pages": { "type": "integer" }, "created_at": { "type": "string" } },
+          "required": ["uri"]
+        },
+        "report_meta": {
+          "type": "object",
+          "properties": { "template_id": { "type": "string" }, "sections": { "type": "array", "items": { "type": "string" } } }
+        }
+      },
+      "validation_rules": [
+        "sections must contain at least 'summary' and 'next_steps'"
+      ],
+      "errors": ["TEMPLATE_NOT_FOUND", "RENDER_FAILED"],
+      "metrics": ["render_time_ms", "pages", "pii_hits"]
+    },
+    {
+      "type": "notify",
+      "title": "Notify",
+      "description": "Send the result to recipients via Email/Slack/Webhook.",
+      "requires": ["report_file"],
+      "produces": ["notification_receipt"],
+      "inputs": {},
+      "params": {
+        "channel": { "type": "string", "enum": ["email","slack","webhook"], "default": "email" },
+        "to": { "type": "array", "items": { "type": "string" }, "default": [] },
+        "subject": { "type": "string", "default": "Workflow Report" },
+        "message_template": { "type": "string", "default": "Report ready: {{ report_file.uri }}" },
+        "attach_file": { "type": "boolean", "default": false }
+      },
+      "output_schema": {
+        "notification_receipt": {
+          "type": "object",
+          "properties": { "status": { "type": "string" }, "provider_id": { "type": "string" }, "timestamp": { "type": "string" } },
+          "required": ["status"]
+        }
+      },
+      "validation_rules": ["At least one recipient must be present in 'to'"],
+      "errors": ["DELIVERY_FAILED", "INVALID_RECIPIENT"],
+      "metrics": ["recipients_count", "delivery_status", "duration_ms"]
+    },
+    {
+      "type": "store_results",
+      "title": "Store Results",
+      "description": "Persist JSON outcomes and artifacts to S3 or DB for auditability.",
+      "requires": ["summary","risk_score","evidence_report","report_file"],
+      "produces": ["storage_receipts"],
+      "inputs": {},
+      "params": {
+        "store": { "type": "string", "enum": ["s3","db"], "default": "s3" },
+        "path_or_table": { "type": "string", "default": "s3://workflow-outputs/" },
+        "run_id": { "type": "string", "required": false },
+        "metadata": { "type": "object", "required": false }
+      },
+      "output_schema": {
+        "storage_receipts": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": { "target": { "type": "string" }, "id_or_uri": { "type": "string" }, "status": { "type": "string" } },
+            "required": ["target","status"]
+          }
+        }
+      },
+      "validation_rules": ["path_or_table must be a valid URI or table name"],
+      "errors": ["WRITE_FAILED", "PERMISSION_DENIED"],
+      "metrics": ["objects_written", "bytes_written", "duration_ms"]
+    },
+    {
+      "type": "review_queue",
+      "title": "Review Queue",
+      "description": "Create a human review task when certain conditions are met.",
+      "requires": ["risk_score","evidence_report"],
+      "produces": ["review_ticket"],
+      "inputs": {},
+      "params": {
+        "assignee": { "type": "string", "required": false },
+        "priority": { "type": "string", "enum": ["low","med","high"], "default": "med" },
+        "enqueue_when": {
+          "type": "object",
+          "properties": {
+            "score_gt": { "type": "number", "required": false },
+            "coverage_lt": { "type": "number", "required": false },
+            "always": { "type": "boolean", "default": false }
+          }
+        }
+      },
+      "output_schema": {
+        "review_ticket": {
+          "type": "object",
+          "properties": {
+            "created": { "type": "boolean" },
+            "id": { "type": "string" },
+            "url": { "type": "string" },
+            "reason": { "type": "string" }
+          },
+          "required": ["created"]
+        }
+      },
+      "validation_rules": [
+        "If enqueue_when.always=true OR score > score_gt OR coverage < coverage_lt then created=true"
+      ],
+      "errors": ["QUEUE_UNAVAILABLE", "ASSIGNEE_NOT_FOUND"],
+      "metrics": ["tickets_created", "sla_due_at", "duration_ms"]
+    }
+  ],
+  "artifacts": {
+    "documents": "Array of normalized documents (text + metadata).",
+    "intent": "Detected business intent with confidence.",
+    "extracted_terms": "Map of requested fields to values and supporting snippets.",
+    "summary": "Human-readable summary text.",
+    "risk_score": "Numeric score 0–100 with drivers and optional rationale.",
+    "evidence_report": "Coverage metrics, present/missing items, examples, needs_fix flag.",
+    "report_file": "Rendered report artifact (URI and metadata).",
+    "report_meta": "Extra info about the report generation.",
+    "notification_receipt": "Receipt from messaging provider.",
+    "storage_receipts": "List of persisted objects/rows and their URIs/IDs.",
+    "review_ticket": "Queue ticket record or a created=false stub."
+  }
+}

@@ -1,0 +1,334 @@
+{
+  "gap_analysis": {
+    "model_id": "REV00001_renamed",
+    "expected_sections": 9,
+    "actual_sections": 20,
+    "missing_sections": 0,
+    "incomplete_sections": 9,
+    "findings": [
+      {
+        "severity": "medium",
+        "title": "Incomplete Validation in 9 Sections",
+        "detail": "Found 9 sections with incomplete validation work. Sections contain TODO items, lack sufficient detail, or are missing reviewer signatures."
+      }
+    ],
+    "pending_items": [
+      "Finalize A: Planning & Scoping - resolve TODO items and obtain reviewer sign-off",
+      "Finalize B: Stakeholders & Governance Setup - resolve TODO items and obtain reviewer sign-off",
+      "Finalize C: Regulatory & Policy Alignment - resolve TODO items and obtain reviewer sign-off",
+      "Finalize D: Conceptual Soundness \u2013 Theory - resolve TODO items and obtain reviewer sign-off",
+      "Finalize E: Conceptual Soundness \u2013 Variables - resolve TODO items and obtain reviewer sign-off",
+      "Finalize F: Data Governance - resolve TODO items and obtain reviewer sign-off",
+      "Finalize I: Development Practices \u2013 Estimation - resolve TODO items and obtain reviewer sign-off",
+      "Finalize J: Model Performance \u2013 In-Sample - resolve TODO items and obtain reviewer sign-off",
+      "Finalize L: Stress Testing & Sensitivity - resolve TODO items and obtain reviewer sign-off"
+    ]
+  },
+  "judge_scores": {
+    "compliance": {
+      "score": 5,
+      "justification": "Model validation shows 0 missing required sections and 9 incomplete sections, indicating gaps in regulatory compliance.",
+      "evidence_refs": [
+        "Missing: 0 sections",
+        "Incomplete: 9 sections"
+      ]
+    },
+    "coverage": {
+      "score": 11,
+      "justification": "Validation covers 222.2% of required sections based on model characteristics. Coverage analysis shows systematic gaps in validation scope.",
+      "evidence_refs": [
+        "Coverage rate: 222.2%",
+        "Expected sections: 9"
+      ]
+    },
+    "clarity": {
+      "score": 3,
+      "justification": "Review structure follows standard format. Some sections lack sufficient detail or contain TODO items affecting clarity.",
+      "evidence_refs": [
+        "Incomplete sections: 9"
+      ]
+    },
+    "challenge": {
+      "score": 2,
+      "justification": "Limited evidence of independent challenge and validation. Missing sections suggest insufficient depth in validation approach.",
+      "evidence_refs": [
+        "Missing validation sections: 0"
+      ]
+    }
+  },
+  "overall_assessment": {
+    "weighted_score": 27.5,
+    "verdict": "fail",
+    "missing_evidence": [],
+    "top_3_remediations": [
+      "Finalize A: Planning & Scoping - resolve TODO items and obtain reviewer sign-off",
+      "Finalize B: Stakeholders & Governance Setup - resolve TODO items and obtain reviewer sign-off",
+      "Finalize C: Regulatory & Policy Alignment - resolve TODO items and obtain reviewer sign-off"
+    ]
+  },
+  "requirements_analysis": {
+    "current_model": {
+      "model_type": "Traditional",
+      "risk_tier": "High",
+      "review_activity": "Full Scope Validation",
+      "is_third_party": false,
+      "total_required": 9,
+      "vst_required": 9,
+      "section_numbers": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "I",
+        "J",
+        "L"
+      ],
+      "vst_section_numbers": [
+        "A",
+        "B",
+        "C",
+        "D",
+        "E",
+        "F",
+        "I",
+        "J",
+        "L"
+      ]
+    },
+    "by_model_type": {
+      "AI/ML": {
+        "total_required": 10,
+        "vst_required": 10,
+        "section_numbers": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "H",
+          "I",
+          "J",
+          "L"
+        ],
+        "vst_section_numbers": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "H",
+          "I",
+          "J",
+          "L"
+        ],
+        "is_current_model": false
+      },
+      "Traditional": {
+        "total_required": 9,
+        "vst_required": 9,
+        "section_numbers": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "I",
+          "J",
+          "L"
+        ],
+        "vst_section_numbers": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "I",
+          "J",
+          "L"
+        ],
+        "is_current_model": true
+      },
+      "Integrator": {
+        "total_required": 7,
+        "vst_required": 7,
+        "section_numbers": [
+          "A",
+          "B",
+          "C",
+          "E",
+          "F",
+          "I",
+          "J"
+        ],
+        "vst_section_numbers": [
+          "A",
+          "B",
+          "C",
+          "E",
+          "F",
+          "I",
+          "J"
+        ],
+        "is_current_model": false
+      },
+      "Qualitative": {
+        "total_required": 4,
+        "vst_required": 4,
+        "section_numbers": [
+          "A",
+          "B",
+          "F",
+          "J"
+        ],
+        "vst_section_numbers": [
+          "A",
+          "B",
+          "F",
+          "J"
+        ],
+        "is_current_model": false
+      },
+      "GenAI": {
+        "total_required": 10,
+        "vst_required": 10,
+        "section_numbers": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "H",
+          "I",
+          "J",
+          "L"
+        ],
+        "vst_section_numbers": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "H",
+          "I",
+          "J",
+          "L"
+        ],
+        "is_current_model": false
+      },
+      "SDC": {
+        "total_required": 7,
+        "vst_required": 7,
+        "section_numbers": [
+          "A",
+          "B",
+          "C",
+          "E",
+          "F",
+          "I",
+          "J"
+        ],
+        "vst_section_numbers": [
+          "A",
+          "B",
+          "C",
+          "E",
+          "F",
+          "I",
+          "J"
+        ],
+        "is_current_model": false
+      }
+    },
+    "by_risk_tier": {
+      "High": {
+        "total_required": 9,
+        "vst_required": 9,
+        "section_numbers": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "I",
+          "J",
+          "L"
+        ],
+        "vst_section_numbers": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "I",
+          "J",
+          "L"
+        ],
+        "is_current_tier": true
+      },
+      "Medium": {
+        "total_required": 8,
+        "vst_required": 8,
+        "section_numbers": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "I",
+          "J"
+        ],
+        "vst_section_numbers": [
+          "A",
+          "B",
+          "C",
+          "D",
+          "E",
+          "F",
+          "I",
+          "J"
+        ],
+        "is_current_tier": false
+      },
+      "Low": {
+        "total_required": 5,
+        "vst_required": 5,
+        "section_numbers": [
+          "A",
+          "B",
+          "C",
+          "F",
+          "J"
+        ],
+        "vst_section_numbers": [
+          "A",
+          "B",
+          "C",
+          "F",
+          "J"
+        ],
+        "is_current_tier": false
+      }
+    },
+    "key_insights": [
+      "Risk tier scaling: High (9) vs Low (5) = 4 fewer sections for lower risk",
+      "All required sections are VST-scoped (high regulatory scrutiny)"
+    ]
+  },
+  "metadata": {
+    "model_id": "REV00001_renamed",
+    "review_title": "QA Gap Analysis - REV00001_renamed",
+    "judge_version": "MVR-QA-v1.0",
+    "timestamp": "2025-09-12T14:22:32.217231Z"
+  }
+}

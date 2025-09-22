@@ -1,0 +1,520 @@
+{
+  "workflow_config": {
+    "workflow_id": "sequential_analysis_001",
+    "workflow_name": "Sequential Document Analysis Flow",
+    "workflow_type": "analysis",
+    "version": "1.0",
+    "created_at": "2025-01-15T12:00:00Z",
+    "status": "template",
+    "description": "Multi-step sequential analysis workflow with RAG integration and JSON output",
+    "template_fields": {
+      "input_files": {
+        "description": "List of input documents to analyze",
+        "type": "array",
+        "required": true,
+        "default": []
+      },
+      "quality_threshold": {
+        "description": "Minimum quality score required (0.0-1.0)",
+        "type": "number",
+        "required": true,
+        "default": 0.85
+      },
+      "domain_context": {
+        "description": "Domain-specific context for analysis",
+        "type": "string",
+        "required": false,
+        "default": "financial_analysis"
+      },
+      "analysis_depth": {
+        "description": "Analysis depth level",
+        "type": "string",
+        "required": false,
+        "default": "standard",
+        "enum": [
+          "basic",
+          "standard",
+          "comprehensive"
+        ]
+      }
+    },
+    "rag_integration": [
+      "ai_powered",
+      "intelligent",
+      "dspy"
+    ],
+    "steps": [
+      {
+        "step_number": 1,
+        "step_name": "Input Validation",
+        "template_file": "step_01_input_validation.md",
+        "timeout_minutes": 5,
+        "retry_attempts": 3,
+        "rag_systems": [
+          "ai_powered"
+        ],
+        "input_variables": {
+          "input_files": "{input_files}",
+          "validation_criteria": "document_completeness",
+          "quality_threshold": "{quality_threshold}"
+        },
+        "expected_output": {
+          "validation_status": "passed|failed|warning",
+          "document_summary": "object",
+          "document_metadata": "array",
+          "next_step_ready": "boolean"
+        },
+        "resolved_input_variables": {
+          "input_files": [
+            "C:\\Users\\marti\\AI-Shipping\\tidyllm\\workflows\\definitions\\workflows\\templates\\inputs\\document_016.pdf",
+            "C:\\Users\\marti\\AI-Shipping\\tidyllm\\workflows\\definitions\\workflows\\templates\\inputs\\model_validation_report.pdf",
+            "C:\\Users\\marti\\AI-Shipping\\tidyllm\\workflows\\definitions\\workflows\\templates\\inputs\\sample_document.md"
+          ],
+          "validation_criteria": "document_completeness",
+          "quality_threshold": 0.85
+        }
+      },
+      {
+        "step_number": 2,
+        "step_name": "Data Extraction",
+        "template_file": "step_02_data_extraction.md",
+        "timeout_minutes": 10,
+        "retry_attempts": 2,
+        "rag_systems": [
+          "ai_powered",
+          "intelligent"
+        ],
+        "depends_on": [
+          1
+        ],
+        "input_variables": {
+          "validated_documents": "{previous_step_output}",
+          "extraction_schema": "financial_entities",
+          "entity_types": [
+            "people",
+            "organizations",
+            "amounts",
+            "dates"
+          ],
+          "domain_context": "{domain_context}"
+        },
+        "expected_output": {
+          "extraction_status": "completed|partial|failed",
+          "extracted_data": "object",
+          "source_mapping": "object",
+          "processing_notes": "array"
+        },
+        "resolved_input_variables": {
+          "validated_documents": "Output from step 1",
+          "extraction_schema": "financial_entities",
+          "entity_types": [
+            "people",
+            "organizations",
+            "amounts",
+            "dates"
+          ],
+          "domain_context": "financial_analysis"
+        }
+      },
+      {
+        "step_number": 3,
+        "step_name": "Pattern Analysis",
+        "template_file": "step_03_analysis.md",
+        "timeout_minutes": 15,
+        "retry_attempts": 2,
+        "rag_systems": [
+          "ai_powered",
+          "intelligent",
+          "dspy"
+        ],
+        "depends_on": [
+          2
+        ],
+        "input_variables": {
+          "extracted_data": "{previous_step_output}",
+          "analysis_framework": "pattern_recognition",
+          "comparison_baselines": "industry_standards",
+          "analysis_depth": "{analysis_depth}"
+        },
+        "expected_output": {
+          "analysis_status": "completed|in_progress|failed",
+          "findings": "object",
+          "risk_indicators": "array",
+          "recommendations": "array"
+        },
+        "resolved_input_variables": {
+          "extracted_data": "Output from step 2",
+          "analysis_framework": "pattern_recognition",
+          "comparison_baselines": "industry_standards",
+          "analysis_depth": "comprehensive"
+        }
+      },
+      {
+        "step_number": 4,
+        "step_name": "Report Synthesis",
+        "template_file": "step_04_synthesis.md",
+        "timeout_minutes": 8,
+        "retry_attempts": 2,
+        "rag_systems": [
+          "ai_powered",
+          "dspy"
+        ],
+        "depends_on": [
+          3
+        ],
+        "input_variables": {
+          "analysis_results": "{previous_step_output}",
+          "report_template": "executive_summary",
+          "output_format": "comprehensive"
+        },
+        "expected_output": {
+          "synthesis_status": "completed|failed",
+          "executive_summary": "string",
+          "detailed_findings": "object",
+          "action_items": "array",
+          "confidence_score": "number"
+        },
+        "resolved_input_variables": {
+          "analysis_results": "Output from step 3",
+          "report_template": "executive_summary",
+          "output_format": "comprehensive"
+        }
+      },
+      {
+        "step_number": 5,
+        "step_name": "Output Generation",
+        "template_file": "step_05_output_generation.md",
+        "timeout_minutes": 5,
+        "retry_attempts": 1,
+        "rag_systems": [
+          "ai_powered"
+        ],
+        "depends_on": [
+          4
+        ],
+        "input_variables": {
+          "synthesis_results": "{previous_step_output}",
+          "output_format": "json",
+          "include_metadata": true
+        },
+        "expected_output": {
+          "final_report": "object",
+          "metadata": "object",
+          "processing_summary": "object",
+          "status": "completed"
+        },
+        "resolved_input_variables": {
+          "synthesis_results": "Output from step 4",
+          "output_format": "json",
+          "include_metadata": true
+        }
+      }
+    ],
+    "execution_config": {
+      "execution_mode": "sequential",
+      "parallel_steps": [],
+      "error_handling": "stop_on_critical_error",
+      "checkpoint_after_each_step": true,
+      "max_total_runtime_minutes": 60
+    },
+    "output_specification": {
+      "primary_output": {
+        "format": "json",
+        "schema": {
+          "workflow_id": "string",
+          "execution_timestamp": "string",
+          "total_processing_time_ms": "number",
+          "step_results": "array",
+          "final_analysis": {
+            "executive_summary": "string",
+            "key_findings": "array",
+            "risk_assessment": "object",
+            "recommendations": "array",
+            "confidence_metrics": "object"
+          },
+          "metadata": {
+            "input_files_processed": "array",
+            "rag_systems_used": "array",
+            "quality_scores": "object",
+            "processing_notes": "array"
+          },
+          "audit_trail": {
+            "steps_executed": "array",
+            "errors_encountered": "array",
+            "recovery_actions": "array",
+            "final_status": "string"
+          }
+        }
+      },
+      "secondary_outputs": [
+        {
+          "name": "processing_log",
+          "format": "json",
+          "location": "outputs/processing_log.json"
+        },
+        {
+          "name": "extracted_entities",
+          "format": "csv",
+          "location": "outputs/entities.csv"
+        }
+      ]
+    },
+    "flow_encoding": "@sequential_analysis#validate!extract@analyze!synthesize@output",
+    "project_structure": {
+      "criteria": true,
+      "outputs": true,
+      "resources": true,
+      "templates": true
+    }
+  },
+  "execution_results": [
+    {
+      "step_number": 1,
+      "step_name": "Input Validation",
+      "status": "completed",
+      "processing_time_ms": 100.508,
+      "output": {
+        "validation_status": "passed",
+        "document_summary": {
+          "total_files": 3,
+          "valid_files": 3,
+          "invalid_files": 0,
+          "warnings": []
+        },
+        "document_metadata": [
+          {
+            "filename": "model_validation_report.pdf",
+            "type": "financial_report",
+            "quality_score": 0.92,
+            "metadata": {
+              "pages": 25,
+              "size_mb": 1.7
+            },
+            "issues": []
+          }
+        ],
+        "next_step_ready": true
+      },
+      "timestamp": "2025-09-16T21:25:34.248361"
+    },
+    {
+      "step_number": 2,
+      "step_name": "Data Extraction",
+      "status": "completed",
+      "processing_time_ms": 200.25,
+      "output": {
+        "extraction_status": "completed",
+        "extracted_data": {
+          "entities": {
+            "people": [
+              "John Smith",
+              "Jane Doe"
+            ],
+            "organizations": [
+              "Federal Reserve",
+              "Bank XYZ"
+            ],
+            "dates": [
+              "2019-02-26",
+              "Q4 2024"
+            ],
+            "amounts": [
+              "$2.5M",
+              "$1.8M",
+              "$700K"
+            ]
+          },
+          "key_facts": [
+            "Model validation performed according to SR 11-7",
+            "Risk metrics within acceptable thresholds",
+            "Quarterly performance shows positive trends"
+          ],
+          "structured_data": [
+            {
+              "metric": "VaR",
+              "value": "2.3%",
+              "benchmark": "2.5%"
+            },
+            {
+              "metric": "Backtesting",
+              "value": "Pass",
+              "confidence": "95%"
+            }
+          ],
+          "themes": [
+            "model_validation",
+            "risk_management",
+            "regulatory_compliance"
+          ]
+        },
+        "source_mapping": {
+          "fact_001": {
+            "source_file": "model_validation_report.pdf",
+            "page": 5,
+            "confidence": 0.95
+          }
+        },
+        "processing_notes": [
+          "High confidence extraction",
+          "All entities validated"
+        ]
+      },
+      "timestamp": "2025-09-16T21:25:34.448675"
+    },
+    {
+      "step_number": 3,
+      "step_name": "Pattern Analysis",
+      "status": "completed",
+      "processing_time_ms": 300.43399999999997,
+      "output": {
+        "analysis_status": "completed",
+        "findings": {
+          "key_patterns": [
+            {
+              "pattern_type": "trend",
+              "description": "Consistent improvement in model performance metrics",
+              "significance": "high",
+              "evidence": [
+                "Backtesting results",
+                "VaR accuracy"
+              ]
+            }
+          ],
+          "comparative_results": [
+            {
+              "comparison_type": "benchmark",
+              "result": "above",
+              "variance": 12.5,
+              "significance": "high"
+            }
+          ],
+          "insights": [
+            {
+              "insight": "Model validation framework is robust and compliant",
+              "confidence": 0.91,
+              "impact": "high",
+              "supporting_evidence": [
+                "SR 11-7 compliance",
+                "Backtesting success"
+              ]
+            }
+          ]
+        },
+        "risk_indicators": [
+          "Market volatility sensitivity",
+          "Data quality dependencies"
+        ],
+        "recommendations": [
+          "Continue current validation approach",
+          "Enhance stress testing"
+        ]
+      },
+      "timestamp": "2025-09-16T21:25:34.749172"
+    },
+    {
+      "step_number": 4,
+      "step_name": "Report Synthesis",
+      "status": "completed",
+      "processing_time_ms": 200.379,
+      "output": {
+        "synthesis_status": "completed",
+        "executive_summary": "Model validation analysis demonstrates strong compliance with regulatory requirements and robust risk management practices. Key metrics exceed industry benchmarks with high confidence levels.",
+        "detailed_findings": {
+          "critical_issues": [],
+          "opportunities": [
+            {
+              "opportunity": "Enhanced stress testing protocols",
+              "potential_value": "Improved risk prediction accuracy",
+              "implementation_complexity": "medium"
+            }
+          ],
+          "risk_factors": [
+            {
+              "risk": "Market volatility impact on model accuracy",
+              "probability": "medium",
+              "impact": "medium",
+              "mitigation": "Regular model recalibration"
+            }
+          ]
+        },
+        "action_items": [
+          {
+            "action": "Schedule quarterly model validation review",
+            "priority": "high",
+            "timeline": "1-month",
+            "owner": "Risk Management Team",
+            "resources_required": "Validation specialists",
+            "success_metrics": "Completed review documentation"
+          }
+        ],
+        "confidence_score": 0.89
+      },
+      "timestamp": "2025-09-16T21:25:34.949621"
+    },
+    {
+      "step_number": 5,
+      "step_name": "Output Generation",
+      "status": "completed",
+      "processing_time_ms": 100.059,
+      "output": {
+        "final_report": {
+          "workflow_execution": {
+            "workflow_id": "sequential_analysis_001",
+            "execution_timestamp": "2025-09-16T21:25:35.049749",
+            "total_processing_time_ms": 1445,
+            "status": "completed"
+          },
+          "final_analysis": {
+            "executive_summary": "Model validation analysis demonstrates strong compliance",
+            "key_findings": [
+              "Regulatory compliance achieved",
+              "Performance metrics exceed benchmarks"
+            ],
+            "risk_assessment": {
+              "overall_risk_level": "low"
+            },
+            "recommendations": [
+              "Continue validation approach",
+              "Enhance stress testing"
+            ],
+            "confidence_metrics": {
+              "overall_confidence": 0.89
+            }
+          }
+        },
+        "metadata": {
+          "input_files_processed": [
+            "C:\\Users\\marti\\AI-Shipping\\tidyllm\\workflows\\definitions\\workflows\\templates\\inputs\\document_016.pdf",
+            "C:\\Users\\marti\\AI-Shipping\\tidyllm\\workflows\\definitions\\workflows\\templates\\inputs\\model_validation_report.pdf",
+            "C:\\Users\\marti\\AI-Shipping\\tidyllm\\workflows\\definitions\\workflows\\templates\\inputs\\sample_document.md"
+          ],
+          "rag_systems_used": [
+            "ai_powered",
+            "intelligent",
+            "dspy"
+          ],
+          "processing_environment": {
+            "workflow_version": "1.0"
+          }
+        },
+        "audit_trail": {
+          "steps_executed": [
+            1,
+            2,
+            3,
+            4,
+            5
+          ],
+          "final_status": "completed_successfully"
+        }
+      },
+      "timestamp": "2025-09-16T21:25:35.049739"
+    }
+  ],
+  "summary": {
+    "total_processing_time_ms": 901.63,
+    "steps_completed": 5,
+    "success_rate": 1.0,
+    "input_files_processed": 3
+  }
+}

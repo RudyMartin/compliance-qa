@@ -13,7 +13,7 @@ def _render_criteria_tab():
     st.markdown("### 📋 **JSON Criteria Files**")
 
     # Default to alex_qaqc project
-    project_path = Path("C:/Users/marti/AI-Shipping/tidyllm/workflows/projects/alex_qaqc")
+    project_path = Path(get_path_manager().root_folder) / "domain" / "workflows" / "projects" / "alex_qaqc"
     criteria_path = project_path / "criteria"
 
     if criteria_path.exists():
@@ -57,7 +57,7 @@ def _render_templates_tab():
     st.markdown("### 📝 **Template Files**")
 
     # Default to alex_qaqc project
-    project_path = Path("C:/Users/marti/AI-Shipping/tidyllm/workflows/projects/alex_qaqc")
+    project_path = Path(get_path_manager().root_folder) / "domain" / "workflows" / "projects" / "alex_qaqc"
     templates_path = project_path / "templates"
 
     if templates_path.exists():
@@ -105,7 +105,7 @@ def _render_inputs_tab():
     st.markdown("### 📂 **Input Files**")
 
     # Default to alex_qaqc project
-    project_path = Path("C:/Users/marti/AI-Shipping/tidyllm/workflows/projects/alex_qaqc")
+    project_path = Path(get_path_manager().root_folder) / "domain" / "workflows" / "projects" / "alex_qaqc"
     inputs_path = project_path / "inputs"
 
     if inputs_path.exists():
@@ -156,7 +156,7 @@ def _render_outputs_tab():
     st.markdown("### 📤 **Output Files**")
 
     # Default to alex_qaqc project
-    project_path = Path("C:/Users/marti/AI-Shipping/tidyllm/workflows/projects/alex_qaqc")
+    project_path = Path(get_path_manager().root_folder) / "domain" / "workflows" / "projects" / "alex_qaqc"
     outputs_path = project_path / "outputs"
 
     if outputs_path.exists():
@@ -316,7 +316,7 @@ def _render_workflows_list(workflow_manager, registry):
             st.rerun()
 
         # Get project path
-        project_path = Path("C:/Users/marti/AI-Shipping/tidyllm/workflows/projects") / workflow_id
+        project_path = Path(get_path_manager().root_folder) / "domain" / "workflows" / "projects" / workflow_id
 
         if not project_path.exists():
             st.error(f"❌ Project folder not found: {project_path}")

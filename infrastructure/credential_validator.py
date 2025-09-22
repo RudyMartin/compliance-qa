@@ -13,11 +13,10 @@ from typing import Dict, List, Tuple, Any
 from dataclasses import dataclass
 from datetime import datetime
 import boto3
-    # #future_fix: Convert to use enhanced service infrastructure
-import psycopg2
 from botocore.exceptions import ClientError, NoCredentialsError
 
 from .environment_manager import get_environment_manager
+from .infra_delegate import get_infra_delegate
 
 logger = logging.getLogger(__name__)
 
@@ -73,18 +72,12 @@ class CredentialValidator:
         logger.info("Validating database connection...")
 
         try:
-            db_config = self.env_manager.get_database_config()
+            # Use infrastructure delegate for connection
+            infra = get_infra_delegate()
+            conn = infra.get_db_connection()
 
-            # Test connection
-    # #future_fix: Convert to use enhanced service infrastructure
-            conn = psycopg2.connect(
-                host=db_config.host,
-                port=db_config.port,
-                database=db_config.database,
-                user=db_config.username,
-                password=db_config.password,
-                connect_timeout=10
-            )
+            if not conn:
+                raise Exception("Failed to get database connection from infrastructure")
 
             # Test basic query
             cursor = conn.cursor()
@@ -92,7 +85,7 @@ class CredentialValidator:
             version = cursor.fetchone()[0]
 
             cursor.close()
-            conn.close()
+            infra.return_db_connection(conn)
 
             self.validation_results.append(ValidationResult(
                 component="database",
@@ -218,7 +211,6 @@ class CredentialValidator:
             import requests
 
             # Set tracking URI
-    # #future_fix: Convert to use enhanced service infrastructure
             mlflow.set_tracking_uri(mlflow_config.tracking_uri)
 
             # Test connection with simple request
@@ -340,17 +332,13 @@ class CredentialValidator:
         for component in essential_components:
             if component == "database":
                 try:
-                    db_config = self.env_manager.get_database_config()
-    # #future_fix: Convert to use enhanced service infrastructure
-                    conn = psycopg2.connect(
-                        host=db_config.host,
-                        port=db_config.port,
-                        database=db_config.database,
-                        user=db_config.username,
-                        password=db_config.password,
-                        connect_timeout=5
-                    )
-                    conn.close()
+                    # Use infrastructure delegate for connection
+                    infra = get_infra_delegate()
+                    conn = infra.get_db_connection()
+                    if conn:
+                        infra.return_db_connection(conn)
+                    else:
+                        raise Exception("No database connection available")
                 except Exception:
                     return False
 

@@ -176,13 +176,15 @@ def test_chat_workflow_interface():
     print("-" * 40)
 
     try:
-        # Check if workflow interface exists
-        workflow_file = project_root / "packages" / "tidyllm" / "scripts" / "chat_workflow_interface.py"
+        # Check if workflow interface exists in portals
+        workflow_file = project_root / "portals" / "chat" / "chat_workflow_interface.py"
         if workflow_file.exists():
             print("[OK] Chat workflow interface file exists")
 
-            # Try to import it
-            from packages.tidyllm.scripts import chat_workflow_interface
+            # Try to import it directly from portals
+            import sys
+            sys.path.insert(0, str(project_root / "portals" / "chat"))
+            import chat_workflow_interface
             print("[OK] Chat workflow interface importable")
 
             return True

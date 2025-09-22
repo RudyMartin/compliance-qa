@@ -1,0 +1,63 @@
+{
+  "meta": {
+    "model_id": "REV00001_renamed",
+    "review_title": "QA Gap Analysis - REV00001_renamed",
+    "judge_version": "MVR-QA-v1.0",
+    "timestamp": "2025-09-12T14:09:17.232909Z"
+  },
+  "scores": {
+    "compliance": {
+      "score": 5,
+      "justification": "Model validation shows 0 missing required sections and 9 incomplete sections, indicating gaps in regulatory compliance.",
+      "evidence_refs": [
+        "Missing: 0 sections",
+        "Incomplete: 9 sections"
+      ]
+    },
+    "coverage": {
+      "score": 11,
+      "justification": "Validation covers 222.2% of required sections based on model characteristics. Coverage analysis shows systematic gaps in validation scope.",
+      "evidence_refs": [
+        "Coverage rate: 222.2%",
+        "Expected sections: 9"
+      ]
+    },
+    "clarity": {
+      "score": 3,
+      "justification": "Review structure follows standard format. Some sections lack sufficient detail or contain TODO items affecting clarity.",
+      "evidence_refs": [
+        "Incomplete sections: 9"
+      ]
+    },
+    "challenge": {
+      "score": 2,
+      "justification": "Limited evidence of independent challenge and validation. Missing sections suggest insufficient depth in validation approach.",
+      "evidence_refs": [
+        "Missing validation sections: 0"
+      ]
+    }
+  },
+  "findings": [
+    {
+      "severity": "medium",
+      "title": "Incomplete Validation in 9 Sections",
+      "detail": "Found 9 sections with incomplete validation work. Sections contain TODO items, lack sufficient detail, or are missing reviewer signatures.",
+      "evidence_refs": [
+        "Section A",
+        "Section B",
+        "Section C"
+      ],
+      "remediation": "Review flagged sections for completeness. Ensure all TODO items are resolved and proper reviewer sign-off is obtained."
+    }
+  ],
+  "overall": {
+    "weighted_score": 27.5,
+    "verdict": "fail",
+    "missing_evidence": [],
+    "top_3_remediations": [
+      "Finalize A: Planning & Scoping - resolve TODO items and obtain reviewer sign-off",
+      "Finalize B: Stakeholders & Governance Setup - resolve TODO items and obtain reviewer sign-off",
+      "Finalize C: Regulatory & Policy Alignment - resolve TODO items and obtain reviewer sign-off"
+    ]
+  }
+}

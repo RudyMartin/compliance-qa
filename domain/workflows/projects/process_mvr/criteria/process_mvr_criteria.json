@@ -1,0 +1,60 @@
+{
+  "document_type": "MVR",
+  "document_type_weight": 0.3,
+  "content_relevance_weight": 0.4,
+  "format_compliance_weight": 0.3,
+  "min_confidence": 0.6,
+  "auto_accept_threshold": 0.8,
+  "required_fields": [
+    "driver_license_number",
+    "violation_records", 
+    "driving_history",
+    "license_status"
+  ],
+  "keywords": [
+    "motor vehicle record",
+    "driving record", 
+    "MVR",
+    "license",
+    "violation",
+    "traffic",
+    "conviction",
+    "suspension",
+    "revocation",
+    "points"
+  ],
+  "validation_rules": [
+    "mvr_document_type",
+    "compliance_standards"
+  ],
+  "priority_level": "high",
+  "description": "Process Model Validation Report through complete compliance workflow",
+  "scoring_criteria": {
+    "document_type_match": {
+      "weight": 0.3,
+      "indicators": [
+        "MVR header present",
+        "State DMV formatting",
+        "License number format"
+      ]
+    },
+    "content_relevance": {
+      "weight": 0.4,
+      "indicators": [
+        "Violation records present",
+        "Driving history timeline", 
+        "License status information",
+        "Driver personal information"
+      ]
+    },
+    "format_compliance": {
+      "weight": 0.3,
+      "indicators": [
+        "Standard MVR format",
+        "Required data fields present",
+        "Proper date formatting",
+        "Complete record structure"
+      ]
+    }
+  }
+}

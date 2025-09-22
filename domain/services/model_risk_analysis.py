@@ -11,11 +11,26 @@ Uses V2 documents module with V1 capabilities for professional analysis.
 import sys
 import json
 import pandas as pd
+import os
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from dataclasses import dataclass, field
 from datetime import datetime
 import re
+
+# PathManager import with fallback
+try:
+    from core.utilities.path_manager import get_path_manager
+except ImportError:
+    try:
+        from common.utilities.path_manager import get_path_manager
+    except ImportError:
+        def get_path_manager():
+            class MockPathManager:
+                @property
+                def root_folder(self):
+                    return os.getcwd()
+            return MockPathManager()
 
 # Add documents module
 sys.path.append(str(Path(__file__).parent))
@@ -349,7 +364,8 @@ def main():
     analyzer = ModelRiskAnalyzer()
     
     # Set paths
-    knowledge_base_path = Path("C:/Users/marti/AI-Scoring/v2/knowledge_base")
+    path_manager = get_path_manager()
+    knowledge_base_path = Path(path_manager.root_folder) / "v2" / "knowledge_base"
     
     if not knowledge_base_path.exists():
         print(f"ERROR: Knowledge base not found: {knowledge_base_path}")
