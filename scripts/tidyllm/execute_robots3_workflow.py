@@ -41,18 +41,33 @@ def execute_robots3_workflow():
         mlflow.log_param('workflow_id', workflow_config['workflow_id'])
         mlflow.log_param('collection_name', workflow_config['global_settings']['domain_collection_name'])
         
+        conn = None
+        cursor = None
         try:
             # Database connection
             db_config = settings['postgres']
-    # #future_fix: Convert to use enhanced service infrastructure
-            conn = psycopg2.connect(
-                host=db_config['host'],
-                port=db_config['port'],
-                database=db_config['db_name'],
-                user=db_config['db_user'],
-                password=db_config['db_password'],
-                sslmode=db_config['ssl_mode']
-            )
+            # #future_fix: Convert to use enhanced service infrastructure
+            try:
+                conn = psycopg2.connect(
+                    host=db_config['host'],
+                    port=db_config['port'],
+                    database=db_config['db_name'],
+                    user=db_config['db_user'],
+                    password=db_config['db_password'],
+                    sslmode=db_config['ssl_mode']
+                )
+            except Exception as e:
+                print(f'ERROR: Failed to connect to PostgreSQL: {e}')
+                mlflow.log_metric('database_connection', 0.0)
+                mlflow.log_param('final_status', f'FAILED: Database connection error - {str(e)}')
+                return False
+
+            if not conn:
+                print('ERROR: No database connection available')
+                mlflow.log_metric('database_connection', 0.0)
+                mlflow.log_param('final_status', 'FAILED: No database connection')
+                return False
+
             cursor = conn.cursor()
             mlflow.log_metric('database_connection', 1.0)
             
@@ -195,19 +210,23 @@ def execute_robots3_workflow():
             mlflow.log_metric('workflow_success', 1.0)
             mlflow.log_param('final_status', 'SUCCESS')
             mlflow.log_param('final_chunk_count', final_chunk_count)
-            
-            cursor.close()
-            conn.close()
-            
+
             print(f'MLFlow tracking: Experiment {experiment.name}, Run {run.info.run_id}')
-            
+
             return True
-            
+
         except Exception as e:
             print(f'ERROR: {str(e)}')
             mlflow.log_metric('workflow_success', 0.0)
             mlflow.log_param('final_status', f'FAILED: {str(e)}')
             return False
+
+        finally:
+            # Ensure proper cleanup
+            if cursor:
+                cursor.close()
+            if conn:
+                conn.close()
 
 if __name__ == '__main__':
     success = execute_robots3_workflow()
