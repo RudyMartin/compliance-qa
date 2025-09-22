@@ -376,7 +376,7 @@ class ModelRouterService:
 
         try:
             # Try to load from project directory
-            from core.utilities.path_manager import get_path_manager
+            from common.utilities.path_manager import get_path_manager
             root = get_path_manager().root_folder
             history_file = Path(root) / "domain" / "workflows" / "projects" / self.project_id / "model_performance.json"
 
@@ -396,7 +396,7 @@ class ModelRouterService:
 
         try:
             # Save to project directory
-            from core.utilities.path_manager import get_path_manager
+            from common.utilities.path_manager import get_path_manager
             root = get_path_manager().root_folder
             history_file = Path(root) / "domain" / "workflows" / "projects" / self.project_id / "model_performance.json"
 

@@ -17,7 +17,7 @@ def render_universal_selector(tab_name: str = "default") -> None:
     """
     # Import path utilities with fallback
     try:
-        from core.utilities.path_manager import get_path_manager
+        from common.utilities.path_manager import get_path_manager
     except ImportError:
         try:
             from common.utilities.path_manager import get_path_manager
@@ -97,7 +97,7 @@ def render_project_selector() -> str:
     """
     # Import path utilities with fallback
     try:
-        from core.utilities.path_manager import get_path_manager
+        from common.utilities.path_manager import get_path_manager
     except ImportError:
         try:
             from common.utilities.path_manager import get_path_manager
@@ -168,7 +168,7 @@ def get_project_workflows_path(project: str = None) -> Path:
 
     # Import path utilities with fallback
     try:
-        from core.utilities.path_manager import get_path_manager
+        from common.utilities.path_manager import get_path_manager
     except ImportError:
         try:
             from common.utilities.path_manager import get_path_manager
@@ -189,7 +189,7 @@ def get_project_resources_path(project: str = None, resource_type: str = "upload
 
     # Import path utilities with fallback
     try:
-        from core.utilities.path_manager import get_path_manager
+        from common.utilities.path_manager import get_path_manager
     except ImportError:
         try:
             from common.utilities.path_manager import get_path_manager

@@ -632,7 +632,7 @@ class RLFactorOptimizer:
     def _save_factors(self):
         """Save current factors to disk."""
         try:
-            from core.utilities.path_manager import get_path_manager
+            from common.utilities.path_manager import get_path_manager
             root = get_path_manager().root_folder
             factors_file = Path(root) / "domain" / "workflows" / "projects" / self.project_id / "rl_factors.json"
 
@@ -660,7 +660,7 @@ class RLFactorOptimizer:
     def _load_factors(self):
         """Load saved factors from disk."""
         try:
-            from core.utilities.path_manager import get_path_manager
+            from common.utilities.path_manager import get_path_manager
             root = get_path_manager().root_folder
             factors_file = Path(root) / "domain" / "workflows" / "projects" / self.project_id / "rl_factors.json"
 

@@ -369,7 +369,7 @@ class CumulativeLearningPipeline:
     def _save_ledger(self):
         """Save performance ledger to disk."""
         try:
-            from core.utilities.path_manager import get_path_manager
+            from common.utilities.path_manager import get_path_manager
             root = get_path_manager().root_folder
             ledger_file = Path(root) / "domain" / "workflows" / "projects" / self.project_id / "performance_ledger.json"
 
@@ -402,7 +402,7 @@ class CumulativeLearningPipeline:
     def _load_ledger(self):
         """Load performance ledger from disk."""
         try:
-            from core.utilities.path_manager import get_path_manager
+            from common.utilities.path_manager import get_path_manager
             root = get_path_manager().root_folder
             ledger_file = Path(root) / "domain" / "workflows" / "projects" / self.project_id / "performance_ledger.json"
 
