@@ -12,7 +12,7 @@ from pathlib import Path
 
 # PathManager import with fallback
 try:
-    from core.utilities.path_manager import get_path_manager
+    from common.utilities.path_manager import get_path_manager
 except ImportError:
     try:
         from common.utilities.path_manager import get_path_manager

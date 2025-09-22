@@ -46,7 +46,7 @@ class AskAIStepsManager:
         else:
             # Try to use path manager if available
             try:
-                from core.utilities.path_manager import get_path_manager
+                from common.utilities.path_manager import get_path_manager
                 root = get_path_manager().root_folder
             except ImportError:
                 # Fallback to relative path

@@ -14,7 +14,7 @@ import os
 
 # Import PathManager for cross-platform path handling
 try:
-    from core.utilities.path_manager import get_path_manager
+    from common.utilities.path_manager import get_path_manager
 except ImportError:
     try:
         from common.utilities.path_manager import get_path_manager

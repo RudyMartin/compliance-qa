@@ -137,7 +137,7 @@ class WorkflowRegistry:
     def __init__(self):
         # Use PathManager for dynamic root detection if available, otherwise use relative path
         try:
-            from core.utilities.path_manager import get_path_manager
+            from common.utilities.path_manager import get_path_manager
             base_path = Path(get_path_manager().root_folder)
         except ImportError:
             # Fallback to relative path from portal location
