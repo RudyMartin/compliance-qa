@@ -2,11 +2,12 @@
 TidyLLM Flow Creator V3 Portal - MODULAR VERSION
 =================================================
 
-Modular version with separated tab components for easier maintenance and focused editing.
+CALLS THE TABFILES (t_ files) instead of monolithic code.
+Each tab is a separate tabfile for modularity.
 
-Architecture: Portal → WorkflowManager → RAG Ecosystem Integration
+Architecture: Portal → Tabfiles → WorkflowManager → RAG Ecosystem
 
-MODULAR STRUCTURE:
+TABFILE STRUCTURE:
 - t_create_flow.py      - Create new workflows
 - t_existing_flows.py   - Browse and manage existing workflows
 - t_test_designer.py    - Enhanced 12th-grader friendly A/B/C/D testing
@@ -30,7 +31,7 @@ import time
 
 # Import step ordering utilities
 try:
-    from tidyllm.utils.step_ordering import (
+    from common.utilities.step_ordering import (
         reorder_steps_by_position,
         check_for_order_changes,
         renumber_steps,
@@ -42,17 +43,51 @@ except ImportError:
     UTILS_AVAILABLE = False
 
 # Import clean JSON I/O utilities
-from tidyllm.utils.clean_json_io import load_json, save_json
-from tidyllm.utils.data_normalizer import DataNormalizer
-
-# Import TidyLLM components
 try:
-    from tidyllm.services.unified_rag_manager import UnifiedRAGManager, RAGSystemType
-    from tidyllm.services.unified_flow_manager import UnifiedFlowManager, WorkflowSystemType, WorkflowStatus
-    from tidyllm.infrastructure.session.unified import UnifiedSessionManager
+    from common.utilities.clean_json_io import load_json, save_json
+    from common.utilities.data_normalizer import DataNormalizer
 except ImportError:
-    st.error("TidyLLM components not available. Please check installation.")
-    st.stop()
+    # Basic fallback
+    import json
+    def load_json(path):
+        with open(path, 'r') as f:
+            return json.load(f)
+    def save_json(data, path):
+        with open(path, 'w') as f:
+            json.dump(data, f, indent=2)
+    class DataNormalizer:
+        @staticmethod
+        def normalize_to_status_dict(data):
+            return {"status": data}
+
+# Import TidyLLM components (with correct paths)
+TIDYLLM_AVAILABLE = False
+try:
+    # Try from packages first
+    from packages.tidyllm.services.unified_rag_manager import UnifiedRAGManager, RAGSystemType
+    from packages.tidyllm.services.unified_flow_manager import UnifiedFlowManager, WorkflowSystemType, WorkflowStatus
+    from packages.tidyllm.infrastructure.session.unified import UnifiedSessionManager
+    TIDYLLM_AVAILABLE = True
+except ImportError:
+    try:
+        # Try adding parent paths
+        import sys
+        from pathlib import Path
+        parent_path = Path(__file__).parent.parent.parent
+        sys.path.insert(0, str(parent_path))
+        sys.path.insert(0, str(parent_path / "packages"))
+
+        from packages.tidyllm.services.unified_rag_manager import UnifiedRAGManager, RAGSystemType
+        from packages.tidyllm.services.unified_flow_manager import UnifiedFlowManager, WorkflowSystemType, WorkflowStatus
+        from packages.tidyllm.infrastructure.session.unified import UnifiedSessionManager
+        TIDYLLM_AVAILABLE = True
+    except ImportError:
+        # Components not available - portal will run in standalone mode
+        pass
+
+if not TIDYLLM_AVAILABLE:
+    st.warning("⚠️ TidyLLM components not available. Running in standalone mode.")
+    # Don't stop - let it run with tabfiles only
 
 # IMPORT MODULAR TAB COMPONENTS
 try:
@@ -84,8 +119,13 @@ class WorkflowRegistry:
     """Manages the comprehensive workflow registry with 17+ workflow definitions."""
 
     def __init__(self):
-        # Use PathManager for dynamic root detection
-        base_path = Path(get_path_manager().root_folder)
+        # Use PathManager for dynamic root detection if available, otherwise use relative path
+        try:
+            from core.utilities.path_manager import get_path_manager
+            base_path = Path(get_path_manager().root_folder)
+        except ImportError:
+            # Fallback to relative path from portal location
+            base_path = Path(__file__).parent.parent.parent
 
         self.workflows_base_path = base_path / "domain" / "workflows" / "projects"
         self.workflow_registry_path = base_path / "domain" / "workflows" / "projects"
@@ -101,7 +141,7 @@ class WorkflowRegistry:
             print(f"DEBUG: Path exists: {self.workflows_base_path.exists()}")
 
             # Demo mode: only show alex_qaqc for now (can be made configurable)
-            demo_filter_enabled = True
+            demo_filter_enabled = False  # Disabled to show all workflows
             allowed_projects = {"alex_qaqc"}
 
             # Scan workflow project directories

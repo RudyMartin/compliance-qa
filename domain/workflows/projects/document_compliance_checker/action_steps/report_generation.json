@@ -1,0 +1,32 @@
+{
+  "step_name": "report_generation",
+  "step_type": "transform",
+  "description": "Generate comprehensive compliance reports with recommendations",
+  "requires": [
+    "compliance_scores",
+    "violation_details",
+    "risk_assessment"
+  ],
+  "produces": [
+    "compliance_report",
+    "executive_summary",
+    "remediation_plan"
+  ],
+  "position": 3,
+  "params": {
+    "report_format": "pdf",
+    "include_charts": true,
+    "language": "en",
+    "detail_level": "comprehensive"
+  },
+  "validation_rules": {
+    "sections_required": [
+      "summary",
+      "findings",
+      "recommendations"
+    ],
+    "max_pages": 100
+  },
+  "last_modified": "2025-09-21T22:24:41.689640",
+  "project_id": "document_compliance_checker"
+}

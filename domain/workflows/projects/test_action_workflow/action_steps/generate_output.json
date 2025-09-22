@@ -1,0 +1,14 @@
+{
+  "step_name": "generate_output",
+  "step_type": "output",
+  "description": "Generate final output files",
+  "requires": [
+    "transformed_data"
+  ],
+  "produces": [
+    "final_output"
+  ],
+  "position": 3,
+  "last_modified": "2025-09-21T22:23:02.591153",
+  "project_id": "test_action_workflow"
+}

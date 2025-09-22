@@ -36,11 +36,18 @@ except ImportError:
 sys.path.append(str(Path(__file__).parent))
 
 try:
-    from documents import process_document, SimpleDocumentProcessor
+    # Try TidyLLM document processors first
+    from packages.tidyllm.services.document_processors import SimpleDocumentProcessor
+    from packages.tidyllm.services.centralized_document_service import process_document
     DOCUMENTS_AVAILABLE = True
-except ImportError as e:
-    DOCUMENTS_AVAILABLE = False
-    print(f"ERROR: Documents module not available: {e}")
+except ImportError:
+    try:
+        # Fallback to documents module if available
+        from documents import process_document, SimpleDocumentProcessor
+        DOCUMENTS_AVAILABLE = True
+    except ImportError:
+        DOCUMENTS_AVAILABLE = False
+        # Documents module is optional - gracefully degrade functionality
 
 @dataclass
 class ModelRiskAnalysis:

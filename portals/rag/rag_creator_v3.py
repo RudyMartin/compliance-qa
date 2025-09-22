@@ -50,8 +50,8 @@ except ImportError:
 
 # UnifiedRAGManager - The core of V3
 try:
-    from tidyllm.services.unified_rag_manager import UnifiedRAGManager, RAGSystemType
-    from tidyllm.infrastructure.session.unified import UnifiedSessionManager
+    from packages.tidyllm.services.unified_rag_manager import UnifiedRAGManager, RAGSystemType
+    from packages.tidyllm.infrastructure.session.unified import UnifiedSessionManager
     URM_AVAILABLE = True
 except ImportError:
     URM_AVAILABLE = False

@@ -1,0 +1,26 @@
+{
+  "step_name": "content_extraction",
+  "step_type": "transform",
+  "description": "Extract text, tables, and structured data from documents",
+  "requires": [
+    "raw_documents",
+    "document_metadata"
+  ],
+  "produces": [
+    "extracted_text",
+    "extracted_tables",
+    "document_structure"
+  ],
+  "position": 1,
+  "params": {
+    "ocr_enabled": true,
+    "language": "en",
+    "preserve_formatting": true
+  },
+  "validation_rules": {
+    "min_text_length": 100,
+    "encoding": "utf-8"
+  },
+  "last_modified": "2025-09-21T22:24:41.686970",
+  "project_id": "document_compliance_checker"
+}

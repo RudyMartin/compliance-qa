@@ -1,0 +1,158 @@
+{
+  "project_id": "document_compliance_checker",
+  "exported_at": "2025-09-21T22:24:41.695731",
+  "action_steps_count": 5,
+  "action_steps": [
+    {
+      "step_name": "compliance_analysis",
+      "step_type": "analyze",
+      "description": "Analyze documents against compliance rules and regulations",
+      "requires": [
+        "extracted_text",
+        "document_structure"
+      ],
+      "produces": [
+        "compliance_scores",
+        "violation_details",
+        "risk_assessment"
+      ],
+      "position": 2,
+      "params": {
+        "compliance_frameworks": [
+          "GDPR",
+          "HIPAA",
+          "SOC2"
+        ],
+        "threshold_score": 0.85,
+        "detailed_analysis": true
+      },
+      "validation_rules": {
+        "score_range": [
+          0,
+          1
+        ],
+        "required_checks": [
+          "data_privacy",
+          "security",
+          "retention"
+        ]
+      },
+      "last_modified": "2025-09-21T22:24:41.688588",
+      "project_id": "document_compliance_checker"
+    },
+    {
+      "step_name": "content_extraction",
+      "step_type": "transform",
+      "description": "Extract text, tables, and structured data from documents",
+      "requires": [
+        "raw_documents",
+        "document_metadata"
+      ],
+      "produces": [
+        "extracted_text",
+        "extracted_tables",
+        "document_structure"
+      ],
+      "position": 1,
+      "params": {
+        "ocr_enabled": true,
+        "language": "en",
+        "preserve_formatting": true
+      },
+      "validation_rules": {
+        "min_text_length": 100,
+        "encoding": "utf-8"
+      },
+      "last_modified": "2025-09-21T22:24:41.686970",
+      "project_id": "document_compliance_checker"
+    },
+    {
+      "step_name": "document_ingestion",
+      "step_type": "process",
+      "description": "Ingest documents from multiple sources (PDF, Word, Excel)",
+      "requires": [],
+      "produces": [
+        "raw_documents",
+        "document_metadata"
+      ],
+      "position": 0,
+      "params": {
+        "supported_formats": [
+          ".pdf",
+          ".docx",
+          ".xlsx"
+        ],
+        "max_file_size_mb": 50,
+        "batch_size": 10
+      },
+      "validation_rules": {
+        "file_exists": true,
+        "format_valid": true
+      },
+      "last_modified": "2025-09-21T22:24:41.685619",
+      "project_id": "document_compliance_checker"
+    },
+    {
+      "step_name": "notification_dispatch",
+      "step_type": "output",
+      "description": "Send reports and alerts to stakeholders via email and dashboard",
+      "requires": [
+        "compliance_report",
+        "executive_summary"
+      ],
+      "produces": [
+        "notification_log",
+        "delivery_confirmation"
+      ],
+      "position": 4,
+      "params": {
+        "channels": [
+          "email",
+          "dashboard",
+          "slack"
+        ],
+        "priority_routing": true,
+        "retry_attempts": 3,
+        "escalation_enabled": true
+      },
+      "validation_rules": {
+        "recipient_validation": true,
+        "delivery_tracking": true
+      },
+      "last_modified": "2025-09-21T22:24:41.690631",
+      "project_id": "document_compliance_checker"
+    },
+    {
+      "step_name": "report_generation",
+      "step_type": "transform",
+      "description": "Generate comprehensive compliance reports with recommendations",
+      "requires": [
+        "compliance_scores",
+        "violation_details",
+        "risk_assessment"
+      ],
+      "produces": [
+        "compliance_report",
+        "executive_summary",
+        "remediation_plan"
+      ],
+      "position": 3,
+      "params": {
+        "report_format": "pdf",
+        "include_charts": true,
+        "language": "en",
+        "detail_level": "comprehensive"
+      },
+      "validation_rules": {
+        "sections_required": [
+          "summary",
+          "findings",
+          "recommendations"
+        ],
+        "max_pages": 100
+      },
+      "last_modified": "2025-09-21T22:24:41.689640",
+      "project_id": "document_compliance_checker"
+    }
+  ]
+}

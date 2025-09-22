@@ -1,0 +1,14 @@
+{
+  "step_name": "transform_data",
+  "step_type": "transform",
+  "description": "Transform data into target format",
+  "requires": [
+    "validated_data"
+  ],
+  "produces": [
+    "transformed_data"
+  ],
+  "position": 2,
+  "last_modified": "2025-09-21T22:23:02.590438",
+  "project_id": "test_action_workflow"
+}

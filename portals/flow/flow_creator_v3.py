@@ -88,16 +88,16 @@ def create_directory(path):
 # Import TidyLLM components (Updated to use hexagonal architecture)
 TIDYLLM_AVAILABLE = False
 try:
-    from tidyllm.services.unified_rag_manager import UnifiedRAGManager, RAGSystemType
-    from tidyllm.services.flow_orchestration_service import FlowOrchestrationService as UnifiedFlowManager, WorkflowSystemType, WorkflowStatus
-    from tidyllm.infrastructure.session.unified import UnifiedSessionManager
+    from packages.tidyllm.services.unified_rag_manager import UnifiedRAGManager, RAGSystemType
+    from packages.tidyllm.services.flow_orchestration_service import FlowOrchestrationService as UnifiedFlowManager, WorkflowSystemType, WorkflowStatus
+    from packages.tidyllm.infrastructure.session.unified import UnifiedSessionManager
     TIDYLLM_AVAILABLE = True
 except ImportError:
     # Fallback to old import for backward compatibility
     try:
-        from tidyllm.services.unified_rag_manager import UnifiedRAGManager, RAGSystemType
-        from tidyllm.services.unified_flow_manager import UnifiedFlowManager, WorkflowSystemType, WorkflowStatus
-        from tidyllm.infrastructure.session.unified import UnifiedSessionManager
+        from packages.tidyllm.services.unified_rag_manager import UnifiedRAGManager, RAGSystemType
+        from packages.tidyllm.services.unified_flow_manager import UnifiedFlowManager, WorkflowSystemType, WorkflowStatus
+        from packages.tidyllm.infrastructure.session.unified import UnifiedSessionManager
         TIDYLLM_AVAILABLE = True
     except ImportError:
         # Create dummy classes for Business Builder standalone operation
@@ -4496,27 +4496,27 @@ class FlowCreatorV3Portal:
                         except Exception as e:
                             st.error(f"❌ Execution error: {e}")
 
-                # Additional workflow controls
-                st.markdown("---")
-                st.markdown("**🔧 Quick Actions**")
+            # Additional workflow controls
+            st.markdown("---")
+            st.markdown("**🔧 Quick Actions**")
 
-                col_action1, col_action2 = st.columns(2)
+            col_action1, col_action2 = st.columns(2)
 
-                with col_action1:
-                    if st.button("🗂️ Clear Inputs", key=f"clear_inputs_{container_key}"):
-                        if inputs_path.exists():
-                            import shutil
-                            try:
-                                shutil.rmtree(inputs_path)
-                                inputs_path.mkdir()
-                                st.success("✅ Inputs cleared")
-                                st.rerun()
-                            except Exception as e:
-                                st.error(f"❌ Clear error: {e}")
+            with col_action1:
+                if st.button("🗂️ Clear Inputs", key=f"clear_inputs_{container_key}"):
+                    if inputs_path.exists():
+                        import shutil
+                        try:
+                            shutil.rmtree(inputs_path)
+                            inputs_path.mkdir()
+                            st.success("✅ Inputs cleared")
+                            st.rerun()
+                        except Exception as e:
+                            st.error(f"❌ Clear error: {e}")
 
-                with col_action2:
-                    if st.button("📊 Manage Outputs", key=f"manage_outputs_{container_key}"):
-                        self._show_output_manager(project_path, container_key)
+            with col_action2:
+                if st.button("📊 Manage Outputs", key=f"manage_outputs_{container_key}"):
+                    self._show_output_manager(project_path, container_key)
 
         # CHAT TAB - Interactive workflow testing with feedback
         with chat_tab:

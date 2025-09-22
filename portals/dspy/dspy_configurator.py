@@ -175,7 +175,7 @@ def check_dspy_health() -> Dict[str, Any]:
             pass
 
         try:
-            from tidyllm.infrastructure.session.unified import UnifiedSessionManager
+            from packages.tidyllm.infrastructure.session.unified import UnifiedSessionManager
             health["corporate_integration"]["usm_available"] = True
         except ImportError:
             pass

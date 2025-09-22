@@ -16,10 +16,12 @@ from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime
 import logging
 
+from .base_step_manager import BaseStepsManager
+
 logger = logging.getLogger(__name__)
 
 
-class ActionStepsManager:
+class ActionStepsManager(BaseStepsManager):
     """Manages action steps for workflow projects."""
 
     def __init__(self, project_id: str, project_path: Path = None):
@@ -30,41 +32,34 @@ class ActionStepsManager:
             project_id: The workflow/project ID
             project_path: Optional custom project path
         """
-        self.project_id = project_id
+        super().__init__(project_id, "action_steps", project_path)
 
-        # Determine project path
-        if project_path:
-            self.project_path = Path(project_path)
-        else:
-            from core.utilities.path_manager import get_path_manager
-            root = get_path_manager().root_folder
-            self.project_path = Path(root) / "domain" / "workflows" / "projects" / project_id
+        # For backward compatibility
+        self.action_steps_path = self.steps_path
 
-        # Create action_steps directory
-        self.action_steps_path = self.project_path / "action_steps"
-        self.action_steps_path.mkdir(parents=True, exist_ok=True)
-
-        # Path for the main action steps configuration
-        self.config_path = self.action_steps_path / "action_steps_config.json"
-
-    def get_all_action_steps(self) -> List[Dict[str, Any]]:
+    def get_all_steps(self) -> List[Dict[str, Any]]:
         """Get all action steps for this project."""
-        action_steps = []
+        steps = []
 
         # Load from individual JSON files
-        json_files = list(self.action_steps_path.glob("*.json"))
+        json_files = list(self.steps_path.glob("*.json"))
         for json_file in json_files:
             if json_file.name != "action_steps_config.json":
                 try:
                     with open(json_file, 'r', encoding='utf-8') as f:
                         step_data = json.load(f)
-                        action_steps.append(step_data)
+                        steps.append(step_data)
                 except Exception as e:
                     logger.error(f"Error loading {json_file}: {e}")
 
-        return action_steps
+        return steps
 
-    def save_action_step(self, step_name: str, step_data: Dict[str, Any]) -> Dict[str, Any]:
+    # Alias for backward compatibility
+    def get_all_action_steps(self) -> List[Dict[str, Any]]:
+        """Backward compatibility alias."""
+        return self.get_all_steps()
+
+    def save_step(self, step_name: str, step_data: Dict[str, Any]) -> Dict[str, Any]:
         """
         Save an action step definition.
 
@@ -82,7 +77,7 @@ class ActionStepsManager:
             step_data['project_id'] = self.project_id
 
             # Save to file
-            file_path = self.action_steps_path / f"{step_name}.json"
+            file_path = self.steps_path / f"{step_name}.json"
             with open(file_path, 'w', encoding='utf-8') as f:
                 json.dump(step_data, f, indent=2)
 
@@ -101,9 +96,14 @@ class ActionStepsManager:
                 'error': str(e)
             }
 
-    def load_action_step(self, step_name: str) -> Optional[Dict[str, Any]]:
+    # Alias for backward compatibility
+    def save_action_step(self, step_name: str, step_data: Dict[str, Any]) -> Dict[str, Any]:
+        """Backward compatibility alias."""
+        return self.save_step(step_name, step_data)
+
+    def load_step(self, step_name: str) -> Optional[Dict[str, Any]]:
         """Load a specific action step."""
-        file_path = self.action_steps_path / f"{step_name}.json"
+        file_path = self.steps_path / f"{step_name}.json"
 
         if not file_path.exists():
             return None
@@ -114,6 +114,11 @@ class ActionStepsManager:
         except Exception as e:
             logger.error(f"Error loading action step {step_name}: {e}")
             return None
+
+    # Alias for backward compatibility
+    def load_action_step(self, step_name: str) -> Optional[Dict[str, Any]]:
+        """Backward compatibility alias."""
+        return self.load_step(step_name)
 
     def delete_action_step(self, step_name: str) -> Dict[str, Any]:
         """Delete an action step."""

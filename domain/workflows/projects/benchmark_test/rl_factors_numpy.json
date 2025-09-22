@@ -1,0 +1,13 @@
+{
+  "factors": {
+    "epsilon": 0.28880313219568093,
+    "epsilon_decay": 0.995,
+    "learning_rate": 0.008476496354391842,
+    "learning_decay": 0.999,
+    "discount_factor": 0.95,
+    "temperature": 1.8623649640252506,
+    "temperature_decay": 0.99
+  },
+  "meta_learning_rate": 0.001,
+  "last_updated": "2025-09-21T23:36:56.681302"
+}
