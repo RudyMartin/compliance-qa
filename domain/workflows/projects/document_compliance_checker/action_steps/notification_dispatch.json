@@ -1,0 +1,30 @@
+{
+  "step_name": "notification_dispatch",
+  "step_type": "output",
+  "description": "Send reports and alerts to stakeholders via email and dashboard",
+  "requires": [
+    "compliance_report",
+    "executive_summary"
+  ],
+  "produces": [
+    "notification_log",
+    "delivery_confirmation"
+  ],
+  "position": 4,
+  "params": {
+    "channels": [
+      "email",
+      "dashboard",
+      "slack"
+    ],
+    "priority_routing": true,
+    "retry_attempts": 3,
+    "escalation_enabled": true
+  },
+  "validation_rules": {
+    "recipient_validation": true,
+    "delivery_tracking": true
+  },
+  "last_modified": "2025-09-21T22:24:41.690631",
+  "project_id": "document_compliance_checker"
+}

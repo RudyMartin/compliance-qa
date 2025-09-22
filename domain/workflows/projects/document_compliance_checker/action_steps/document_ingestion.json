@@ -1,0 +1,26 @@
+{
+  "step_name": "document_ingestion",
+  "step_type": "process",
+  "description": "Ingest documents from multiple sources (PDF, Word, Excel)",
+  "requires": [],
+  "produces": [
+    "raw_documents",
+    "document_metadata"
+  ],
+  "position": 0,
+  "params": {
+    "supported_formats": [
+      ".pdf",
+      ".docx",
+      ".xlsx"
+    ],
+    "max_file_size_mb": 50,
+    "batch_size": 10
+  },
+  "validation_rules": {
+    "file_exists": true,
+    "format_valid": true
+  },
+  "last_modified": "2025-09-21T22:24:41.685619",
+  "project_id": "document_compliance_checker"
+}

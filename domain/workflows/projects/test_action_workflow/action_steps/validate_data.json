@@ -1,0 +1,15 @@
+{
+  "step_name": "validate_data",
+  "step_type": "analyze",
+  "description": "Validate data quality and completeness",
+  "requires": [
+    "raw_data"
+  ],
+  "produces": [
+    "validated_data",
+    "validation_report"
+  ],
+  "position": 1,
+  "last_modified": "2025-09-21T22:23:02.589122",
+  "project_id": "test_action_workflow"
+}

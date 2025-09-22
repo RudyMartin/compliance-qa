@@ -1,0 +1,37 @@
+{
+  "step_name": "compliance_analysis",
+  "step_type": "analyze",
+  "description": "Analyze documents against compliance rules and regulations",
+  "requires": [
+    "extracted_text",
+    "document_structure"
+  ],
+  "produces": [
+    "compliance_scores",
+    "violation_details",
+    "risk_assessment"
+  ],
+  "position": 2,
+  "params": {
+    "compliance_frameworks": [
+      "GDPR",
+      "HIPAA",
+      "SOC2"
+    ],
+    "threshold_score": 0.85,
+    "detailed_analysis": true
+  },
+  "validation_rules": {
+    "score_range": [
+      0,
+      1
+    ],
+    "required_checks": [
+      "data_privacy",
+      "security",
+      "retention"
+    ]
+  },
+  "last_modified": "2025-09-21T22:24:41.688588",
+  "project_id": "document_compliance_checker"
+}

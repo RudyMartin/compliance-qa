@@ -1,0 +1,62 @@
+{
+  "project_id": "test_action_workflow",
+  "exported_at": "2025-09-21T22:23:02.594247",
+  "action_steps_count": 4,
+  "action_steps": [
+    {
+      "step_name": "generate_output",
+      "step_type": "output",
+      "description": "Generate final output files",
+      "requires": [
+        "transformed_data"
+      ],
+      "produces": [
+        "final_output"
+      ],
+      "position": 3,
+      "last_modified": "2025-09-21T22:23:02.591153",
+      "project_id": "test_action_workflow"
+    },
+    {
+      "step_name": "load_data",
+      "step_type": "process",
+      "description": "Load data from source files",
+      "requires": [],
+      "produces": [
+        "raw_data"
+      ],
+      "position": 0,
+      "last_modified": "2025-09-21T22:23:02.588298",
+      "project_id": "test_action_workflow"
+    },
+    {
+      "step_name": "transform_data",
+      "step_type": "transform",
+      "description": "Transform data into target format",
+      "requires": [
+        "validated_data"
+      ],
+      "produces": [
+        "transformed_data"
+      ],
+      "position": 2,
+      "last_modified": "2025-09-21T22:23:02.590438",
+      "project_id": "test_action_workflow"
+    },
+    {
+      "step_name": "validate_data",
+      "step_type": "analyze",
+      "description": "Validate data quality and completeness",
+      "requires": [
+        "raw_data"
+      ],
+      "produces": [
+        "validated_data",
+        "validation_report"
+      ],
+      "position": 1,
+      "last_modified": "2025-09-21T22:23:02.589122",
+      "project_id": "test_action_workflow"
+    }
+  ]
+}
