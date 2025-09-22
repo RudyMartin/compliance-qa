@@ -1,0 +1,63 @@
+{
+  "card_id": "unified_document_analysis",
+  "card_name": "Unified Document Analysis",
+  "card_type": "unified_action",
+  "category": "observe",
+  "ooda_level": "observe",
+  "icon": "🔍",
+  "description": "Extract document content with TidyLLM, generate embeddings, then analyze structure and content with AI in a single unified step",
+  "business_value": "Complete document ingestion and initial analysis in one optimized step",
+  "use_cases": [
+    "Document intake and processing",
+    "Content extraction with quality assessment",
+    "Embedding generation for retrieval systems",
+    "Document structure and readiness analysis"
+  ],
+  "step_definition": {
+    "step_type": "unified",
+    "phases": {
+      "action": {
+        "tidyllm_functions": [
+          {
+            "function": "extract_text_from_document",
+            "inputs": ["document_source"],
+            "parameters": {
+              "extract_tables": "{{extract_tables}}",
+              "extract_images": "{{extract_images}}"
+            },
+            "output_variable": "extracted_content"
+          },
+          {
+            "function": "generate_embeddings",
+            "inputs": ["extracted_content"],
+            "parameters": {
+              "model": "{{embedding_model}}",
+              "chunk_size": "{{chunk_size}}",
+              "overlap": "{{overlap}}"
+            },
+            "output_variable": "document_embeddings"
+          }
+        ]
+      },
+      "prompt": {
+        "template_file": "step_01_document_structure_analysis.md",
+        "inputs": ["extracted_content", "document_embeddings"],
+        "output_variable": "ai_analysis"
+      }
+    }
+  },
+  "inputs": {
+    "required": ["document_source"],
+    "optional": ["extraction_options", "embedding_options", "analysis_depth"]
+  },
+  "outputs": {
+    "extracted_content": "Raw text content from document with metadata",
+    "document_embeddings": "Vector embeddings for content chunks",
+    "ai_analysis": "AI assessment of document structure and quality"
+  },
+  "configuration_form": "unified_document_analysis_form.json",
+  "estimated_time": "2-5 minutes",
+  "complexity": "medium",
+  "ooda_stage_rationale": "Observe stage - gathering and processing raw document data",
+  "tags": ["unified", "document_analysis", "extraction", "embeddings", "ai_analysis", "observe"]
+}

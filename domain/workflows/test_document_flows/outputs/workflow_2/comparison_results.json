@@ -1,0 +1,7 @@
+{
+  "similarity_score": 0.004541326067211626,
+  "doc1_unique_words": 6,
+  "doc2_unique_words": 1090,
+  "shared_words": 5,
+  "comparison_method": "jaccard_similarity"
+}

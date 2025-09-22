@@ -1,0 +1,105 @@
+{
+  "workflows": {
+    "Simple 2-Step Demo": {
+      "name": "Simple 2-Step Demo",
+      "version": "1.0",
+      "created": "2025-01-14",
+      "description": "Quick demo workflow - Extract document and generate summary",
+      "cards": [
+        {
+          "id": "extract_doc",
+          "name": "📄 Extract Document",
+          "category": "observe",
+          "ai_level": "None",
+          "step_type": "process",
+          "kind": "extract",
+          "position": 0,
+          "description": "Extracts text and metadata from uploaded documents",
+          "requires": ["document_path"],
+          "produces": ["extracted_text", "metadata"],
+          "params": {
+            "format": "text",
+            "include_metadata": "true",
+            "ocr_enabled": "false"
+          },
+          "validation_rules": {
+            "file_exists": "true",
+            "max_size_mb": "10",
+            "allowed_formats": "pdf,docx,txt"
+          }
+        },
+        {
+          "id": "create_report",
+          "name": "📝 Create Report",
+          "category": "act",
+          "ai_level": "Assist",
+          "step_type": "output",
+          "kind": "report",
+          "position": 1,
+          "description": "Creates a summary report from extracted document content",
+          "requires": ["extracted_text", "metadata"],
+          "produces": ["report_document", "summary"],
+          "params": {
+            "format": "markdown",
+            "include_visualizations": "false",
+            "summary_length": "500"
+          },
+          "validation_rules": {
+            "required_sections": "summary,key_points",
+            "min_content_length": "100"
+          }
+        }
+      ]
+    },
+    "Quick Analysis": {
+      "name": "Quick Analysis",
+      "version": "1.0",
+      "created": "2025-01-14",
+      "description": "2-step analysis: Load data and generate insights",
+      "cards": [
+        {
+          "id": "load_data",
+          "name": "📊 Load Data",
+          "category": "observe",
+          "ai_level": "None",
+          "step_type": "process",
+          "kind": "extract",
+          "position": 0,
+          "description": "Loads data from CSV or JSON files",
+          "requires": ["data_source"],
+          "produces": ["dataframe", "data_summary"],
+          "params": {
+            "format": "auto",
+            "encoding": "utf-8",
+            "sample_size": "1000"
+          },
+          "validation_rules": {
+            "source_exists": "true",
+            "max_rows": "10000"
+          }
+        },
+        {
+          "id": "generate_insights",
+          "name": "🎯 Generate Insights",
+          "category": "decide",
+          "ai_level": "Auto",
+          "step_type": "analyze",
+          "kind": "summarize",
+          "position": 1,
+          "description": "Analyzes data patterns and generates actionable insights",
+          "requires": ["dataframe", "data_summary"],
+          "produces": ["insights_report", "action_items", "visualizations"],
+          "params": {
+            "insight_depth": "comprehensive",
+            "priority_ranking": "true",
+            "confidence_threshold": "0.75"
+          },
+          "validation_rules": {
+            "data_completeness": "80%",
+            "min_records": "10"
+          }
+        }
+      ]
+    }
+  }
+}

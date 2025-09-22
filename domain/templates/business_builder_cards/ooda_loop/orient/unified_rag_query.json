@@ -1,0 +1,80 @@
+{
+  "card_id": "unified_rag_query",
+  "card_name": "Unified RAG Query",
+  "card_type": "unified_action",
+  "category": "orient",
+  "ooda_level": "orient",
+  "icon": "🔍",
+  "description": "Perform intelligent document queries using RAG (Retrieval-Augmented Generation) with TidyLLM vector search and AI reasoning",
+  "business_value": "Extract precise information from large document collections using intelligent retrieval and generation",
+  "use_cases": [
+    "Question-answering over document collections",
+    "Information extraction from knowledge bases",
+    "Context-aware document search",
+    "Intelligent research assistance",
+    "Policy and compliance queries"
+  ],
+  "step_definition": {
+    "step_type": "unified",
+    "phases": {
+      "action": {
+        "tidyllm_functions": [
+          {
+            "function": "vector_similarity_search",
+            "inputs": ["query_text", "document_embeddings"],
+            "parameters": {
+              "top_k": "{{top_k_results}}",
+              "similarity_threshold": "{{similarity_threshold}}",
+              "search_strategy": "{{search_strategy}}"
+            },
+            "output_variable": "retrieved_chunks"
+          },
+          {
+            "function": "rank_retrieved_chunks",
+            "inputs": ["retrieved_chunks", "query_text"],
+            "parameters": {
+              "ranking_method": "{{ranking_method}}",
+              "relevance_scoring": "{{relevance_scoring}}"
+            },
+            "output_variable": "ranked_chunks"
+          },
+          {
+            "function": "prepare_rag_context",
+            "inputs": ["ranked_chunks"],
+            "parameters": {
+              "max_context_length": "{{max_context_length}}",
+              "chunk_overlap_handling": "{{chunk_overlap_handling}}"
+            },
+            "output_variable": "rag_context"
+          }
+        ]
+      },
+      "prompt": {
+        "template_file": "rag_generation_analysis.md",
+        "inputs": ["query_text", "rag_context", "ranked_chunks"],
+        "ai_model": "{{llm_model}}",
+        "output_variable": "rag_response"
+      }
+    }
+  },
+  "inputs": {
+    "required": ["query_text", "document_embeddings"],
+    "optional": ["search_preferences", "generation_style", "context_requirements"]
+  },
+  "outputs": {
+    "retrieved_chunks": "Relevant document chunks from vector search",
+    "ranked_chunks": "Relevance-ranked context chunks",
+    "rag_context": "Prepared context for AI generation",
+    "rag_response": "AI-generated response using retrieved context"
+  },
+  "configuration_form": "unified_rag_query_form.json",
+  "estimated_time": "1-3 minutes",
+  "complexity": "medium",
+  "ooda_stage_rationale": "Orient stage - using RAG to understand and contextualize information from knowledge base for informed reasoning",
+  "rag_integration_points": {
+    "retrieval_phase": "TidyLLM vector search and ranking",
+    "augmentation_phase": "Context preparation and optimization",
+    "generation_phase": "AI reasoning with retrieved context"
+  },
+  "tags": ["unified", "rag", "retrieval", "vector_search", "question_answering", "orient"]
+}

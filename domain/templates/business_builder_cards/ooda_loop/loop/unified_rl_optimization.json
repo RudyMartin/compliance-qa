@@ -1,0 +1,64 @@
+{
+  "card_id": "unified_rl_optimization",
+  "card_name": "Unified RL Optimization",
+  "card_type": "unified_action",
+  "category": "loop",
+  "ooda_level": "loop",
+  "icon": "🔄",
+  "description": "Optimize workflow performance through reinforcement learning feedback and continuous improvement cycles",
+  "business_value": "Continuously improve system performance through intelligent feedback loops and optimization",
+  "use_cases": [
+    "Performance optimization",
+    "Workflow improvement",
+    "Learning from execution results",
+    "Adaptive system enhancement"
+  ],
+  "step_definition": {
+    "step_type": "unified",
+    "phases": {
+      "action": {
+        "tidyllm_functions": [
+          {
+            "function": "analyze_performance_metrics",
+            "inputs": ["execution_results", "execution_assessment"],
+            "parameters": {
+              "performance_dimensions": "{{performance_dimensions}}",
+              "baseline_comparison": "{{baseline_comparison}}"
+            },
+            "output_variable": "performance_analysis"
+          },
+          {
+            "function": "optimize_workflow_factors",
+            "inputs": ["performance_analysis"],
+            "parameters": {
+              "rl_strategy": "{{rl_strategy}}",
+              "optimization_targets": "{{optimization_targets}}",
+              "learning_rate": "{{learning_rate}}"
+            },
+            "output_variable": "optimization_recommendations"
+          }
+        ]
+      },
+      "prompt": {
+        "template_file": "step_05_rl_optimization_analysis.md",
+        "inputs": ["performance_analysis", "optimization_recommendations"],
+        "ai_model": "{{llm_model}}",
+        "output_variable": "improvement_strategy"
+      }
+    }
+  },
+  "inputs": {
+    "required": ["execution_results"],
+    "optional": ["execution_assessment", "performance_baselines", "optimization_preferences"]
+  },
+  "outputs": {
+    "performance_analysis": "Detailed performance metrics and improvement opportunities",
+    "optimization_recommendations": "RL-driven optimization suggestions",
+    "improvement_strategy": "AI-enhanced strategy for continuous improvement"
+  },
+  "configuration_form": "unified_rl_optimization_form.json",
+  "estimated_time": "3-8 minutes",
+  "complexity": "high",
+  "ooda_stage_rationale": "Loop stage - continuous improvement through reinforcement learning and feedback optimization",
+  "tags": ["unified", "rl_optimization", "performance_analysis", "continuous_improvement", "feedback_loop", "loop"]
+}

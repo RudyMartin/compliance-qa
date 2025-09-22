@@ -1,0 +1,73 @@
+{
+  "card_id": "unified_rag_indexing",
+  "card_name": "Unified RAG Indexing",
+  "card_type": "unified_action",
+  "category": "observe",
+  "ooda_level": "observe",
+  "icon": "📚",
+  "description": "Create and maintain RAG knowledge bases with intelligent document indexing and vector store optimization",
+  "business_value": "Build searchable knowledge repositories that serve as foundation for intelligent retrieval systems",
+  "use_cases": [
+    "Knowledge base construction",
+    "Document collection indexing",
+    "Vector store optimization",
+    "Multi-source knowledge integration",
+    "Semantic search preparation"
+  ],
+  "step_definition": {
+    "step_type": "unified",
+    "phases": {
+      "action": {
+        "tidyllm_functions": [
+          {
+            "function": "build_rag_knowledge_base",
+            "inputs": ["document_collection"],
+            "parameters": {
+              "indexing_strategy": "{{indexing_strategy}}",
+              "embedding_model": "{{embedding_model}}",
+              "chunk_optimization": "{{chunk_optimization}}"
+            },
+            "output_variable": "rag_knowledge_base"
+          },
+          {
+            "function": "create_vector_store",
+            "inputs": ["rag_knowledge_base"],
+            "parameters": {
+              "store_type": "{{store_type}}",
+              "indexing_algorithm": "{{indexing_algorithm}}",
+              "similarity_metric": "{{similarity_metric}}"
+            },
+            "output_variable": "vector_store"
+          },
+          {
+            "function": "optimize_retrieval_performance",
+            "inputs": ["vector_store"],
+            "parameters": {
+              "performance_targets": "{{performance_targets}}",
+              "optimization_method": "{{optimization_method}}"
+            },
+            "output_variable": "optimized_vector_store"
+          }
+        ]
+      },
+      "prompt": {
+        "template_file": "rag_indexing_quality_analysis.md",
+        "inputs": ["rag_knowledge_base", "vector_store", "optimized_vector_store"],
+        "output_variable": "indexing_quality_assessment"
+      }
+    }
+  },
+  "inputs": {
+    "required": ["document_collection"],
+    "optional": ["indexing_preferences", "performance_requirements"]
+  },
+  "outputs": {
+    "rag_knowledge_base": "Processed knowledge base ready for indexing",
+    "vector_store": "Searchable vector database",
+    "optimized_vector_store": "Performance-optimized vector store",
+    "indexing_quality_assessment": "AI analysis of indexing quality and recommendations"
+  },
+  "rag_type": "knowledge_base_creation",
+  "ooda_stage_rationale": "Observe stage - gathering and preparing data for intelligent retrieval systems",
+  "tags": ["unified", "rag_indexing", "knowledge_base", "vector_store", "observe"]
+}

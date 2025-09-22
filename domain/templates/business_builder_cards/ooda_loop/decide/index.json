@@ -1,0 +1,29 @@
+{
+  "ooda_level": "decide",
+  "level_name": "Decide Stage",
+  "level_description": "Decision-making, strategy formation, and recommendation generation cards",
+  "level_purpose": "Synthesize insights into strategic recommendations and actionable decisions",
+  "business_value": "Convert understanding into strategic direction and concrete action plans",
+  "cards": [
+    {
+      "card_id": "unified_insight_synthesis",
+      "card_name": "Unified Insight Synthesis",
+      "complexity": "high",
+      "primary_function": "Strategic insight synthesis and recommendation generation using AI reasoning",
+      "outputs": ["synthesized_insights", "strategic_recommendations", "final_insights"]
+    }
+  ],
+  "stage_characteristics": {
+    "focus": "Strategic decision-making and planning",
+    "output_types": ["decisions", "strategies", "recommendations", "action_plans", "priorities"],
+    "processing_style": "Synthesis-focused, strategy-heavy",
+    "ai_involvement": "Very High - complex reasoning, strategic thinking, and decision support"
+  },
+  "recommended_flow": [
+    "Receive analyzed insights from Orient stage",
+    "Synthesize multiple data sources and perspectives",
+    "Generate strategic recommendations",
+    "Prioritize actions and decisions",
+    "Create actionable plans for Act stage"
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "card_id": "unified_insight_synthesis",
+  "card_name": "Unified Insight Synthesis",
+  "card_type": "unified_action",
+  "category": "decide",
+  "ooda_level": "decide",
+  "icon": "💡",
+  "description": "Synthesize insights from analysis data and generate strategic recommendations using AI reasoning and knowledge synthesis",
+  "business_value": "Transform raw analysis into actionable insights and strategic recommendations",
+  "use_cases": [
+    "Strategic decision support",
+    "Insight generation from complex data",
+    "Recommendation synthesis",
+    "Knowledge integration and reasoning"
+  ],
+  "step_definition": {
+    "step_type": "unified",
+    "phases": {
+      "action": {
+        "tidyllm_functions": [
+          {
+            "function": "synthesize_insights",
+            "inputs": ["ai_analysis", "content_classification", "extracted_entities"],
+            "parameters": {
+              "synthesis_depth": "{{synthesis_depth}}",
+              "focus_areas": "{{focus_areas}}"
+            },
+            "output_variable": "synthesized_insights"
+          },
+          {
+            "function": "generate_recommendations",
+            "inputs": ["synthesized_insights"],
+            "parameters": {
+              "recommendation_types": "{{recommendation_types}}",
+              "priority_framework": "{{priority_framework}}"
+            },
+            "output_variable": "strategic_recommendations"
+          }
+        ]
+      },
+      "prompt": {
+        "template_file": "step_03_insight_synthesis_analysis.md",
+        "inputs": ["synthesized_insights", "strategic_recommendations"],
+        "ai_model": "{{llm_model}}",
+        "output_variable": "final_insights"
+      }
+    }
+  },
+  "inputs": {
+    "required": ["ai_analysis", "content_classification"],
+    "optional": ["extracted_entities", "synthesis_preferences", "recommendation_criteria"]
+  },
+  "outputs": {
+    "synthesized_insights": "Integrated insights from all analysis phases",
+    "strategic_recommendations": "Prioritized recommendations and action items",
+    "final_insights": "AI-enhanced insight synthesis with strategic guidance"
+  },
+  "configuration_form": "unified_insight_synthesis_form.json",
+  "estimated_time": "2-4 minutes",
+  "complexity": "high",
+  "ooda_stage_rationale": "Decide stage - synthesizing insights and generating strategic recommendations for action",
+  "tags": ["unified", "insight_synthesis", "recommendations", "strategy", "decision_support", "decide"]
+}

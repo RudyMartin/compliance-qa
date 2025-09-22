@@ -1,0 +1,110 @@
+{
+  "workflow_id": "data_processing_pipeline",
+  "workflow_name": "Data Processing Pipeline",
+  "workflow_type": "data_pipeline",
+  "description": "Multi-stage data processing workflow with validation and transformation steps",
+  "steps": {
+    "1": {
+      "step_id": "data_ingestion",
+      "step_name": "Data Ingestion",
+      "step_type": "ingest",
+      "step_number": "1",
+      "description": "Ingest raw data from multiple sources",
+      "requires": ["input_data"],
+      "produces": ["raw_dataset"],
+      "params": {
+        "source_types": ["csv", "json", "api"],
+        "batch_size": 1000,
+        "timeout": 300
+      },
+      "kind": "extract",
+      "validation_rules": {
+        "required_fields": ["timestamp", "data"],
+        "max_file_size": "100MB"
+      }
+    },
+    "2": {
+      "step_id": "data_validation",
+      "step_name": "Data Validation",
+      "step_type": "validate",
+      "step_number": "2",
+      "description": "Validate data quality and completeness",
+      "requires": ["raw_dataset"],
+      "produces": ["validated_dataset", "validation_report"],
+      "params": {
+        "validation_rules": ["schema_check", "null_check", "range_check"],
+        "error_threshold": 0.05
+      },
+      "kind": "validate",
+      "validation_rules": {
+        "min_completeness": 0.95,
+        "max_error_rate": 0.05
+      }
+    },
+    "3": {
+      "step_id": "data_transformation",
+      "step_name": "Data Transformation",
+      "step_type": "transform",
+      "step_number": "3",
+      "description": "Apply transformations and feature engineering",
+      "requires": ["validated_dataset"],
+      "produces": ["transformed_dataset"],
+      "params": {
+        "transformations": ["normalize", "encode_categorical", "feature_scaling"],
+        "target_format": "parquet"
+      },
+      "kind": "transform",
+      "validation_rules": {
+        "preserve_record_count": true,
+        "required_columns": ["features", "target"]
+      }
+    },
+    "4": {
+      "step_id": "quality_assurance",
+      "step_name": "Quality Assurance",
+      "step_type": "analyze",
+      "step_number": "4",
+      "description": "Perform quality checks on transformed data",
+      "requires": ["transformed_dataset"],
+      "produces": ["qa_report", "quality_metrics"],
+      "params": {
+        "checks": ["distribution_analysis", "outlier_detection", "correlation_analysis"],
+        "generate_visualizations": true
+      },
+      "kind": "analyze",
+      "validation_rules": {
+        "min_quality_score": 0.8,
+        "max_outlier_percentage": 0.1
+      }
+    },
+    "5": {
+      "step_id": "data_export",
+      "step_name": "Data Export",
+      "step_type": "output",
+      "step_number": "5",
+      "description": "Export processed data to target systems",
+      "requires": ["transformed_dataset", "qa_report"],
+      "produces": ["exported_data", "export_log"],
+      "params": {
+        "export_formats": ["parquet", "csv"],
+        "destinations": ["data_warehouse", "ml_platform"],
+        "compression": "gzip"
+      },
+      "kind": "report",
+      "validation_rules": {
+        "verify_export_integrity": true,
+        "log_all_operations": true
+      }
+    }
+  },
+  "metadata": {
+    "created_at": "2025-01-14T12:00:00Z",
+    "workflow_complexity": "medium",
+    "expected_execution_time": "15-30 minutes",
+    "resource_requirements": {
+      "memory": "4GB",
+      "cpu": "2 cores",
+      "storage": "10GB temp space"
+    }
+  }
+}

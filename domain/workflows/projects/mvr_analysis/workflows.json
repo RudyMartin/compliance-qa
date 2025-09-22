@@ -1,0 +1,34 @@
+{
+  "workflows": {
+    "MVR Standard Analysis": {
+      "name": "MVR Standard Analysis",
+      "version": "1.0",
+      "created": "2025-01-14",
+      "description": "Standard MVR document analysis workflow",
+      "cards": [
+        {"id": "mvr_extract", "name": "📄 Extract MVR Document", "category": "observe", "ai_level": "None"},
+        {"id": "mvr_tag", "name": "🏷️ MVR Tagging", "category": "observe", "ai_level": "Assist"},
+        {"id": "mvr_qa", "name": "❓ MVR QA Analysis", "category": "orient", "ai_level": "Auto"},
+        {"id": "mvr_peer", "name": "👥 MVR Peer Review", "category": "decide", "ai_level": "Auto"},
+        {"id": "mvr_report", "name": "📊 MVR Report Generation", "category": "act", "ai_level": "Assist"}
+      ]
+    },
+    "MVR Deep Analysis": {
+      "name": "MVR Deep Analysis",
+      "version": "2.0",
+      "created": "2025-01-14",
+      "description": "Comprehensive MVR analysis with risk assessment",
+      "cards": [
+        {"id": "mvr_extract", "name": "📄 Extract MVR Document", "category": "observe", "ai_level": "None"},
+        {"id": "mvr_metadata", "name": "📊 Extract Metadata", "category": "observe", "ai_level": "None"},
+        {"id": "mvr_tag", "name": "🏷️ MVR Tagging", "category": "observe", "ai_level": "Assist"},
+        {"id": "mvr_qa", "name": "❓ MVR QA Analysis", "category": "orient", "ai_level": "Auto"},
+        {"id": "mvr_risk", "name": "⚠️ Risk Assessment", "category": "orient", "ai_level": "Auto"},
+        {"id": "mvr_compliance", "name": "✅ Compliance Check", "category": "decide", "ai_level": "Auto"},
+        {"id": "mvr_peer", "name": "👥 MVR Peer Review", "category": "decide", "ai_level": "Auto"},
+        {"id": "mvr_report", "name": "📊 MVR Report Generation", "category": "act", "ai_level": "Assist"},
+        {"id": "mvr_archive", "name": "💾 Archive Results", "category": "act", "ai_level": "None"}
+      ]
+    }
+  }
+}

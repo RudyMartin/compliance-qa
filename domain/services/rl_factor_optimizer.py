@@ -249,6 +249,53 @@ class RLFactorOptimizer:
 
         return self.get_current_factors()
 
+    def optimize_step_factors(self, step_config: Dict[str, Any],
+                              performance_metrics: Dict[str, float] = None) -> Dict[str, Any]:
+        """
+        Optimize RL factors for a specific step configuration.
+
+        This method is called by TidyLLM RL functions to optimize factors
+        for individual workflow steps.
+
+        Args:
+            step_config: Step configuration to optimize
+            performance_metrics: Recent performance data
+
+        Returns:
+            Optimized factors for the step
+        """
+
+        # Extract performance data
+        if performance_metrics:
+            recent_rewards = performance_metrics.get('rewards', [])
+            recent_latencies = performance_metrics.get('latencies', [])
+        else:
+            recent_rewards = []
+            recent_latencies = []
+
+        # Use existing optimization logic
+        optimized_factors = self.optimize_factors(recent_rewards, recent_latencies)
+
+        # Add step-specific optimizations
+        step_type = step_config.get('step_type', 'unknown')
+
+        # Adjust factors based on step type
+        if step_type == 'prompt':
+            # Prompt steps benefit from higher temperature for creativity
+            optimized_factors['temperature'] = min(1.5, optimized_factors['temperature'] * 1.1)
+        elif step_type == 'action':
+            # Action steps benefit from lower temperature for consistency
+            optimized_factors['temperature'] = max(0.3, optimized_factors['temperature'] * 0.9)
+
+        # Adjust exploration based on step complexity
+        step_complexity = step_config.get('metadata', {}).get('complexity', 'medium')
+        if step_complexity == 'high':
+            optimized_factors['epsilon'] = min(0.2, optimized_factors['epsilon'] * 1.05)
+        elif step_complexity == 'low':
+            optimized_factors['epsilon'] = max(0.01, optimized_factors['epsilon'] * 0.95)
+
+        return optimized_factors
+
     def _compute_factor_gradients(self, reward: float, variance: float):
         """
         Compute gradients for each factor based on performance correlation.

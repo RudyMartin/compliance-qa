@@ -1,0 +1,218 @@
+{
+  "action_type": "unified_document_comparison",
+  "form_title": "Configure Document Comparison",
+  "form_description": "Set up document similarity analysis and structural comparison using TidyLLM + AI",
+  "form_sections": [
+    {
+      "section_id": "document_inputs",
+      "section_title": "Document Sources",
+      "section_description": "Select the documents to compare",
+      "fields": [
+        {
+          "field_id": "document_a_source",
+          "field_name": "First Document",
+          "field_type": "select",
+          "required": true,
+          "options": [
+            {"value": "upload", "label": "Upload File", "description": "Upload document directly"},
+            {"value": "previous_step", "label": "From Previous Step", "description": "Use output from previous workflow step"},
+            {"value": "s3", "label": "S3 Bucket", "description": "Load from AWS S3"},
+            {"value": "local", "label": "Local Path", "description": "Use local file system"}
+          ],
+          "default_value": "previous_step",
+          "help_text": "Source of the first document for comparison"
+        },
+        {
+          "field_id": "document_b_source",
+          "field_name": "Second Document",
+          "field_type": "select",
+          "required": true,
+          "options": [
+            {"value": "upload", "label": "Upload File", "description": "Upload document directly"},
+            {"value": "previous_step", "label": "From Previous Step", "description": "Use output from previous workflow step"},
+            {"value": "s3", "label": "S3 Bucket", "description": "Load from AWS S3"},
+            {"value": "local", "label": "Local Path", "description": "Use local file system"}
+          ],
+          "default_value": "upload",
+          "help_text": "Source of the second document for comparison"
+        }
+      ]
+    },
+    {
+      "section_id": "similarity_analysis",
+      "section_title": "Similarity Analysis",
+      "section_description": "Configure how documents are compared for similarity",
+      "fields": [
+        {
+          "field_id": "similarity_metrics",
+          "field_name": "Similarity Metrics",
+          "field_type": "multi_select",
+          "required": true,
+          "options": [
+            {"value": "cosine", "label": "Cosine Similarity", "description": "Standard vector similarity"},
+            {"value": "euclidean", "label": "Euclidean Distance", "description": "Geometric distance measure"},
+            {"value": "jaccard", "label": "Jaccard Index", "description": "Set similarity coefficient"},
+            {"value": "semantic", "label": "Semantic Similarity", "description": "Meaning-based comparison"}
+          ],
+          "default_value": ["cosine", "semantic"],
+          "help_text": "Methods for calculating document similarity"
+        },
+        {
+          "field_id": "chunk_level_comparison",
+          "field_name": "Chunk-Level Analysis",
+          "field_type": "checkbox",
+          "default_value": true,
+          "help_text": "Compare documents at chunk level for detailed analysis"
+        }
+      ]
+    },
+    {
+      "section_id": "structural_comparison",
+      "section_title": "Structural Comparison",
+      "section_description": "Configure structural and formatting difference detection",
+      "fields": [
+        {
+          "field_id": "comparison_granularity",
+          "field_name": "Comparison Granularity",
+          "field_type": "select",
+          "required": true,
+          "options": [
+            {"value": "document", "label": "Document Level", "description": "High-level structural comparison"},
+            {"value": "section", "label": "Section Level", "description": "Compare major sections"},
+            {"value": "paragraph", "label": "Paragraph Level", "description": "Detailed paragraph-by-paragraph"},
+            {"value": "sentence", "label": "Sentence Level", "description": "Fine-grained sentence comparison"}
+          ],
+          "default_value": "section",
+          "help_text": "Level of detail for structural comparison"
+        },
+        {
+          "field_id": "detect_formatting",
+          "field_name": "Include Formatting Analysis",
+          "field_type": "checkbox",
+          "default_value": false,
+          "help_text": "Analyze differences in formatting and layout"
+        }
+      ]
+    },
+    {
+      "section_id": "element_extraction",
+      "section_title": "Unique Element Detection",
+      "section_description": "Identify elements unique to each document",
+      "fields": [
+        {
+          "field_id": "element_types",
+          "field_name": "Element Types to Extract",
+          "field_type": "multi_select",
+          "required": true,
+          "options": [
+            {"value": "key_terms", "label": "Key Terms", "description": "Important terminology"},
+            {"value": "concepts", "label": "Concepts", "description": "Main ideas and concepts"},
+            {"value": "data_points", "label": "Data Points", "description": "Numbers, dates, statistics"},
+            {"value": "conclusions", "label": "Conclusions", "description": "Final statements and results"},
+            {"value": "recommendations", "label": "Recommendations", "description": "Suggested actions"},
+            {"value": "references", "label": "References", "description": "Citations and sources"}
+          ],
+          "default_value": ["key_terms", "concepts", "conclusions"],
+          "help_text": "Types of unique elements to identify in each document"
+        },
+        {
+          "field_id": "confidence_threshold",
+          "field_name": "Confidence Threshold",
+          "field_type": "slider",
+          "min_value": 0.0,
+          "max_value": 1.0,
+          "step": 0.1,
+          "default_value": 0.7,
+          "help_text": "Minimum confidence for element uniqueness (0.0-1.0)"
+        }
+      ]
+    },
+    {
+      "section_id": "ai_analysis",
+      "section_title": "AI Analysis Settings",
+      "section_description": "Configure AI-powered comparison insights",
+      "fields": [
+        {
+          "field_id": "analysis_focus",
+          "field_name": "Analysis Focus Areas",
+          "field_type": "multi_select",
+          "required": true,
+          "options": [
+            {"value": "content_overlap", "label": "Content Overlap", "description": "Shared content analysis"},
+            {"value": "perspective_differences", "label": "Perspective Differences", "description": "Different viewpoints"},
+            {"value": "completeness", "label": "Completeness Comparison", "description": "Coverage gaps"},
+            {"value": "quality_assessment", "label": "Quality Assessment", "description": "Relative quality comparison"},
+            {"value": "contradiction_detection", "label": "Contradiction Detection", "description": "Conflicting information"}
+          ],
+          "default_value": ["content_overlap", "perspective_differences", "completeness"],
+          "help_text": "Areas the AI should focus on during comparison"
+        },
+        {
+          "field_id": "llm_model",
+          "field_name": "AI Model for Analysis",
+          "field_type": "select",
+          "required": true,
+          "options": [
+            {"value": "auto", "label": "Auto Select", "description": "System chooses best model"},
+            {"value": "gpt-4", "label": "GPT-4", "description": "Highest accuracy for analysis"},
+            {"value": "gpt-3.5-turbo", "label": "GPT-3.5 Turbo", "description": "Fast, good accuracy"},
+            {"value": "claude-3-sonnet", "label": "Claude 3 Sonnet", "description": "Excellent for comparison analysis"}
+          ],
+          "default_value": "auto",
+          "help_text": "AI model for generating comparison insights"
+        }
+      ]
+    }
+  ],
+  "validation_rules": [
+    {
+      "rule": "different_document_sources",
+      "message": "Document A and Document B should be from different sources or files",
+      "fields": ["document_a_source", "document_b_source"]
+    },
+    {
+      "rule": "at_least_one_similarity_metric",
+      "message": "At least one similarity metric must be selected",
+      "fields": ["similarity_metrics"]
+    },
+    {
+      "rule": "at_least_one_element_type",
+      "message": "At least one element type must be selected for extraction",
+      "fields": ["element_types"]
+    }
+  ],
+  "prerequisites": {
+    "required_artifacts": [
+      "extracted_content_a",
+      "extracted_content_b",
+      "document_embeddings_a",
+      "document_embeddings_b"
+    ],
+    "description": "This action requires content extraction and embeddings from both documents"
+  },
+  "output_preview": {
+    "artifacts_generated": [
+      "similarity_scores: Quantitative similarity metrics between documents",
+      "structural_differences: Detailed structural and organizational differences",
+      "unique_elements: Elements unique to each document",
+      "comparison_insights: AI analysis of document relationships and significance"
+    ],
+    "estimated_time": "3-7 minutes depending on document size and complexity",
+    "estimated_cost": "$0.15-$0.50 depending on model and document length"
+  },
+  "json_template": {
+    "type": "unified_document_comparison",
+    "params": {
+      "document_a_source": "{{document_a_source}}",
+      "document_b_source": "{{document_b_source}}",
+      "similarity_metrics": "{{similarity_metrics}}",
+      "chunk_level_comparison": "{{chunk_level_comparison}}",
+      "comparison_granularity": "{{comparison_granularity}}",
+      "detect_formatting": "{{detect_formatting}}",
+      "element_types": "{{element_types}}",
+      "confidence_threshold": "{{confidence_threshold}}",
+      "analysis_focus": "{{analysis_focus}}",
+      "llm_model": "{{llm_model}}"
+    }
+  }
+}

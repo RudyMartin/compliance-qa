@@ -1,0 +1,135 @@
+{
+  "workflow_id": "ml_model_training",
+  "workflow_name": "ML Model Training Pipeline",
+  "workflow_type": "ml_training",
+  "description": "End-to-end machine learning model training with hyperparameter optimization",
+  "steps": {
+    "1": {
+      "step_id": "feature_preparation",
+      "step_name": "Feature Preparation",
+      "step_type": "process",
+      "step_number": "1",
+      "description": "Prepare features for model training",
+      "requires": ["training_data"],
+      "produces": ["feature_matrix", "feature_metadata"],
+      "params": {
+        "feature_selection_method": "mutual_information",
+        "max_features": 100,
+        "handle_missing": "impute"
+      },
+      "kind": "transform",
+      "validation_rules": {
+        "min_feature_variance": 0.01,
+        "max_correlation": 0.95
+      }
+    },
+    "2": {
+      "step_id": "train_test_split",
+      "step_name": "Train Test Split",
+      "step_type": "process",
+      "step_number": "2",
+      "description": "Split data into training and testing sets",
+      "requires": ["feature_matrix"],
+      "produces": ["train_set", "test_set", "validation_set"],
+      "params": {
+        "test_size": 0.2,
+        "validation_size": 0.1,
+        "random_state": 42,
+        "stratify": true
+      },
+      "kind": "transform",
+      "validation_rules": {
+        "min_train_size": 1000,
+        "balanced_splits": true
+      }
+    },
+    "3": {
+      "step_id": "hyperparameter_tuning",
+      "step_name": "Hyperparameter Tuning",
+      "step_type": "analyze",
+      "step_number": "3",
+      "description": "Optimize model hyperparameters using cross-validation",
+      "requires": ["train_set", "validation_set"],
+      "produces": ["best_params", "tuning_results"],
+      "params": {
+        "search_method": "bayesian_optimization",
+        "n_trials": 100,
+        "cv_folds": 5,
+        "scoring_metric": "f1_weighted"
+      },
+      "kind": "analyze",
+      "validation_rules": {
+        "min_improvement": 0.02,
+        "convergence_patience": 20
+      }
+    },
+    "4": {
+      "step_id": "model_training",
+      "step_name": "Model Training",
+      "step_type": "process",
+      "step_number": "4",
+      "description": "Train final model with optimized parameters",
+      "requires": ["train_set", "best_params"],
+      "produces": ["trained_model", "training_metrics"],
+      "params": {
+        "algorithm": "gradient_boosting",
+        "early_stopping": true,
+        "save_checkpoints": true
+      },
+      "kind": "classify",
+      "validation_rules": {
+        "min_training_accuracy": 0.8,
+        "max_training_time": 3600
+      }
+    },
+    "5": {
+      "step_id": "model_evaluation",
+      "step_name": "Model Evaluation",
+      "step_type": "analyze",
+      "step_number": "5",
+      "description": "Evaluate model performance on test set",
+      "requires": ["trained_model", "test_set"],
+      "produces": ["evaluation_report", "performance_metrics"],
+      "params": {
+        "metrics": ["accuracy", "precision", "recall", "f1", "auc"],
+        "generate_plots": true,
+        "feature_importance": true
+      },
+      "kind": "validate",
+      "validation_rules": {
+        "min_test_accuracy": 0.75,
+        "max_overfitting": 0.1
+      }
+    },
+    "6": {
+      "step_id": "model_deployment",
+      "step_name": "Model Deployment",
+      "step_type": "output",
+      "step_number": "6",
+      "description": "Deploy model to production environment",
+      "requires": ["trained_model", "evaluation_report"],
+      "produces": ["deployment_endpoint", "deployment_log"],
+      "params": {
+        "deployment_target": "ml_platform",
+        "enable_monitoring": true,
+        "auto_scaling": true
+      },
+      "kind": "notify",
+      "validation_rules": {
+        "health_check_passed": true,
+        "performance_baseline_met": true
+      }
+    }
+  },
+  "metadata": {
+    "created_at": "2025-01-14T12:00:00Z",
+    "workflow_complexity": "high",
+    "expected_execution_time": "2-4 hours",
+    "resource_requirements": {
+      "memory": "16GB",
+      "cpu": "8 cores",
+      "gpu": "1 GPU (optional)",
+      "storage": "50GB"
+    }
+  }
+}

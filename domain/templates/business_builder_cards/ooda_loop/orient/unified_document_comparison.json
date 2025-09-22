@@ -1,0 +1,74 @@
+{
+  "card_id": "unified_document_comparison",
+  "card_name": "Unified Document Comparison",
+  "card_type": "unified_action",
+  "category": "orient",
+  "ooda_level": "orient",
+  "icon": "📊",
+  "description": "Compare multiple documents using TidyLLM similarity analysis and AI-powered structural and semantic comparison",
+  "business_value": "Identify differences, similarities, and relationships between documents for informed decision-making",
+  "use_cases": [
+    "Contract comparison and analysis",
+    "Version control and change detection",
+    "Policy document alignment",
+    "Research paper similarity analysis",
+    "Compliance document verification"
+  ],
+  "step_definition": {
+    "step_type": "unified",
+    "phases": {
+      "action": {
+        "tidyllm_functions": [
+          {
+            "function": "calculate_document_similarity",
+            "inputs": ["document_embeddings_a", "document_embeddings_b"],
+            "parameters": {
+              "similarity_metrics": "{{similarity_metrics}}",
+              "chunk_level_comparison": "{{chunk_level_comparison}}"
+            },
+            "output_variable": "similarity_scores"
+          },
+          {
+            "function": "detect_structural_differences",
+            "inputs": ["extracted_content_a", "extracted_content_b"],
+            "parameters": {
+              "comparison_granularity": "{{comparison_granularity}}",
+              "detect_formatting": "{{detect_formatting}}"
+            },
+            "output_variable": "structural_differences"
+          },
+          {
+            "function": "extract_unique_elements",
+            "inputs": ["extracted_content_a", "extracted_content_b"],
+            "parameters": {
+              "element_types": "{{element_types}}",
+              "confidence_threshold": "{{confidence_threshold}}"
+            },
+            "output_variable": "unique_elements"
+          }
+        ]
+      },
+      "prompt": {
+        "template_file": "document_comparison_analysis.md",
+        "inputs": ["similarity_scores", "structural_differences", "unique_elements", "extracted_content_a", "extracted_content_b"],
+        "ai_model": "{{llm_model}}",
+        "output_variable": "comparison_insights"
+      }
+    }
+  },
+  "inputs": {
+    "required": ["document_a", "document_b"],
+    "optional": ["comparison_criteria", "analysis_depth", "focus_areas"]
+  },
+  "outputs": {
+    "similarity_scores": "Quantitative similarity metrics and scores",
+    "structural_differences": "Detailed structural and formatting differences",
+    "unique_elements": "Elements unique to each document",
+    "comparison_insights": "AI analysis of document relationships and significance"
+  },
+  "configuration_form": "unified_document_comparison_form.json",
+  "estimated_time": "3-7 minutes",
+  "complexity": "medium-high",
+  "ooda_stage_rationale": "Orient stage - understanding relationships and differences between documents to build comparative context",
+  "tags": ["unified", "document_comparison", "similarity_analysis", "structural_comparison", "orient"]
+}

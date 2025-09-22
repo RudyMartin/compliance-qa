@@ -17,6 +17,13 @@ from typing import Dict, List, Any, Optional, Tuple
 from datetime import datetime
 import logging
 
+# TidyLLM RL integration
+try:
+    from packages.tidyllm.services.workflow_rl_optimizer import create_rl_enhanced_step
+    TIDYLLM_RL_AVAILABLE = True
+except ImportError:
+    TIDYLLM_RL_AVAILABLE = False
+
 logger = logging.getLogger(__name__)
 
 
@@ -209,6 +216,42 @@ class AskAIStepsManager:
                 'success': False,
                 'error': str(e)
             }
+
+    def enhance_ai_suggestion_with_rl(self, suggestion_data: Dict[str, Any]) -> Dict[str, Any]:
+        """
+        Enhance AI suggestions with TidyLLM RL optimization.
+
+        Args:
+            suggestion_data: AI suggestion data to enhance
+
+        Returns:
+            Enhanced suggestion data with RL factors
+        """
+        if not TIDYLLM_RL_AVAILABLE:
+            logger.warning("TidyLLM RL not available for AI suggestion enhancement")
+            return suggestion_data
+
+        try:
+            # Enhance workflow steps in the AI suggestion
+            workflow_steps = suggestion_data.get('workflow_steps', [])
+            enhanced_steps = []
+
+            for step in workflow_steps:
+                enhanced_step = create_rl_enhanced_step(step, self.project_id)
+                enhanced_steps.append(enhanced_step)
+
+            suggestion_data.update({
+                'workflow_steps': enhanced_steps,
+                'rl_enhanced': True,
+                'rl_enhancement_timestamp': datetime.now().isoformat(),
+                'rl_enhancement_count': len(enhanced_steps)
+            })
+
+            logger.info(f"Successfully enhanced AI suggestion with TidyLLM RL: {suggestion_data.get('suggestion_name', 'unnamed')}")
+            return suggestion_data
+        except Exception as e:
+            logger.error(f"Failed to enhance AI suggestion with RL: {e}")
+            return suggestion_data
 
     def generate_workflow_from_conversation(self, conversation_id: str) -> Dict[str, Any]:
         """

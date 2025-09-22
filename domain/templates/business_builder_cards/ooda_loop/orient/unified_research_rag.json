@@ -1,0 +1,73 @@
+{
+  "card_id": "unified_research_rag",
+  "card_name": "Unified Research RAG",
+  "card_type": "unified_action",
+  "category": "orient",
+  "ooda_level": "orient",
+  "icon": "🔬",
+  "description": "Perform deep research analysis using RAG with multi-hop reasoning and cross-source synthesis",
+  "business_value": "Conduct comprehensive research that connects insights across multiple sources and domains",
+  "use_cases": [
+    "Multi-source research synthesis",
+    "Academic literature analysis",
+    "Market research aggregation",
+    "Competitive intelligence gathering",
+    "Cross-domain knowledge discovery"
+  ],
+  "step_definition": {
+    "step_type": "unified",
+    "phases": {
+      "action": {
+        "tidyllm_functions": [
+          {
+            "function": "multi_hop_retrieval",
+            "inputs": ["research_query", "vector_store"],
+            "parameters": {
+              "hop_depth": "{{hop_depth}}",
+              "expansion_strategy": "{{expansion_strategy}}",
+              "relevance_threshold": "{{relevance_threshold}}"
+            },
+            "output_variable": "research_chunks"
+          },
+          {
+            "function": "cross_source_synthesis",
+            "inputs": ["research_chunks"],
+            "parameters": {
+              "synthesis_method": "{{synthesis_method}}",
+              "contradiction_detection": "{{contradiction_detection}}"
+            },
+            "output_variable": "synthesized_research"
+          },
+          {
+            "function": "identify_research_gaps",
+            "inputs": ["research_query", "synthesized_research"],
+            "parameters": {
+              "gap_analysis": "{{gap_analysis}}",
+              "completeness_assessment": "{{completeness_assessment}}"
+            },
+            "output_variable": "research_gaps"
+          }
+        ]
+      },
+      "prompt": {
+        "template_file": "research_rag_analysis.md",
+        "inputs": ["research_query", "synthesized_research", "research_gaps"],
+        "ai_model": "gpt-4",
+        "output_variable": "research_insights"
+      }
+    }
+  },
+  "inputs": {
+    "required": ["research_query", "vector_store"],
+    "optional": ["research_scope", "synthesis_preferences"]
+  },
+  "outputs": {
+    "research_chunks": "Retrieved information from multiple sources",
+    "synthesized_research": "Cross-source research synthesis",
+    "research_gaps": "Identified knowledge gaps and limitations",
+    "research_insights": "Comprehensive research analysis and findings"
+  },
+  "rag_type": "research_synthesis",
+  "ooda_stage_rationale": "Orient stage - deep research understanding through multi-source analysis and synthesis",
+  "tags": ["unified", "research_rag", "multi_hop", "synthesis", "orient"]
+}

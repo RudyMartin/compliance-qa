@@ -1,0 +1,50 @@
+{
+  "ooda_level": "orient",
+  "level_name": "Orient Stage",
+  "level_description": "Analysis, pattern recognition, and content understanding cards for situational comprehension",
+  "level_purpose": "Analyze, classify, and understand content to build situational awareness and context",
+  "business_value": "Transform raw data into meaningful insights and contextual understanding",
+  "cards": [
+    {
+      "card_id": "unified_content_intelligence",
+      "card_name": "Unified Content Intelligence",
+      "complexity": "medium",
+      "primary_function": "Entity extraction, sentiment analysis, and AI-powered content classification",
+      "outputs": ["extracted_entities", "sentiment_analysis", "content_classification"]
+    },
+    {
+      "card_id": "unified_document_comparison",
+      "card_name": "Unified Document Comparison",
+      "complexity": "medium-high",
+      "primary_function": "Compare multiple documents using similarity analysis and structural comparison",
+      "outputs": ["similarity_scores", "structural_differences", "unique_elements", "comparison_insights"]
+    },
+    {
+      "card_id": "unified_rag_query",
+      "card_name": "Unified RAG Query",
+      "complexity": "medium",
+      "primary_function": "Intelligent document querying using RAG (Retrieval-Augmented Generation)",
+      "outputs": ["retrieved_chunks", "ranked_chunks", "rag_context", "rag_response"]
+    },
+    {
+      "card_id": "unified_ask_expert",
+      "card_name": "Unified Ask An Expert",
+      "complexity": "medium",
+      "primary_function": "Connect to expert LLM interfaces for domain-specific insights and consultation",
+      "outputs": ["expert_domain", "expert_routing", "formatted_expert_query", "expert_consultation_result"]
+    }
+  ],
+  "stage_characteristics": {
+    "focus": "Understanding and contextualizing data",
+    "output_types": ["entities", "classifications", "patterns", "relationships", "context"],
+    "processing_style": "Analysis-focused, intelligence-heavy",
+    "ai_involvement": "High - complex reasoning and pattern recognition"
+  },
+  "recommended_flow": [
+    "Receive processed data from Observe stage",
+    "Extract meaningful entities and relationships",
+    "Analyze sentiment and contextual elements",
+    "Classify and categorize content",
+    "Build situational understanding for Decide stage"
+  ]
+}

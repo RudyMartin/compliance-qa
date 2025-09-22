@@ -1,0 +1,158 @@
+{
+  "action_type": "unified_content_intelligence",
+  "form_title": "Configure Content Intelligence",
+  "form_description": "Set up semantic analysis, entity extraction, and AI classification",
+  "form_sections": [
+    {
+      "section_id": "entity_extraction",
+      "section_title": "Entity Extraction",
+      "section_description": "Configure what types of entities to extract from the content",
+      "fields": [
+        {
+          "field_id": "entity_types",
+          "field_name": "Entity Types to Extract",
+          "field_type": "multi_select",
+          "required": true,
+          "options": [
+            {"value": "PERSON", "label": "People", "description": "Names of individuals"},
+            {"value": "ORG", "label": "Organizations", "description": "Companies, institutions"},
+            {"value": "GPE", "label": "Locations", "description": "Countries, cities, regions"},
+            {"value": "DATE", "label": "Dates", "description": "Dates and time periods"},
+            {"value": "MONEY", "label": "Money", "description": "Monetary amounts"},
+            {"value": "PRODUCT", "label": "Products", "description": "Product names and models"},
+            {"value": "EVENT", "label": "Events", "description": "Named events and occurrences"},
+            {"value": "LAW", "label": "Laws", "description": "Legal documents and regulations"}
+          ],
+          "default_value": ["PERSON", "ORG", "GPE", "DATE", "MONEY"],
+          "help_text": "Select which types of entities to identify in the document"
+        },
+        {
+          "field_id": "confidence_threshold",
+          "field_name": "Confidence Threshold",
+          "field_type": "slider",
+          "min_value": 0.0,
+          "max_value": 1.0,
+          "step": 0.1,
+          "default_value": 0.7,
+          "help_text": "Minimum confidence score for entity extraction (0.0-1.0)"
+        }
+      ]
+    },
+    {
+      "section_id": "semantic_analysis",
+      "section_title": "Semantic Analysis",
+      "section_description": "Configure deep content analysis settings",
+      "fields": [
+        {
+          "field_id": "include_sentiment",
+          "field_name": "Include Sentiment Analysis",
+          "field_type": "checkbox",
+          "default_value": true,
+          "help_text": "Analyze the emotional tone of the content"
+        },
+        {
+          "field_id": "detect_topics",
+          "field_name": "Detect Topics",
+          "field_type": "checkbox",
+          "default_value": true,
+          "help_text": "Automatically identify main topics in the content"
+        }
+      ]
+    },
+    {
+      "section_id": "classification",
+      "section_title": "Content Classification",
+      "section_description": "Configure how AI classifies the document",
+      "fields": [
+        {
+          "field_id": "classification_labels",
+          "field_name": "Classification Categories",
+          "field_type": "multi_select",
+          "required": true,
+          "options": [
+            {"value": "research_paper", "label": "Research Paper", "description": "Academic or scientific research"},
+            {"value": "technical_report", "label": "Technical Report", "description": "Technical documentation"},
+            {"value": "business_document", "label": "Business Document", "description": "Business plans, proposals"},
+            {"value": "legal_document", "label": "Legal Document", "description": "Contracts, legal texts"},
+            {"value": "financial_report", "label": "Financial Report", "description": "Financial statements, analysis"},
+            {"value": "marketing_material", "label": "Marketing Material", "description": "Marketing and promotional content"},
+            {"value": "policy_document", "label": "Policy Document", "description": "Policies and procedures"},
+            {"value": "user_manual", "label": "User Manual", "description": "Instructions and guides"}
+          ],
+          "default_value": ["research_paper", "technical_report", "business_document", "legal_document"],
+          "help_text": "Categories the AI can classify the document into"
+        },
+        {
+          "field_id": "min_themes",
+          "field_name": "Minimum Themes to Identify",
+          "field_type": "number",
+          "min_value": 1,
+          "max_value": 10,
+          "default_value": 2,
+          "help_text": "Minimum number of themes AI should identify"
+        }
+      ]
+    },
+    {
+      "section_id": "ai_settings",
+      "section_title": "AI Model Settings",
+      "section_description": "Configure AI analysis parameters",
+      "fields": [
+        {
+          "field_id": "llm_model",
+          "field_name": "AI Model for Classification",
+          "field_type": "select",
+          "required": true,
+          "options": [
+            {"value": "auto", "label": "Auto Select", "description": "System chooses best model"},
+            {"value": "gpt-4", "label": "GPT-4", "description": "Highest accuracy for classification"},
+            {"value": "gpt-3.5-turbo", "label": "GPT-3.5 Turbo", "description": "Fast, good accuracy"},
+            {"value": "claude-3-sonnet", "label": "Claude 3 Sonnet", "description": "Excellent for content analysis"}
+          ],
+          "default_value": "auto",
+          "help_text": "AI model for content classification and theme identification"
+        }
+      ]
+    }
+  ],
+  "validation_rules": [
+    {
+      "rule": "at_least_one_entity_type",
+      "message": "At least one entity type must be selected",
+      "fields": ["entity_types"]
+    },
+    {
+      "rule": "at_least_one_classification_label",
+      "message": "At least one classification category must be selected",
+      "fields": ["classification_labels"]
+    }
+  ],
+  "prerequisites": {
+    "required_artifacts": [
+      "extracted_content",
+      "document_embeddings"
+    ],
+    "description": "This action requires content extraction and embeddings from a previous step"
+  },
+  "output_preview": {
+    "artifacts_generated": [
+      "semantic_analysis: Topics, sentiment, and complexity scores",
+      "extracted_entities: Named entities with relationships",
+      "content_classification: Document type and identified themes"
+    ],
+    "estimated_time": "1-3 minutes depending on content length",
+    "estimated_cost": "$0.05-$0.25 depending on model and content complexity"
+  },
+  "json_template": {
+    "type": "unified_content_intelligence",
+    "params": {
+      "entity_types": "{{entity_types}}",
+      "confidence_threshold": "{{confidence_threshold}}",
+      "include_sentiment": "{{include_sentiment}}",
+      "detect_topics": "{{detect_topics}}",
+      "classification_labels": "{{classification_labels}}",
+      "min_themes": "{{min_themes}}",
+      "llm_model": "{{llm_model}}"
+    }
+  }
+}

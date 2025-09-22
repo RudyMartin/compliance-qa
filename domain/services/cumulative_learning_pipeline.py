@@ -299,6 +299,36 @@ class CumulativeLearningPipeline:
             step.dspy_metrics = result.get('metrics', {})
             self.ledger.signatures_optimized += 1
 
+    def calculate_step_reward(self, step: BaseStep, result: Dict[str, Any],
+                              execution_time: float, success: bool) -> float:
+        """
+        Calculate reward for a step execution.
+
+        Args:
+            step: The executed step
+            result: Execution result
+            execution_time: Time taken for execution
+            success: Whether execution was successful
+
+        Returns:
+            Calculated reward value
+        """
+        # Base reward from success/failure
+        base_reward = 0.5 if success else -0.5
+
+        # Latency penalty (normalize to reasonable range)
+        latency_penalty = min(execution_time / 5.0, 0.3)  # Max 0.3 penalty for >5s
+
+        # Quality bonus from result
+        quality_bonus = 0.0
+        if success and 'quality_score' in result:
+            quality_bonus = (result['quality_score'] - 0.5) * 0.2  # -0.1 to +0.1
+
+        total_reward = base_reward - latency_penalty + quality_bonus
+
+        # Clamp to [-1, 1] range
+        return max(-1.0, min(1.0, total_reward))
+
     def get_performance_report(self) -> Dict[str, Any]:
         """Generate comprehensive performance report."""
         trends = self.ledger.get_trending_metrics()

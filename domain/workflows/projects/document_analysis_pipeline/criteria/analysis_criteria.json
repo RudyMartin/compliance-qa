@@ -1,0 +1,72 @@
+{
+  "project_name": "Document Analysis Pipeline",
+  "project_description": "Comprehensive document processing, analysis, and insight generation workflow",
+  "quality_thresholds": {
+    "document_processing": {
+      "text_extraction_accuracy": 0.95,
+      "metadata_completeness": 0.90,
+      "chunk_quality_score": 0.85
+    },
+    "content_analysis": {
+      "theme_identification_confidence": 0.80,
+      "entity_extraction_precision": 0.88,
+      "classification_accuracy": 0.85,
+      "embedding_quality": 0.90
+    },
+    "insight_generation": {
+      "insight_relevance": 0.85,
+      "recommendation_feasibility": 0.80,
+      "evidence_support": 0.90,
+      "executive_summary_clarity": 0.88
+    }
+  },
+  "validation_rules": {
+    "document_requirements": {
+      "supported_formats": ["pdf", "docx", "txt", "html"],
+      "max_file_size_mb": 50,
+      "min_content_length": 100,
+      "required_sections": ["content"]
+    },
+    "processing_standards": {
+      "chunk_size_range": [500, 2000],
+      "overlap_percentage": 10,
+      "min_entities_per_document": 5,
+      "max_processing_time_minutes": 15
+    },
+    "output_requirements": {
+      "min_insights_generated": 3,
+      "min_recommendations": 2,
+      "required_output_sections": ["executive_summary", "detailed_insights", "recommendations"],
+      "confidence_threshold": 0.75
+    }
+  },
+  "tidyllm_functions": {
+    "document_processing": [
+      "extract_text_from_pdf",
+      "extract_document_metadata",
+      "chunk_document",
+      "clean_text"
+    ],
+    "content_analysis": [
+      "semantic_analysis",
+      "extract_entities",
+      "classify_content",
+      "generate_embeddings"
+    ],
+    "insight_generation": [
+      "synthesize_insights",
+      "generate_recommendations",
+      "create_executive_summary",
+      "identify_patterns"
+    ]
+  },
+  "error_handling": {
+    "retry_attempts": 3,
+    "fallback_processing": true,
+    "manual_review_triggers": [
+      "quality_score_below_threshold",
+      "processing_errors",
+      "insufficient_content"
+    ]
+  }
+}

@@ -29,6 +29,22 @@ from typing import Dict, List, Any, Optional
 import traceback
 import time
 
+# Import TidyLLM RL functions (sovereign functionality)
+try:
+    from packages.tidyllm.services.workflow_rl_optimizer import (
+        optimize_workflow_execution,
+        calculate_step_reward,
+        update_rl_factors,
+        get_rl_performance_summary,
+        create_rl_enhanced_step
+    )
+    from packages.tidyllm.services.rl_workflow_service import RLWorkflowService
+    TIDYLLM_RL_AVAILABLE = True
+    st.success("🧠 TidyLLM RL-Enhanced Functions Loaded (Sovereign)")
+except ImportError as e:
+    TIDYLLM_RL_AVAILABLE = False
+    st.info("ℹ️ Running in standard mode (TidyLLM RL enhancement unavailable)")
+
 # Import step ordering utilities
 try:
     from common.utilities.step_ordering import (

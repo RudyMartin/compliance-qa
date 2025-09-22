@@ -1,0 +1,29 @@
+{
+  "test_run": "2025-09-22T01:16:45.789240",
+  "total_workflows": 3,
+  "successful": 3,
+  "total_time": 0.9469194412231445,
+  "results": [
+    {
+      "workflow": "Basic Document Analysis",
+      "steps": 3,
+      "status": "SUCCESS",
+      "execution_time": 0.005239963531494141,
+      "outputs": 6
+    },
+    {
+      "workflow": "Document Comparison",
+      "steps": 4,
+      "status": "SUCCESS",
+      "execution_time": 0.3088839054107666,
+      "outputs": 4
+    },
+    {
+      "workflow": "RAG Knowledge Base",
+      "steps": 5,
+      "status": "SUCCESS",
+      "execution_time": 0.6327955722808838,
+      "outputs": 4
+    }
+  ]
+}

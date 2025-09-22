@@ -1,0 +1,6 @@
+{
+  "embedding_model": "text-embedding-3-small",
+  "dimensions": 1536,
+  "total_vectors": 27,
+  "chunks_embedded": 27
+}

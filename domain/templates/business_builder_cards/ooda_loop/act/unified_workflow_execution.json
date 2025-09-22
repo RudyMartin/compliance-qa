@@ -1,0 +1,64 @@
+{
+  "card_id": "unified_workflow_execution",
+  "card_name": "Unified Workflow Execution",
+  "card_type": "unified_action",
+  "category": "act",
+  "ooda_level": "act",
+  "icon": "⚡",
+  "description": "Execute strategic recommendations through automated workflow orchestration and action implementation",
+  "business_value": "Transform insights into concrete actions through automated execution",
+  "use_cases": [
+    "Automated workflow execution",
+    "Action plan implementation",
+    "Process orchestration",
+    "Strategic initiative deployment"
+  ],
+  "step_definition": {
+    "step_type": "unified",
+    "phases": {
+      "action": {
+        "tidyllm_functions": [
+          {
+            "function": "orchestrate_workflow",
+            "inputs": ["strategic_recommendations", "final_insights"],
+            "parameters": {
+              "execution_strategy": "{{execution_strategy}}",
+              "priority_order": "{{priority_order}}",
+              "parallel_execution": "{{parallel_execution}}"
+            },
+            "output_variable": "execution_plan"
+          },
+          {
+            "function": "execute_actions",
+            "inputs": ["execution_plan"],
+            "parameters": {
+              "monitoring_enabled": "{{monitoring_enabled}}",
+              "error_handling": "{{error_handling}}"
+            },
+            "output_variable": "execution_results"
+          }
+        ]
+      },
+      "prompt": {
+        "template_file": "step_04_execution_monitoring.md",
+        "inputs": ["execution_plan", "execution_results"],
+        "ai_model": "{{llm_model}}",
+        "output_variable": "execution_assessment"
+      }
+    }
+  },
+  "inputs": {
+    "required": ["strategic_recommendations"],
+    "optional": ["final_insights", "execution_preferences", "monitoring_config"]
+  },
+  "outputs": {
+    "execution_plan": "Detailed action execution strategy",
+    "execution_results": "Results and metrics from action implementation",
+    "execution_assessment": "AI analysis of execution effectiveness"
+  },
+  "configuration_form": "unified_workflow_execution_form.json",
+  "estimated_time": "5-15 minutes",
+  "complexity": "high",
+  "ooda_stage_rationale": "Act stage - implementing strategic decisions through coordinated action execution",
+  "tags": ["unified", "workflow_execution", "action_implementation", "orchestration", "act"]
+}

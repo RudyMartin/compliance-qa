@@ -1,0 +1,36 @@
+{
+  "ooda_level": "observe",
+  "level_name": "Observe Stage",
+  "level_description": "Data gathering, monitoring, and initial processing cards for situational awareness",
+  "level_purpose": "Collect, extract, and prepare data from various sources for analysis",
+  "business_value": "Foundation for informed decision-making through comprehensive data acquisition",
+  "cards": [
+    {
+      "card_id": "extract_document_text",
+      "card_name": "Extract Document Text",
+      "complexity": "low",
+      "primary_function": "Document text extraction using TidyLLM",
+      "outputs": ["extracted_text", "text_file"]
+    },
+    {
+      "card_id": "unified_document_analysis",
+      "card_name": "Unified Document Analysis",
+      "complexity": "medium",
+      "primary_function": "Complete document processing with TidyLLM + AI analysis",
+      "outputs": ["extracted_content", "document_embeddings", "ai_analysis"]
+    }
+  ],
+  "stage_characteristics": {
+    "focus": "Data acquisition and initial processing",
+    "output_types": ["raw_data", "extracted_content", "embeddings", "metadata"],
+    "processing_style": "Input-focused, extraction-heavy",
+    "ai_involvement": "Moderate - primarily for quality assessment"
+  },
+  "recommended_flow": [
+    "Start with document or data source",
+    "Extract and normalize content",
+    "Generate embeddings if needed",
+    "Perform initial quality assessment",
+    "Prepare data for Orient stage analysis"
+  ]
+}
