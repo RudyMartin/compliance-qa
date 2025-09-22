@@ -1,9 +1,8 @@
 #!/usr/bin/env python3
 """
-NEW Setup Portal Launcher (Fixed)
-==================================
+NEW Setup Portal Launcher
+=========================
 Easy launcher for the student-friendly setup portal.
-Fixed path resolution to correctly locate the portal file.
 """
 
 import subprocess
@@ -29,27 +28,8 @@ def main():
     print("Starting portal on http://localhost:8512...")
     print("=" * 60)
 
-    # Get the portal file path (go up from domain/scripts to root, then to portals/setup)
-    # Path: domain/scripts/run_new_setup_portal.py -> qa-shipping/portals/setup/new_setup_portal.py
-    portal_file = Path(__file__).parent.parent.parent / "portals" / "setup" / "new_setup_portal.py"
-
-    # Check if the file exists
-    if not portal_file.exists():
-        print(f"\nERROR: Portal file not found!")
-        print(f"Looking for: {portal_file}")
-        print(f"Current directory: {Path.cwd()}")
-        print(f"Script location: {Path(__file__).parent}")
-
-        # Try alternative path (if running from different location)
-        alt_portal = Path("portals") / "setup" / "new_setup_portal.py"
-        if alt_portal.exists():
-            portal_file = alt_portal
-            print(f"Found portal at alternative location: {portal_file}")
-        else:
-            print("\nPlease ensure you're running this from the qa-shipping root directory")
-            return 1
-
-    print(f"\nLaunching portal from: {portal_file}")
+    # Get the portal file path
+    portal_file = Path(__file__).parent / "portals" / "setup" / "new_setup_portal.py"
 
     # Launch with streamlit
     try:
@@ -64,9 +44,6 @@ def main():
     except Exception as e:
         print(f"\nError launching portal: {e}")
         print("Make sure Streamlit is installed: pip install streamlit")
-        return 1
-
-    return 0
 
 if __name__ == "__main__":
-    sys.exit(main())
+    main()
