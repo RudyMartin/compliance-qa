@@ -142,6 +142,14 @@ Thumbs.db
 mlruns/
 mlflow.db
 
+# Windows special device names (accidentally created)
+nul
+con
+prn
+aux
+com[1-9]
+lpt[1-9]
+
 # Logs
 *.log
 logs/
@@ -175,3 +183,19 @@ packages/**/.claude/
 functionals/*/TEST_RESULTS.md
 functionals/*/FUNCTIONAL_PROOF_*.md
 functionals/**/test_output.log
+
+# Test directories and outputs (keep source but ignore outputs)
+tests/**/test_output.log
+tests/**/test_results.json
+tests/**/*.log
+tests/**/coverage/
+tests/**/.pytest_cache/
+tests/**/htmlcov/
+
+# Functional test directories (keep structure but ignore results)
+functionals/**/test_output.log
+functionals/**/test_results.json
+functionals/**/*.log
+
+# Migrated components (archived - can ignore changes)
+migrated/
