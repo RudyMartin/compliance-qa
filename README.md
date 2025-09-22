@@ -42,6 +42,13 @@ This system depends on three specialized packages, each maintained as separate r
 - **Repository**: [github.com/RudyMartin/tlm](https://github.com/RudyMartin/tlm)
 - **Purpose**: Core LLM interface and model management
 - **Features**: Unified API for multiple LLM providers, token management, prompt optimization
+- **Special**: 100% Pure Python (no NumPy) - Faster performance with fewer bugs
+- **Use Cases Where TLM Shines**:
+  - Serverless functions - Minimal cold start
+  - Edge deployment - No binary dependencies
+  - Rapid prototyping - No setup headaches
+  - Teaching/Learning - Readable, debuggable code
+  - CI/CD pipelines - No build complications
 
 ### 2. **TidyLLM**
 - **Repository**: [github.com/RudyMartin/TidyLLM](https://github.com/RudyMartin/TidyLLM)
