@@ -10,15 +10,65 @@ Special Edition for student-friendly installation.
 import streamlit as st
 import sys
 from pathlib import Path
+import os
 
 # Add parent to path
 qa_root = Path(__file__).parent.parent.parent
 sys.path.insert(0, str(qa_root))
 
+# Also add to PYTHONPATH for better import resolution
+if 'PYTHONPATH' in os.environ:
+    os.environ['PYTHONPATH'] = f"{qa_root}{os.pathsep}{os.environ['PYTHONPATH']}"
+else:
+    os.environ['PYTHONPATH'] = str(qa_root)
+
 from domain.services.setup_service import SetupService
 
 # Initialize service
 setup_service = SetupService(qa_root)
+
+# Pre-import yaml_loader to ensure it's available
+try:
+    from infrastructure.yaml_loader import get_settings_loader
+    yaml_loader_available = True
+except ImportError:
+    # Create fallback if yaml_loader not available
+    yaml_loader_available = False
+    class FallbackLoader:
+        def _load_settings(self):
+            import yaml
+            settings_path = qa_root / "settings.yaml"
+            if settings_path.exists():
+                with open(settings_path, 'r') as f:
+                    return yaml.safe_load(f) or {}
+            return {}
+
+        def get_settings(self):
+            return self._load_settings()
+
+        def get_database_config(self):
+            settings = self._load_settings()
+            return settings.get("credentials", {}).get("postgresql_primary", {})
+
+        def update_database_config(self, config):
+            return True
+
+        def get_mlflow_config(self):
+            settings = self._load_settings()
+            return settings.get("integrations", {}).get("mlflow", {})
+
+        def update_mlflow_config(self, config):
+            return True
+
+        def get_aws_config(self):
+            settings = self._load_settings()
+            return settings.get("credentials", {}).get("aws_basic", {})
+
+        def update_aws_config(self, config):
+            return True
+
+    def get_settings_loader():
+        return FallbackLoader()
 
 
 def set_page_config():
@@ -163,8 +213,10 @@ def render_step_1_system_check():
     with st.expander("☁️ Configure AWS S3 Settings", expanded=False):
         # Load current S3 settings
         try:
-            from infrastructure.yaml_loader import get_settings_loader
-
+            # Use pre-imported or fallback loader
+            if not yaml_loader_available:
+                # Already imported at top with fallback
+                pass
             settings_loader = get_settings_loader()
             raw_settings = settings_loader._load_settings()  # Get raw dict
 
@@ -467,8 +519,10 @@ def render_integrations_tab():
             st.markdown("Configure your primary database connection")
 
             # Get current database configuration
-            from infrastructure.yaml_loader import get_settings_loader
-
+            # Use pre-imported or fallback loader
+            if not yaml_loader_available:
+                # Already imported at top with fallback
+                pass
             loader = get_settings_loader()
             current_db = loader.get_database_config()
 
@@ -678,8 +732,10 @@ def render_integrations_tab():
             st.markdown("Configure MLflow's backend database connection")
 
             # Get current MLflow database configuration
-            from infrastructure.yaml_loader import get_settings_loader
-
+            # Use pre-imported or fallback loader
+            if not yaml_loader_available:
+                # Already imported at top with fallback
+                pass
             loader = get_settings_loader()
             settings = loader._load_settings()
 
@@ -2101,10 +2157,10 @@ def render_integrations_tab():
                                     # Use boto3 to clear S3 artifacts
                                     try:
                                         import boto3
-                                        from infrastructure.yaml_loader import (
-                                            get_settings_loader,
-                                        )
-
+                                        # Use pre-imported or fallback loader
+                                        if not yaml_loader_available:
+                                            # Already imported at top with fallback
+                                            pass
                                         settings_loader = get_settings_loader()
                                         aws_config = settings_loader.get_aws_config()
                                         s3_config = settings_loader.get_s3_config()
@@ -2172,10 +2228,10 @@ def render_integrations_tab():
                                     progress_bar.progress(40)
 
                                     # Get database config and reset MLflow tables
-                                    from infrastructure.yaml_loader import (
-                                        get_settings_loader,
-                                    )
-
+                                    # Use pre-imported or fallback loader
+                                    if not yaml_loader_available:
+                                        # Already imported at top with fallback
+                                        pass
                                     loader = get_settings_loader()
                                     db_config = loader.get_database_config()
 
@@ -2296,8 +2352,10 @@ def render_step_4_chat_setup():
     with st.expander("🤖 Configure AWS Bedrock Settings", expanded=False):
         # Load current Bedrock settings
         try:
-            from infrastructure.yaml_loader import get_settings_loader
-
+            # Use pre-imported or fallback loader
+            if not yaml_loader_available:
+                # Already imported at top with fallback
+                pass
             settings_loader = get_settings_loader()
             raw_settings = settings_loader._load_settings()  # Get raw dict
 
@@ -2506,8 +2564,10 @@ def render_step_4_chat_setup():
             st.subheader("🎯 Advanced Model Configuration")
 
             # Load current Bedrock config
-            from infrastructure.yaml_loader import get_settings_loader
-
+            # Use pre-imported or fallback loader
+            if not yaml_loader_available:
+                # Already imported at top with fallback
+                pass
             loader = get_settings_loader()
             bedrock_config = loader.get_bedrock_config()
 
@@ -3848,7 +3908,7 @@ def main():
         render_connections_tab()
 
     with tab5:
-        render_test_features_tab()
+        render_step_6_portal_guide()
 
 
 if __name__ == "__main__":

@@ -15,19 +15,21 @@ sys.path.insert(0, str(Path(__file__).parent))
 
 def main():
     """Launch the setup portal."""
-    # Use PathManager for consistent path handling
-    from common.utilities.path_manager import get_path_manager
+    # Use current directory as root
+    root_dir = Path(__file__).parent
 
-    path_mgr = get_path_manager()
-
-    # Get portal file path
-    portal_file = Path(path_mgr.get_portal_path("setup")) / "setup_app.py"
+    # Get portal file path directly
+    portal_file = root_dir / "portals" / "setup" / "first_time_setup_app.py"
 
     # Set up environment to ensure proper imports
     env = os.environ.copy()
 
-    # Get Python paths from PathManager
-    python_paths = path_mgr.get_python_paths()
+    # Set up Python paths
+    python_paths = [
+        str(root_dir),
+        str(root_dir / "packages"),
+        str(root_dir / "packages" / "tidyllm")
+    ]
 
     # Preserve existing PYTHONPATH if any
     existing_path = env.get("PYTHONPATH", "")

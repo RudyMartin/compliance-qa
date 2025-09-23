@@ -1,0 +1,81 @@
+# Compliance-QA Requirements - NUMPY-FREE ZONE
+# Production requirements only - NO numpy, NO heavy ML libraries
+
+# =============================================================================
+# CORE WEB FRAMEWORK
+# =============================================================================
+streamlit==1.49.1
+
+# =============================================================================
+# AWS SERVICES
+# =============================================================================
+boto3==1.35.76
+botocore==1.35.76
+
+# =============================================================================
+# DATABASE
+# =============================================================================
+psycopg2-binary==2.9.10
+asyncpg==0.30.0
+
+# =============================================================================
+# ML TRACKING
+# =============================================================================
+mlflow==2.19.0
+
+# =============================================================================
+# VISUALIZATION (Used in portals)
+# =============================================================================
+plotly==5.24.1
+
+# =============================================================================
+# DOCUMENT PROCESSING
+# =============================================================================
+PyMuPDF==1.25.1  # fitz - Primary PDF processor
+PyPDF2==3.0.1  # Secondary PDF processor  
+pdfplumber==0.11.4  # Table extraction from PDFs
+
+# =============================================================================
+# CONFIGURATION
+# =============================================================================
+pyyaml==6.0.2
+
+# =============================================================================
+# AI/LLM FRAMEWORKS
+# =============================================================================
+dspy-ai==2.5.43
+ujson==5.10.0  # Required by DSPy for fast JSON parsing
+datasets==3.2.0  # Required by DSPy for data handling
+
+# =============================================================================
+# API FRAMEWORK
+# =============================================================================
+fastapi==0.115.6
+pydantic==2.10.4
+
+# =============================================================================
+# FILE MONITORING
+# =============================================================================
+watchdog==6.0.0
+
+# =============================================================================
+# UTILITIES
+# =============================================================================
+requests==2.32.3  # HTTP requests
+psutil==6.1.0  # System monitoring
+python-dotenv==1.0.1  # Environment variables
+
+# =============================================================================
+# OPTIONAL - BENCHMARKING ONLY - DO NOT INSTALL FOR PRODUCTION
+# =============================================================================
+# These are ONLY needed for running benchmarks/comparisons
+# Production code uses TLM instead of numpy
+#
+# #DONOTINSTALL numpy==1.26.4  # Only for benchmarks
+# #DONOTINSTALL sentence-transformers==3.3.1  # Only for benchmarks
+# #DONOTINSTALL faiss-cpu==1.9.0  # Only for benchmarks
+# #DONOTINSTALL scikit-learn==1.5.2  # Only for benchmark metrics
+# #DONOTINSTALL pandas==2.2.3  # Only for data analysis in benchmarks
+#
+# To run benchmarks, uncomment above and install separately:
+# pip install numpy sentence-transformers faiss-cpu scikit-learn pandas

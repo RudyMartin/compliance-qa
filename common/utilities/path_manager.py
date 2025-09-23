@@ -180,6 +180,14 @@ class PathManager:
         """Normalize path for current platform."""
         return os.path.normpath(path)
 
+    def get_python_paths(self) -> list:
+        """Get list of paths for Python imports."""
+        return [
+            self.root_folder,
+            self.packages_folder,
+            os.path.join(self.packages_folder, "tidyllm")
+        ]
+
     def get_architecture_summary(self) -> Dict[str, str]:
         """Get summary of 4-layer architecture paths."""
         return {
