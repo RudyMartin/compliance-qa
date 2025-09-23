@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-QA-Shipping Safety Validation - Check all critical constraints
+Compliance QA Safety Validation - Check all critical constraints
 """
 
 import os
@@ -209,7 +209,7 @@ def check_architecture():
 
     root_path = Path(get_path_manager().root_folder)
 
-    # QA-Shipping 4-layer architecture
+    # Compliance QA 4-layer architecture
     required_layers = [
         "domain",
         "packages",
@@ -232,7 +232,7 @@ def check_architecture():
 
 def run_safety_validation():
     """Run all safety validations"""
-    print("QA-SHIPPING SAFETY VALIDATION")
+    print("COMPLIANCE QA SAFETY VALIDATION")
     print("=" * 50)
     print("Checking for violations of critical constraints...")
     print()
@@ -256,7 +256,7 @@ def run_safety_validation():
             results.append((check_name, False))
 
     print("\n" + "=" * 50)
-    print("QA-SHIPPING SAFETY VALIDATION RESULTS")
+    print("COMPLIANCE QA SAFETY VALIDATION RESULTS")
     print("=" * 50)
 
     passed = 0
@@ -272,13 +272,13 @@ def run_safety_validation():
     print(f"\nSafety Score: {passed}/{total} ({success_rate:.1f}%)")
 
     if success_rate == 100:
-        print("\nCONCLUSION: QA-Shipping is SAFE for deployment")
+        print("\nCONCLUSION: Compliance QA is SAFE for deployment")
         print("All critical constraints are satisfied.")
     elif success_rate >= 80:
-        print("\nCONCLUSION: QA-Shipping needs MINOR fixes")
+        print("\nCONCLUSION: Compliance QA needs MINOR fixes")
         print("Address the failing checks before deployment.")
     else:
-        print("\nCONCLUSION: QA-Shipping has CRITICAL safety violations")
+        print("\nCONCLUSION: Compliance QA has CRITICAL safety violations")
         print("MUST fix all issues before deployment!")
 
     return success_rate == 100

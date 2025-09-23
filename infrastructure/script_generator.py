@@ -30,11 +30,11 @@ class ScriptGenerator:
         config = self.settings_loader.load_config()
 
         script_content = f"""@echo off
-REM QA-Shipping Environment Setup - Windows
+REM Compliance QA Environment Setup - Windows
 REM Generated automatically from settings.yaml on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 REM Sets all credentials for current session
 
-echo Setting QA-Shipping environment variables...
+echo Setting Compliance QA environment variables...
 
 REM Database credentials
 set DB_HOST={config.db_host}
@@ -100,11 +100,11 @@ echo   python -c "from infrastructure.yaml_loader import setup_environment_from_
         config = self.settings_loader.load_config()
 
         script_content = f"""#!/bin/bash
-# QA-Shipping Environment Setup - Linux/Mac
+# Compliance QA Environment Setup - Linux/Mac
 # Generated automatically from settings.yaml on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 # Sets all credentials for current session
 
-echo "Setting QA-Shipping environment variables..."
+echo "Setting Compliance QA environment variables..."
 
 # Database credentials
 export DB_HOST={config.db_host}
@@ -172,7 +172,7 @@ echo "  python -c \\"from infrastructure.yaml_loader import setup_environment_fr
 
         config = self.settings_loader.load_config()
 
-        env_content = f"""# QA-Shipping Docker Environment
+        env_content = f"""# Compliance QA Docker Environment
 # Generated automatically from settings.yaml on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
 # Database Configuration
@@ -194,7 +194,7 @@ MLFLOW_TRACKING_URI={config.mlflow_tracking_uri}
 S3_BUCKET={config.s3_bucket}
 S3_PREFIX={config.s3_prefix}
 
-# QA-Shipping Configuration
+# Compliance QA Configuration
 ENVIRONMENT=development
 LOG_LEVEL=INFO
 """
@@ -212,10 +212,10 @@ LOG_LEVEL=INFO
 
         config = self.settings_loader.load_config()
 
-        script_content = f"""# QA-Shipping Environment Setup - PowerShell
+        script_content = f"""# Compliance QA Environment Setup - PowerShell
 # Generated automatically from settings.yaml on {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
 
-Write-Host "Setting QA-Shipping environment variables..." -ForegroundColor Green
+Write-Host "Setting Compliance QA environment variables..." -ForegroundColor Green
 
 # Database credentials
 $env:DB_HOST = "{config.db_host}"
@@ -344,7 +344,7 @@ def regenerate_scripts_from_settings():
 
 if __name__ == "__main__":
     # Demo the script generator
-    print("QA-Shipping Script Generator Demo")
+    print("Compliance QA Script Generator Demo")
     print("=" * 40)
 
     try:
