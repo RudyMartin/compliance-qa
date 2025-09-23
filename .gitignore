@@ -4,35 +4,8 @@
 # =============================================================================
 # IMPORTANT: PACKAGE MANAGEMENT
 # =============================================================================
-# The packages/ directory contains separate Git repositories
-# Each package (tidyllm, tlm, tidyllm-sentence) manages its own versioning
-# We exclude their git and build artifacts but track the directories themselves
-
-# Package-specific exclusions
-packages/*/.git/
-packages/*/.gitignore
-packages/*/dist/
-packages/*/build/
-packages/*/*.egg-info/
-packages/*/__pycache__/
-packages/*/.pytest_cache/
-packages/*/.ruff_cache/
-packages/*/.mypy_cache/
-packages/*/.tox/
-packages/*/.nox/
-packages/*/htmlcov/
-packages/*/coverage/
-packages/*/.coverage
-packages/*/*.pyc
-packages/*/*.pyo
-packages/*/*.pyd
-packages/*/.DS_Store
-packages/*/Thumbs.db
-
-# Claude artifacts in packages
-packages/*/.claude/
-packages/*/claude*.md
-packages/*/.claude-*
+# Exclude EVERYTHING in the packages directory
+packages/
 
 # =============================================================================
 # SECURITY & CREDENTIALS - CRITICAL EXCLUSIONS
@@ -110,8 +83,28 @@ active_state*
 *active_state*
 
 # =============================================================================
-# DATABASE & DATA FILES
+# DATABASE & DATA FILES - COMPREHENSIVE EXCLUSIONS
 # =============================================================================
+
+# Additional data file formats
+**/*.pkl
+**/*.pickle
+**/*.npy
+**/*.npz
+**/*.msgpack
+**/*.feather
+**/*.hdf
+**/*.mat
+**/*.sav
+**/*.dta
+**/*.rds
+**/*.json.gz
+**/*.jsonl
+**/*.jsonlines
+*.pkl
+*.pickle
+*.npy
+*.npz
 
 # Database files
 *.db
@@ -148,11 +141,18 @@ mlartifacts/
 *.mlflow
 
 # =============================================================================
-# PYTHON
+# PYTHON - COMPREHENSIVE EXCLUSIONS
 # =============================================================================
 
-# Byte-compiled / optimized / DLL files
+# Byte-compiled / optimized / DLL files (EVERYWHERE)
+**/__pycache__/
 __pycache__/
+**/*.pyc
+**/*.pyo
+**/*.pyd
+*.pyc
+*.pyo
+*.pyd
 *.py[cod]
 *$py.class
 
@@ -188,19 +188,33 @@ pip-log.txt
 pip-delete-this-directory.txt
 
 # Unit test / coverage reports
+**/htmlcov/
 htmlcov/
+**/.tox/
 .tox/
+**/.nox/
 .nox/
+**/.coverage
 .coverage
+**/.coverage.*
 .coverage.*
+**/.cache
 .cache
+**/nosetests.xml
 nosetests.xml
+**/coverage.xml
 coverage.xml
+**/*.cover
 *.cover
+**/*.py,cover
 *.py,cover
+**/.hypothesis/
 .hypothesis/
+**/.pytest_cache/
 .pytest_cache/
+**/cover/
 cover/
+**/coverage/
 coverage/
 
 # Virtual environments
@@ -210,12 +224,20 @@ ENV/
 env.bak/
 venv.bak/
 
-# Modern Python tools
+# Modern Python tools and caches
+**/.ruff_cache/
 .ruff_cache/
+**/.benchmarks/
 .benchmarks/
+**/.mypy_cache/
 .mypy_cache/
+**/.dmypy.json
 .dmypy.json
 dmypy.json
+**/.cache/
+.cache/
+**/cache/
+cache/
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -278,11 +300,13 @@ tramp
 .spyproject
 
 # =============================================================================
-# OPERATING SYSTEMS
+# OPERATING SYSTEMS - COMPREHENSIVE EXCLUSIONS
 # =============================================================================
 
-# macOS
+# macOS (EVERYWHERE)
+**/.DS_Store
 .DS_Store
+**/.DS_Store?
 .AppleDouble
 .LSOverride
 Icon
@@ -300,8 +324,10 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# Windows
+# Windows (EVERYWHERE)
+**/Thumbs.db
 Thumbs.db
+**/Thumbs.db:encryptable
 Thumbs.db:encryptable
 ehthumbs.db
 ehthumbs_vista.db
@@ -332,23 +358,25 @@ lpt[1-9]
 .nfs*
 
 # =============================================================================
-# CLAUDE CODE ARTIFACTS
+# CLAUDE CODE ARTIFACTS - COMPLETE EXCLUSION
 # =============================================================================
 
-# Claude Code session files and artifacts
-**/.claude/
+# Exclude ANYTHING with 'claude' or 'Claude' (case-insensitive on Windows)
+**/[Cc]laude*
+**/[Cc]laude*/
+**/*[Cc]laude*
+**/*[Cc]laude*/
+[Cc]laude*
+*[Cc]laude*
 .claude/
+**/.claude/
 *.claude
-claude-*
-*claude*.md
-claude_*.json
-claude_*.yaml
 .claude-*
+**/.claude-*
+CLAUDE*
+*CLAUDE*
+claude*
 *claude*
-
-# Claude Code generated files
-**/*claude*
-**/claude_*
 
 # =============================================================================
 # LOGS AND TEMPORARY FILES
@@ -400,6 +428,12 @@ demos/
 review/
 presentation/
 pending/
+
+# Infrastructure setup files
+infrastructure/setup/__init__.py
+
+# Old documentation
+README_old.md
 
 # =============================================================================
 # DOCKER & DEPLOYMENT
@@ -508,6 +542,10 @@ poetry.lock
 !docs/**/*.md
 !*.md
 
-# But still exclude Claude docs
+# But still exclude ALL Claude docs and files
+**/[Cc]laude*.md
+**/CLAUDE*.md
 claude*.md
 CLAUDE.md
+*claude*
+*CLAUDE*
