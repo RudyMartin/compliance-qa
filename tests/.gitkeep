@@ -1,0 +1,2 @@
+# This file ensures the tests directory is tracked by Git
+# while all other contents are ignored via .gitignore
