@@ -1,0 +1,40 @@
+project:
+  name: compliance-qa
+  version: 1.0.0
+  description: Compliance QA System - NUMPY-FREE ZONE
+paths:
+  root: C:\Users\marti\compliance-qa
+  packages: C:\Users\marti\compliance-qa\packages
+  data: C:\Users\marti\compliance-qa\data
+  logs: C:\Users\marti\compliance-qa\logs
+database:
+  host: localhost
+  port: 5432
+  database: compliance_qa
+  username: postgres
+  password: ''
+  pool_size: 5
+  connection_timeout: 30
+mlflow:
+  tracking_uri: http://localhost:5000
+  artifact_root: s3://compliance-qa-artifacts/mlflow
+  experiment_name: compliance-qa-default
+aws:
+  region: us-east-1
+  access_key_id: ''
+  secret_access_key: ''
+  s3_bucket: compliance-qa-data
+ai:
+  provider: aws_bedrock
+  model: anthropic.claude-3-sonnet-20240229-v1:0
+  temperature: 0.7
+  max_tokens: 4096
+security:
+  enable_ssl: false
+  jwt_secret_key: ''
+  session_timeout: 3600
+features:
+  enable_rag: true
+  enable_dspy: true
+  enable_mlflow_tracking: true
+  enable_s3_storage: true

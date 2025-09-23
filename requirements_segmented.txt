@@ -1,0 +1,169 @@
+# Compliance-QA Segmented Requirements
+# =====================================
+# Based on actual usage in the codebase
+# Last updated: 2025-09-23
+
+# =================================================================
+# CORE TLM DEPENDENCIES (Low-level, fundamental)
+# =================================================================
+# These are the absolute core dependencies that TidyLLM relies on
+
+# Python Core Extensions
+pyyaml>=6.0.1           # Used extensively: config files, infrastructure
+typing-extensions>=4.8.0 # Type hints support
+dataclasses             # Built-in but listed for clarity
+
+# System & OS
+pathlib2>=2.3.7         # Path handling
+psutil>=5.9.0          # System monitoring
+
+# =================================================================
+# TIDYLLM-SENTENCE LAYER
+# =================================================================
+# Text processing and embeddings layer
+
+numpy==1.26.4          # Core numerical operations for embeddings
+scipy>=1.10.0          # Scientific computing for similarity
+scikit-learn==1.3.2    # ML algorithms, TF-IDF
+
+# Note: sentence-transformers not directly imported but referenced in configs
+# sentence-transformers==2.6.1  # If using transformer-based embeddings
+
+# =================================================================
+# TIDYLLM CORE
+# =================================================================
+# The main TidyLLM framework dependencies
+
+# Data Processing
+pandas==2.2.2          # Data manipulation (heavily used)
+polars>=0.20.0         # Alternative data processing (s3_flow_parser.py)
+pyarrow==14.0.1        # Arrow format support
+
+# AI/ML Frameworks
+dspy==2.5.26           # DSPy framework (workflow_advisor.py, rag_knowledge_base.py)
+mlflow>=2.8.0          # MLflow tracking (multiple files)
+
+# LLM Providers
+litellm==1.46.4        # Multi-LLM gateway
+openai>=1.0.0          # OpenAI API (referenced in configs)
+anthropic>=0.25.0      # Anthropic API (LLM_GATEWAY_SHIM_INTEGRATION.md)
+
+# AWS Services
+boto3>=1.34.0          # AWS SDK (s3_flow_parser.py, docs)
+botocore>=1.34.0       # AWS core
+
+# Database
+psycopg2-binary>=2.9.9 # PostgreSQL (multiple files, MLflow backend)
+sqlalchemy>=2.0.0      # SQL toolkit
+
+# =================================================================
+# COMPLIANCE-QA SPECIFIC
+# =================================================================
+# Application-specific dependencies for the compliance-qa system
+
+# Web Framework
+streamlit==1.33.0      # Primary UI (all portal files)
+streamlit-option-menu>=0.3.0
+streamlit-aggrid>=0.3.4
+streamlit-plotly-events>=0.1.6
+
+# API Framework
+fastapi>=0.104.0       # REST API (api/main.py)
+uvicorn>=0.24.0        # ASGI server (api/main.py)
+pydantic>=2.4.0        # Data validation (api/main.py)
+
+# Visualization
+plotly>=5.17.0         # Interactive plots
+matplotlib==3.8.4      # Static plots
+seaborn==0.13.2        # Statistical visualization
+
+# Document Processing
+PyPDF2==3.0.1          # PDF reading (run_workflow.py)
+fitz                   # PyMuPDF (document_intake.py)
+python-docx==1.1.0     # Word documents
+openpyxl==3.1.5        # Excel files
+fpdf==1.7.2            # PDF generation
+
+# HTTP & Async
+requests>=2.31.0       # HTTP requests (portal_startup.py)
+aiohttp>=3.8.0         # Async HTTP
+aiofiles>=23.2.0       # Async file operations
+httpx>=0.25.0          # Modern HTTP client
+
+# =================================================================
+# OPTIONAL/REFERENCED BUT NOT DIRECTLY IMPORTED
+# =================================================================
+# These are mentioned in configs/docs but not directly imported
+
+# Vector Stores (referenced in configs)
+# chromadb>=0.4.0        # Vector database
+# faiss-cpu==1.10.0      # Facebook AI similarity search
+# langchain>=0.1.0       # LangChain framework
+
+# Additional ML (referenced)
+# sagemaker==2.240.0     # AWS SageMaker
+# nltk==3.8.1            # Natural language toolkit
+
+# =================================================================
+# DEVELOPMENT & TESTING
+# =================================================================
+# Development tools (not required for runtime)
+
+pytest>=7.4.0          # Testing framework
+pytest-cov>=4.1.0      # Coverage
+pytest-asyncio>=0.21.0 # Async testing
+black>=23.7.0          # Code formatting
+isort>=5.12.0          # Import sorting
+mypy>=1.5.0            # Type checking
+ruff>=0.1.0            # Linting
+ipython>=8.12.0        # Interactive shell
+
+# =================================================================
+# UTILITIES & SUPPORT
+# =================================================================
+# Supporting libraries
+
+# Configuration
+python-dotenv>=1.0.0   # Environment variables
+configparser>=5.3.0    # Config files
+jsonschema>=4.19.0     # JSON validation
+
+# CLI & Progress
+click>=8.1.0           # CLI framework
+tqdm>=4.66.0           # Progress bars
+
+# Date & Time
+python-dateutil>=2.8.2 # Date utilities
+pytz>=2023.3           # Timezone support
+
+# Security
+cryptography>=41.0.0   # Cryptographic operations
+python-jose>=3.3.0     # JWT support
+
+# Logging & Monitoring
+loguru>=0.7.0          # Enhanced logging
+rich>=13.5.0           # Rich terminal output
+memory-profiler>=0.61.0 # Memory profiling
+
+# File System
+fsspec==2023.6.0       # File system spec
+watchdog               # File system monitoring (referenced)
+
+# Image Processing
+pillow>=10.0.0         # Image manipulation
+
+# Other
+beautifulsoup4>=4.11.0 # HTML parsing
+urllib3>=1.26.18       # HTTP library
+importlib-metadata==6.8.0 # Metadata
+
+# =================================================================
+# NOTES
+# =================================================================
+# - Dependencies are grouped by architectural layer
+# - #tlm = Core TidyLLM dependencies
+# - #tidyllm-sentence = Sentence/embedding processing layer
+# - #tidyllm = Main TidyLLM framework
+# - #compliance-qa = Application-specific dependencies
+# - Versions are pinned where actively used in code
+# - Optional dependencies are commented out but documented

@@ -41,7 +41,7 @@ configuration:
       log_level: INFO
       s3_prefix: staging/
   generated_from: v2_4layer_clean_template
-  last_updated: '2025-09-22'
+  last_updated: '2025-09-23'
   loaded_by: v2_config_loader
   official:
     contains_credentials: true
