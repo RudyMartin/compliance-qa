@@ -226,7 +226,7 @@ def get_architecture_paths(config: Optional[Dict[str, Any]] = None) -> Dict[str,
 
 if __name__ == "__main__":
     # Demo the path manager
-    print("QA-Shipping Path Manager Demo")
+    print("Compliance QA Path Manager Demo")
     print("=" * 40)
 
     path_mgr = PathManager()

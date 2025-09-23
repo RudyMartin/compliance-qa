@@ -410,13 +410,9 @@ tmp/
 # PROJECT-SPECIFIC EXCLUSIONS
 # =============================================================================
 
-# Test directories and outputs
-tests/**/test_output.log
-tests/**/test_results.json
-tests/**/*.log
-tests/**/coverage/
-tests/**/.pytest_cache/
-tests/**/htmlcov/
+# Test directories - exclude all contents
+tests/*
+!tests/.gitkeep
 
 # Migrated, development and testing directories
 migrated/

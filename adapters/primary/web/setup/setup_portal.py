@@ -504,7 +504,7 @@ def render_comprehensive_setup():
 
     # Add overview section
     st.markdown("""
-    This section provides one-click setup for all QA-Shipping components including:
+    This section provides one-click setup for all Compliance QA components including:
     - Environment configuration and validation
     - Database connection pooling setup
     - Portal discovery and management
