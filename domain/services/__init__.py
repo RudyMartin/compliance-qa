@@ -23,6 +23,15 @@ from .safety_validation import (
     run_safety_validation
 )
 
+# Tensor Logic Service (NEW)
+from .tensor_logic import (
+    TensorLogicService,
+    TemperatureRouter,
+    InferenceResult,
+    ReasoningMode,
+    ProvenanceType
+)
+
 # Package exports
 __all__ = [
     "ModelRiskAnalysis",
@@ -35,4 +44,10 @@ __all__ = [
     "demonstrate_simple_tagging",
     "main",
     "run_safety_validation",
+    # Tensor Logic
+    "TensorLogicService",
+    "TemperatureRouter",
+    "InferenceResult",
+    "ReasoningMode",
+    "ProvenanceType",
 ]

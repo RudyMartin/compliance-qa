@@ -79,3 +79,13 @@ python-dotenv==1.0.1  # Environment variables
 #
 # To run benchmarks, uncomment above and install separately:
 # pip install numpy sentence-transformers faiss-cpu scikit-learn pandas
+
+# =============================================================================
+# TENSOR LOGIC - TRUSTWORTHINESS SCORING (YRSN Framework)
+# =============================================================================
+# Uses YOUR TidyLLM packages exclusively - NO external APIs!
+# - packages/tlm/ → Pure-Python ML for scoring
+# - packages/tidyllm-sentence/ → Embeddings for consistency
+# - code_samples/yrsn/ → YRSN (Yes/Relevant/Specific/No-fluff) patterns
+#
+# NO cleanlab-tlm or other external services required!
