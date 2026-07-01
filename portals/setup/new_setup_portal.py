@@ -658,7 +658,7 @@ def render_integrations_tab():
                                 status_text.text("Stopping MLflow server...")
                                 progress_bar.progress(10)
                                 subprocess.run(["taskkill", "/F", "/IM", "mlflow.exe"],
-                                             capture_output=True, text=True, shell=True)
+                                             capture_output=True, text=True)
                                 time.sleep(2)
 
                                 # Step 2: Clear MLflow artifacts from S3
@@ -734,7 +734,6 @@ def render_integrations_tab():
                                     ["mlflow", "db", "upgrade", mlflow_db_uri],
                                     capture_output=True,
                                     text=True,
-                                    shell=True
                                 )
                                 time.sleep(2)
 
@@ -747,7 +746,6 @@ def render_integrations_tab():
                                      "--default-artifact-root", "s3://nsc-mvp1/compliance-qa/mlflow/",
                                      "--host", "0.0.0.0",
                                      "--port", "5000"],
-                                    shell=True
                                 )
                                 time.sleep(3)
 
