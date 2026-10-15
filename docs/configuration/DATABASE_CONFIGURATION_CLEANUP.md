@@ -32,7 +32,7 @@
 # SINGLE SOURCE OF TRUTH in settings.yaml
 databases:
   primary:
-    host: vectorqa-cluster.cluster-cu562e4m02nq.us-east-1.rds.amazonaws.com
+    host: vectorqa-cluster.cluster-cgbo6guqw0th.us-east-1.rds.amazonaws.com
     port: 5432
     username: vectorqa_user
     password: bitcoin-miner-2025
@@ -49,7 +49,7 @@ databases:
 ```yaml
 databases:
   app_postgres:
-    host: vectorqa-cluster.cluster-cu562e4m02nq.us-east-1.rds.amazonaws.com
+    host: vectorqa-cluster.cluster-cgbo6guqw0th.us-east-1.rds.amazonaws.com
     port: 5432
     database: vectorqa
     username: vectorqa_user
@@ -86,7 +86,7 @@ mlflow_alt_db:
 
 # To this:
 mlflow_alt_db:
-  host: vectorqa-cluster.cluster-cu562e4m02nq.us-east-1.rds.amazonaws.com  # SAME AS MAIN
+  host: vectorqa-cluster.cluster-cgbo6guqw0th.us-east-1.rds.amazonaws.com  # SAME AS MAIN
   database: mlflow_db  # DIFFERENT DATABASE
 ```
 

@@ -28,7 +28,7 @@ credentials:
   postgresql_primary:
     type: database_credentials
     engine: postgresql
-    host: vectorqa-cluster.cluster-cu562e4m02nq.us-east-1.rds.amazonaws.com
+    host: vectorqa-cluster.cluster-cgbo6guqw0th.us-east-1.rds.amazonaws.com
     port: 5432
     database: vectorqa
     username: vectorqa_user
@@ -41,7 +41,7 @@ credentials:
     database: ./data/backup.db
     host: ./data/backup.db
     username: backup_user
-    password: YOUR_BACKUP_PASSWORD_HERE
+    password: ***REMOVED***
 
   mlflow_api:
     type: api_credentials

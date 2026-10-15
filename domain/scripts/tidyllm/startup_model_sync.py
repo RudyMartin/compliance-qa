@@ -152,7 +152,7 @@ embeddings:
 
 vector_database:
   postgres:
-    host: "vectorqa-cluster.cluster-cu562e4m02nq.us-east-1.rds.amazonaws.com"
+    host: "vectorqa-cluster.cluster-cgbo6guqw0th.us-east-1.rds.amazonaws.com"
     port: 5432
     database: "vectorqa"
     user: "vectorqa_user"

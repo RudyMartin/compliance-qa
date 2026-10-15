@@ -1331,7 +1331,7 @@ def render_step_4_chat_setup():
                                         st.info("🔧 **Your pgvector Configuration**:")
                                         st.text("• Database: vectorqa on AWS RDS")
                                         st.text("• Standard dimension: 1024 (from vector_manager.py)")
-                                        st.text("• Host: vectorqa-cluster.cluster-cu562e4m02nq.us-east-1.rds.amazonaws.com")
+                                        st.text("• Host: vectorqa-cluster.cluster-cgbo6guqw0th.us-east-1.rds.amazonaws.com")
                                         st.text("• pgvector supports up to 16,000 dimensions")
                                         st.text("• Your Bedrock models: 1024-1536D (perfectly compatible)")
 

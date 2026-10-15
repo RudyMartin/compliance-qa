@@ -258,7 +258,7 @@ Session Params → Audit Trail → MLflow Logging → AWS RDS Storage
 
 ### MLflow Backend
 - **Database**: PostgreSQL on AWS RDS
-- **Host**: vectorqa-cluster.cluster-cu562e4m02nq.us-east-1.rds.amazonaws.com
+- **Host**: vectorqa-cluster.cluster-cgbo6guqw0th.us-east-1.rds.amazonaws.com
 - **Database**: vectorqa
 - **Connection**: Managed through unified sessions
 

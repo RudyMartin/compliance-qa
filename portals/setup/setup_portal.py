@@ -1394,7 +1394,7 @@ def fix_component_issue(component_name: str, error_message: str):
                 st.write("**🎯 Proposed Fix: AWS RDS Settings**")
                 st.info("**New Configuration:**")
                 new_config = {
-                    'DB_HOST': 'vectorqa-cluster.cluster-cu562e4m02nq.us-east-1.rds.amazonaws.com',
+                    'DB_HOST': 'vectorqa-cluster.cluster-cgbo6guqw0th.us-east-1.rds.amazonaws.com',
                     'DB_PORT': '5432',
                     'DB_NAME': 'vectorqa',
                     'DB_USERNAME': 'vectorqa_user',
@@ -1485,7 +1485,7 @@ AWS_DEFAULT_REGION=us-east-1
 
         if st.button("Reset MLflow Configuration", key="reset_mlflow"):
             import os
-            os.environ['MLFLOW_TRACKING_URI'] = 'postgresql://vectorqa_user:bitcoin-miner-2025@vectorqa-cluster.cluster-cu562e4m02nq.us-east-1.rds.amazonaws.com:5432/vectorqa'
+            os.environ['MLFLOW_TRACKING_URI'] = 'postgresql://vectorqa_user:bitcoin-miner-2025@vectorqa-cluster.cluster-cgbo6guqw0th.us-east-1.rds.amazonaws.com:5432/vectorqa'
             st.success("✅ MLflow configuration reset! Please refresh the page.")
             st.experimental_rerun()
 

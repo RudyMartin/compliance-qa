@@ -111,7 +111,7 @@ def check_hardcoded_credentials():
         "SECRET_KEY",
         "api_key=",
         "AWS_ACCESS_KEY",
-        "Fujifuji500"  # The known bad password
+        "Fujifuji"  # prefix of a rotated+scrubbed known-bad password
     ]
 
     violations = []
